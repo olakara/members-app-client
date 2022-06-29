@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import classNames from 'classnames';
-import UserRow from './user-row.component';
+import UserRow from './user-row';
 
 export default function UserList(props) {
 

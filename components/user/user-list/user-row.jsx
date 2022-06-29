@@ -24,7 +24,7 @@ export default function UserRow(props) {
                 >
                     <span className="sr-only">Use setting</span>
                     <span
-                    aria-hidden="true"
+                    ariaHidden="true"
                     className={`${props.vm.isActive ? 'translate-x-5' : 'translate-x-0'}
                         pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200`}
                     />

@@ -1,25 +1,27 @@
+import { config } from '../../shared/constants';
 import httpGateway from "../../shared/http-gateway";
 import Observable from "../../shared/observable";
 
 class UserRepository {
-    userPm = null;
+    
+    userProgrammersModel = null;
     
     constructor() {
-        this.userPm = new Observable({});
+        this.userProgrammersModel = new Observable({});
     }
 
-    getUser = async (callback) => {
-        this.userPm.subscribe(callback);
-        const userDto = await httpGateway.get("http://localhost:5000/Users/me");
-        this.userPm.value = userDto;
-        this.userPm.notify();
+    getCurrentUser = async (callback) => {
+        this.userProgrammersModel.subscribe(callback);
+        const userDto = await httpGateway.get(config.BASE_URL + config.USER_INFO);
+        this.userProgrammersModel.value = userDto;
+        this.userProgrammersModel.notify();
     }
 
     signIn = async (signInDto) => {
 
-        const accessDto = await httpGateway.post("http://localhost:5000/Users/sign-in",signInDto);
-        if(accessDto.accessToken) {
-            localStorage.setItem("token", accessDto.accessToken);
+        const accessDto = await httpGateway.post(config.BASE_URL + config.SIGN_IN, signInDto);
+        if(accessDto.data.accessToken) {
+            localStorage.setItem("token", accessDto.data.accessToken);
             return true;
         } else {
             return false;
@@ -30,7 +32,7 @@ class UserRepository {
         localStorage.clear();
     }
 
-    isLoggedIn = async () => {
+    isLoggedIn = () => {
         const token = localStorage.getItem("token");
         if(token) {
             return true;
