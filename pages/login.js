@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Head from 'next/head'
 import Router from "next/router"
+import Image from "next/image"
 import UserPresenter from "../components/user/user.presenter"
 
 export default function Login(){
@@ -28,7 +29,9 @@ export default function Login(){
     <div className="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
       <div className="mx-auto w-full max-w-sm lg:w-96">
         <div>
-          <img className="h-12 w-auto" src="/static/images/Logo.jpg" alt="Logo" />
+          
+            <Image src="/static/images/logo.jpg" layout='fixed' alt="KMCC Logo" width="112" height="112" objectFit='contain'/>
+          
           <h2 className="mt-6 text-3xl font-extrabold text-gray-900">Sign in to your account</h2>
         </div>
 
@@ -77,11 +80,6 @@ export default function Login(){
           </div>
         </div>
       </div>
-    </div>
-    <div className="hidden lg:block relative w-0 flex-1">
-      <img className="absolute inset-0 h-full w-full object-cover"
-        src="http://www.kmccabudhabi.org/wp-content/uploads/2020/05/home-bannner-1.jpg"
-        alt="KMCC Image" />
     </div>
     </>);
    
