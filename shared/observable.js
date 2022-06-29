@@ -1,4 +1,3 @@
-
 export default class Observable {
   _value = null;
   observers = [];
