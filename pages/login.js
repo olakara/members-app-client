@@ -30,7 +30,7 @@ export default function Login(){
       <div className="mx-auto w-full max-w-sm lg:w-96">
         <div>
           
-            <Image src="/static/images/logo.jpg" layout='fixed' alt="KMCC Logo" width="112" height="112" objectFit='contain'/>
+            <Image src="/images/logo.jpg" layout='fixed' alt="KMCC Logo" width="112" height="112" objectFit='contain'/>
           
           <h2 className="mt-6 text-3xl font-extrabold text-gray-900">Sign in to your account</h2>
         </div>
