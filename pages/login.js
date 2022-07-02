@@ -28,9 +28,8 @@ export default function Login(){
           </Head>
     <div className="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
       <div className="mx-auto w-full max-w-sm lg:w-96">
-        <div>
-          
-            <Image src="/images/logo.jpg" layout='fixed' alt="KMCC Logo" width="112" height="112" objectFit='contain'/>
+        <div className="content-center">          
+          <Image src="/images/logo.jpg" layout='fixed' alt="KMCC Logo" width="112" height="112" objectFit='contain'/>
           
           <h2 className="mt-6 text-3xl font-extrabold text-gray-900">Sign in to your account</h2>
         </div>
