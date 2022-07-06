@@ -16,6 +16,7 @@ export default function HeaderComponent() {
       
        async function loadCurrentUser() {
         await userPresenter.getCurrentUser(user => {
+            console.log('user', user)
             setCurrentUser(user);
         });
         }

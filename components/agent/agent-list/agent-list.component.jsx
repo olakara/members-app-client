@@ -62,6 +62,10 @@ export default function AgentListComponent(props) {
                     {vm && vm.map((agentVm,index) => {
                     return  <AgentRowComponent key={index} vm={agentVm} index={index}  />   
                     })}
+
+                    {vm.length === 0 && 
+                            <td colSpan={4} className="py-3.5 pl-4 text-center text-lg">Data not available</td>
+                    }
                 
                 </tbody>
             </table>

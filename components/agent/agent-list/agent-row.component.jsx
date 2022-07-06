@@ -4,7 +4,6 @@ import { Switch } from '@headlessui/react'
 import AgentsPresenter from '../agents.presenter'
 
 export default function AgentRowComponent(props) {
-
    
     const [enabled, setEnabled] = useState(props.vm.isActive);
     const agentsPresenter = new AgentsPresenter();
