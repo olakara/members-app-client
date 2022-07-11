@@ -1,4 +1,1 @@
-
-it('dummy test', ()=> {
-
-});
+it('dummy test', () => {});

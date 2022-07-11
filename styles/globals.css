@@ -3,11 +3,11 @@
 @tailwind utilities;
 
 @layer components {
-    #__next {
-        @apply min-h-full;
-    }
-    html,
-    body {
-        @apply h-full;
-    }
+  #__next {
+    @apply min-h-full;
+  }
+  html,
+  body {
+    @apply h-full;
+  }
 }

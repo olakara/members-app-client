@@ -15,13 +15,13 @@ export default class Observable {
     return this._value;
   }
 
-  subscribe = func => {
+  subscribe = (func) => {
     this.observers.push(func);
     this.notify();
   };
 
   notify = () => {
-    this.observers.forEach(observer => {
+    this.observers.forEach((observer) => {
       observer(this._value);
     });
   };
