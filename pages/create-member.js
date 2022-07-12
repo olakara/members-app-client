@@ -7,6 +7,8 @@ import FormErrorComponent from '../components/common/form-error.component';
 
 export default function CreateMemberPage() {
   const [userLookups, copyUserLookupsToStateViewModel] = useState(null);
+  const [professionsLookup, copyProfessionsToStateViewModel] = useState(null);
+  const [qualificationsLookup, copyQualificationsToStateViewModel] = useState(null);
 
   const [location, setLocation] = useState('');
   const [role, setRole] = useState('');
@@ -37,13 +39,19 @@ export default function CreateMemberPage() {
   useEffect(() => {
     async function load() {
       await lookupsPresenter.loadUserLookups((generatedViewModel) => {
-        console.log('lookups', generatedViewModel);
-
         copyUserLookupsToStateViewModel(generatedViewModel);
-        //const userRole = getDefaultRoleForUser(generatedViewModel.applicableUserRole ?? []);
-        //setRole(userRole);
+      });
+
+      await lookupsPresenter.loadProfessions((generatedViewModel) => {
+        copyProfessionsToStateViewModel(generatedViewModel.professions);
+      });
+
+      await lookupsPresenter.loadQualifications((generatedViewModel) => {
+        console.log('Qualifications in create member screen', generatedViewModel);
+        copyQualificationsToStateViewModel(generatedViewModel.qualifications);
       });
     }
+
     load();
   }, []);
 
@@ -253,15 +261,27 @@ export default function CreateMemberPage() {
                     Profession
                   </label>
                   <div className="mt-1 sm:mt-0 sm:col-span-2">
-                    <input
-                      type="text"
-                      name="profession"
+                    <select
                       id="profession"
+                      name="profession"
                       autoComplete="profession"
                       value={profession}
-                      onChange={(e) => setProfession(e.target.value)}
-                      className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-                    />
+                      onChange={(e) => {
+                        setProfession(e.target.value);
+                      }}
+                      className="max-w-lg block focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                    >
+                      <option value="">Select</option>
+                      {professionsLookup &&
+                        professionsLookup.length &&
+                        professionsLookup.map((profession, index) => {
+                          return (
+                            <option key={index} value={profession.id}>
+                              {profession.name}
+                            </option>
+                          );
+                        })}
+                    </select>
                   </div>
                 </div>
 
@@ -271,15 +291,27 @@ export default function CreateMemberPage() {
                     Qualification
                   </label>
                   <div className="mt-1 sm:mt-0 sm:col-span-2">
-                    <input
-                      type="text"
-                      name="qualification"
+                    <select
                       id="qualification"
+                      name="qualification"
                       autoComplete="qualification"
                       value={qualification}
-                      onChange={(e) => setQualification(e.target.value)}
-                      className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-                    />
+                      onChange={(e) => {
+                        setQualification(e.target.value);
+                      }}
+                      className="max-w-lg block focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                    >
+                      <option value="">Select</option>
+                      {qualificationsLookup &&
+                        qualificationsLookup.length &&
+                        qualificationsLookup.map((qualification, index) => {
+                          return (
+                            <option key={index} value={qualification.id}>
+                              {qualification.name}
+                            </option>
+                          );
+                        })}
+                    </select>
                   </div>
                 </div>
 

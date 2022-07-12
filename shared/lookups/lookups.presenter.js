@@ -27,4 +27,32 @@ export default class LookupsPresenter {
       callback(lookupsVm);
     });
   };
+
+  loadProfessions = async (callback) => {
+    lookupsRepository.getProfessions((professionsPm) => {
+      const professionsVm = {
+        professions: professionsPm.map((item) => {
+          return {
+            id: item.id,
+            name: item.name,
+          };
+        }),
+      };
+      callback(professionsVm);
+    });
+  };
+
+  loadQualifications = async (callback) => {
+    lookupsRepository.getQualifications((qualificationsPm) => {
+      const qualificationsVm = {
+        qualifications: qualificationsPm.map((item) => {
+          return {
+            id: item.id,
+            name: item.name,
+          };
+        }),
+      };
+      callback(qualificationsVm);
+    });
+  };
 }
