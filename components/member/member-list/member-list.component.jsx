@@ -1,23 +1,24 @@
 import { useState, useEffect } from 'react';
-import AgentsPresenter from '../agents.presenter';
+import MembersPresenter from '../members.presenter';
 import LookupsPresenter from '../../../shared/lookups/lookups.presenter';
-import AgentRowComponent from './agent-row.component';
+import MemberRowComponent from '../member-list/member-row.component';
 
-export default function AgentListComponent(props) {
+export default function MemberListComponent(props) {
   const [vm, copyViewModelToStateModel] = useState([]);
   const [locationLabel, setLocationLabel] = useState('');
 
-  const agentsPresenter = new AgentsPresenter();
+  const membersPresenter = new MembersPresenter();
   const lookupsPresenter = new LookupsPresenter();
 
   useEffect(() => {
     async function load() {
       await lookupsPresenter.loadUserLookups((generatedViewModel) => {
         const userRole = getDefaultRoleForUser(generatedViewModel.applicableUserRole ?? []);
-        setLocationLabel(getLocationLabel(userRole));
+        console.log('lookup', generatedViewModel);
+        setLocationLabel(userRole);
       });
 
-      await agentsPresenter.load((generatedViewModel) => {
+      await membersPresenter.load((generatedViewModel) => {
         copyViewModelToStateModel(generatedViewModel);
       });
     }
@@ -65,8 +66,8 @@ export default function AgentListComponent(props) {
           </thead>
           <tbody className="divide-y divide-gray-200 bg-white">
             {vm &&
-              vm.map((agentVm, index) => {
-                return <AgentRowComponent key={index} vm={agentVm} index={index} />;
+              vm.map((memberVm, index) => {
+                return <MemberRowComponent key={index} vm={memberVm} index={index} />;
               })}
 
             {vm.length === 0 && (

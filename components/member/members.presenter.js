@@ -1,13 +1,7 @@
-import membersRepostory from "./members.repository";
+import membersRepostory from './members.repository';
 
 export default class MembersPresenter {
+  load = async (callback) => {};
 
-    load = async (callback) => {
-
-    }
-
-    createMember = async (memberDto, successCallback, errorCallback) => {
-
-        
-    }
+  createMember = async (memberDto, successCallback, errorCallback) => {};
 }

@@ -1,27 +1,19 @@
 import { config } from '../../shared/constants';
-import httpGateway from "../../shared/http-gateway";
-import Observable from "../../shared/observable";
+import httpGateway from '../../shared/http-gateway';
+import Observable from '../../shared/observable';
 
 class MembersRepostory {
+  programmersModel = null;
 
-    programmersModel = null;
+  constructor() {
+    this.programmersModel = new Observable([]);
+  }
 
-    constructor() {
-        this.programmersModel = new Observable([]);
-    }
+  getMembers = async (callback) => {};
 
-    getMembers = async callback => {
+  createMember = async (memberPm, successCallback, errorCallback) => {};
 
-    }
-
-    createMember = async(memberPm, successCallback, errorCallback) => {
-
-    }
-
-    loadData = async () => {
-
-    }
-
+  loadData = async () => {};
 }
 
 const membersRepostory = new MembersRepostory();
