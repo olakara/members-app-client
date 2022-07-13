@@ -55,4 +55,18 @@ export default class LookupsPresenter {
       callback(qualificationsVm);
     });
   };
+
+  loadRegisteredOrganizations = async (callback) => {
+    lookupsRepository.getRegisteredOrganizations((organizationsPm) => {
+      const organizationsVm = organizationsPm;
+      callback(organizationsVm);
+    });
+  };
+
+  loadWelfareSchemes = async (callback) => {
+    lookupsRepository.getWelfareSchemes((schemesPm) => {
+      const schemesVm = schemesPm;
+      callback(schemesVm);
+    });
+  };
 }

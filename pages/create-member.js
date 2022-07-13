@@ -9,6 +9,8 @@ export default function CreateMemberPage() {
   const [userLookups, copyUserLookupsToStateViewModel] = useState(null);
   const [professionsLookup, copyProfessionsToStateViewModel] = useState(null);
   const [qualificationsLookup, copyQualificationsToStateViewModel] = useState(null);
+  const [organizationsLookup, copyOrganizationsToStateViewModel] = useState(null);
+  const [welfareSchemesLookup, copyWelfareSchemesToStateViewModel] = useState(null);
 
   const [location, setLocation] = useState('');
   const [role, setRole] = useState('');
@@ -28,8 +30,8 @@ export default function CreateMemberPage() {
   const [bloodGroup, SetBloodGroup] = useState('');
   const [houseName, SetHouseName] = useState('');
   const [addressIndia, SetIndianAddress] = useState('');
-  const [area, SetArea] = useState('');
   const [panchayat, SetPanchayat] = useState('');
+  const [area, SetArea] = useState('');
   const [registeredOrganization, SetRegisteredOrganization] = useState('');
   const [welfareScheme, SetWelfareScheme] = useState('');
 
@@ -49,6 +51,16 @@ export default function CreateMemberPage() {
       await lookupsPresenter.loadQualifications((generatedViewModel) => {
         console.log('Qualifications in create member screen', generatedViewModel);
         copyQualificationsToStateViewModel(generatedViewModel.qualifications);
+      });
+
+      await lookupsPresenter.loadRegisteredOrganizations((generatedViewModel) => {
+        console.log('Registered Orgranizations', generatedViewModel);
+        copyOrganizationsToStateViewModel(generatedViewModel);
+      });
+
+      await lookupsPresenter.loadWelfareSchemes((generatedViewModel) => {
+        console.log('Welfare Schemes', generatedViewModel);
+        copyWelfareSchemesToStateViewModel(generatedViewModel);
       });
     }
 
@@ -321,15 +333,27 @@ export default function CreateMemberPage() {
                     Blood Group
                   </label>
                   <div className="mt-1 sm:mt-0 sm:col-span-2">
-                    <input
-                      type="text"
-                      name="bloodGroup"
+                    <select
                       id="bloodGroup"
+                      name="bloodGroup"
                       autoComplete="bloodGroup"
                       value={bloodGroup}
-                      onChange={(e) => setBloodGroup(e.target.value)}
-                      className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-                    />
+                      onChange={(e) => {
+                        setBloodGroup(e.target.value);
+                      }}
+                      className="max-w-lg block focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                    >
+                      <option value="">Select</option>
+                      <option value="0">A +</option>
+                      <option value="1">A -</option>
+                      <option value="2">B +</option>
+                      <option value="3">B -</option>
+                      <option value="4">O +</option>
+                      <option value="5">O -</option>
+                      <option value="6">AB +</option>
+                      <option value="7">AB -</option>
+                      <option value="8">Unknown</option>
+                    </select>
                   </div>
                 </div>
 
@@ -390,27 +414,54 @@ export default function CreateMemberPage() {
                 <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                   <label htmlFor="role" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                     {' '}
-                    Role
+                    Registered Organization
                   </label>
                   <div className="mt-1 sm:mt-0 sm:col-span-2">
                     <select
-                      id="role"
-                      name="role"
-                      autoComplete="role"
-                      value={role}
+                      id="registeredOrganization"
+                      name="registeredOrganization"
+                      autoComplete="registeredOrganization"
+                      value={registeredOrganization}
                       onChange={(e) => {
-                        setRole(e.target.value);
-                        setLocationNeeded(e.target.value);
+                        SetRegisteredOrganization(e.target.value);
                       }}
                       className="max-w-lg block focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                     >
                       <option value="">Select</option>
-                      {userLookups &&
-                        userLookups.applicableUserRole &&
-                        userLookups.applicableUserRole.map((role) => {
+                      {organizationsLookup &&
+                        organizationsLookup.map((org, index) => {
                           return (
-                            <option key={role} value={role}>
-                              {role}
+                            <option key={index} value={org.id}>
+                              {org.name}
+                            </option>
+                          );
+                        })}
+                    </select>
+                  </div>
+                </div>
+
+                <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                  <label htmlFor="role" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                    {' '}
+                    Welfare Scheme
+                  </label>
+                  <div className="mt-1 sm:mt-0 sm:col-span-2">
+                    <select
+                      id="welfareScheme"
+                      name="welfareScheme"
+                      autoComplete="welfareScheme"
+                      value={welfareScheme}
+                      onChange={(e) => {
+                        SetWelfareScheme(e.target.value);
+                      }}
+                      className="max-w-lg block focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                    >
+                      <option value="">Select</option>
+                      {welfareSchemesLookup &&
+                        welfareSchemesLookup.map((org, index) => {
+                          return (
+                            <option key={index} value={org.id}>
+                              {org.name}
                             </option>
                           );
                         })}
