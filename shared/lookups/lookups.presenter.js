@@ -4,12 +4,12 @@ export default class LookupsPresenter {
   loadGeneralLookups = async (callback) => {
     lookupsRepository.getLookups((lookupPm) => {
       const lookupsVm = {
-        areas: lookupPm.areas,
-        districts: lookupPm.districts,
-        states: lookupPm.states,
-        professions: lookupPm.professions,
-        qualifications: lookupPm.qualifications,
-        membershipPeriod: lookupPm.membershipPeriod,
+        areas: lookupPm.areas ?? [],
+        districts: lookupPm.districts ?? [],
+        states: lookupPm.states ?? [],
+        professions: lookupPm.professions ?? [],
+        qualifications: lookupPm.qualifications ?? [],
+        membershipPeriod: lookupPm.membershipPeriod ?? [],
       };
       callback(lookupsVm);
     });
@@ -20,10 +20,12 @@ export default class LookupsPresenter {
       const lookupsVm = {
         applicableUserRole: lookupPm.applicableUserRole,
         cascadeData: lookupPm.cascadeData,
-        areas: lookupPm.areas,
-        panchayats: lookupPm.panchayats,
+        areas: lookupPm.areas ?? [],
+        panchayats: this.getPanchayatsVm(lookupPm.panchayats ?? []),
         cascadeTitle: lookupPm.cascadeTitle,
       };
+
+      console.log('lookupVm:', lookupsVm);
       callback(lookupsVm);
     });
   };
@@ -68,5 +70,19 @@ export default class LookupsPresenter {
       const schemesVm = schemesPm;
       callback(schemesVm);
     });
+  };
+
+  getPanchayatsVm = (panchayats) => {
+    if (panchayats.length) {
+      return panchayats.map((item) => {
+        return {
+          id: item.id,
+          name: item.name,
+          mandalam: item.mandalam,
+        };
+      });
+    } else {
+      return [];
+    }
   };
 }

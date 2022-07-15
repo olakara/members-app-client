@@ -27,13 +27,12 @@ export default function CreateMemberPage() {
   const [passportExpiry, setPassportExpiry] = useState('');
   const [profession, setProfession] = useState('');
   const [qualification, setQualification] = useState('');
-  const [bloodGroup, SetBloodGroup] = useState('');
-  const [houseName, SetHouseName] = useState('');
-  const [addressIndia, SetIndianAddress] = useState('');
-  const [panchayat, SetPanchayat] = useState('');
-  const [area, SetArea] = useState('');
-  const [registeredOrganization, SetRegisteredOrganization] = useState('');
-  const [welfareScheme, SetWelfareScheme] = useState('');
+  const [bloodGroup, setBloodGroup] = useState('');
+  const [houseName, setHouseName] = useState('');
+  const [addressIndia, setAddressIndia] = useState('');
+  const [panchayat, setPanchayat] = useState('');
+  const [registeredOrganization, setRegisteredOrganization] = useState('');
+  const [welfareScheme, setWelfareScheme] = useState('');
 
   //const memberPresenter = new MemberPresenter();
   const lookupsPresenter = new LookupsPresenter();
@@ -41,15 +40,17 @@ export default function CreateMemberPage() {
   useEffect(() => {
     async function load() {
       await lookupsPresenter.loadUserLookups((generatedViewModel) => {
+        console.log('User lookups', generatedViewModel);
         copyUserLookupsToStateViewModel(generatedViewModel);
       });
 
       await lookupsPresenter.loadProfessions((generatedViewModel) => {
+        console.log('Professions', generatedViewModel);
         copyProfessionsToStateViewModel(generatedViewModel.professions);
       });
 
       await lookupsPresenter.loadQualifications((generatedViewModel) => {
-        console.log('Qualifications in create member screen', generatedViewModel);
+        console.log('Qualifications', generatedViewModel);
         copyQualificationsToStateViewModel(generatedViewModel.qualifications);
       });
 
@@ -71,13 +72,38 @@ export default function CreateMemberPage() {
     e.preventDefault();
 
     // create DTO
-    // let memberDto = {};
+    let memberDto = {
+      fullName,
+      emiratesIdNumber,
+      emiratesIdExpiry,
+      dateOfBirth,
+      mobile,
+      alternateMobile,
+      email,
+      passportNumber,
+      passportExpiry,
+      professionId: profession,
+      qualificationId: qualification,
+      bloodGroup,
+      houseName,
+      addressIndia,
+      //areaId:
+      panchayatId: panchayat,
+      registeredOrganizationId: registeredOrganization,
+      welfareSchemeId: welfareScheme,
+    };
 
-    //   await memberPresenter.createMember(memberDto, success => {
+    console.log('memberDto', memberDto);
+
+    // await memberPresenter.createMember(
+    //   memberDto,
+    //   (success) => {
     //     Router.push('/home');
-    //   }, error => {
+    //   },
+    //   (error) => {
     //     setErrorMessage(error.data.reason);
-    //   });
+    //   }
+    // );
   };
 
   return (
@@ -148,7 +174,7 @@ export default function CreateMemberPage() {
                   </label>
                   <div className="mt-1 sm:mt-0 sm:col-span-2">
                     <input
-                      type="text"
+                      type="date"
                       name="emiratesIdExpiry"
                       id="emiratesIdExpiry"
                       autoComplete="emirates-id-expiry"
@@ -396,18 +422,30 @@ export default function CreateMemberPage() {
                 <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                   <label htmlFor="area" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                     {' '}
-                    area
+                    Panchayat
                   </label>
                   <div className="mt-1 sm:mt-0 sm:col-span-2">
-                    <input
-                      type="text"
-                      name="area"
-                      id="area"
-                      autoComplete="area"
-                      value={area}
-                      onChange={(e) => setArea(e.target.value)}
-                      className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-                    />
+                    <select
+                      id="panchayat"
+                      name="panchayat"
+                      autoComplete="panchayat"
+                      value={panchayat}
+                      onChange={(e) => {
+                        setPanchayat(e.target.value);
+                      }}
+                      className="max-w-lg block focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                    >
+                      <option value="">Select</option>
+                      {userLookups &&
+                        userLookups.panchayats &&
+                        userLookups.panchayats.map((org, index) => {
+                          return (
+                            <option key={index} value={org.id}>
+                              {org.name}
+                            </option>
+                          );
+                        })}
+                    </select>
                   </div>
                 </div>
 
@@ -423,7 +461,7 @@ export default function CreateMemberPage() {
                       autoComplete="registeredOrganization"
                       value={registeredOrganization}
                       onChange={(e) => {
-                        SetRegisteredOrganization(e.target.value);
+                        setRegisteredOrganization(e.target.value);
                       }}
                       className="max-w-lg block focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                     >
@@ -452,7 +490,7 @@ export default function CreateMemberPage() {
                       autoComplete="welfareScheme"
                       value={welfareScheme}
                       onChange={(e) => {
-                        SetWelfareScheme(e.target.value);
+                        setWelfareScheme(e.target.value);
                       }}
                       className="max-w-lg block focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                     >
@@ -483,7 +521,6 @@ export default function CreateMemberPage() {
                 </button>
                 <button
                   type="submit"
-                  disabled={!fullName || !email || !mobile || !location || (isLocationNeeded && !role)}
                   className="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white disabled:bg-gray-500 bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                 >
                   Save
