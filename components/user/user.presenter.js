@@ -1,6 +1,7 @@
 import userRepository from './user.repository';
 
 export default class UserPresenter {
+  
   signIn = async (email, password) => {
     return await userRepository.signIn({ email, password });
   };

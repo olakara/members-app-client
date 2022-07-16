@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Router from 'next/router';
 import LookupsPresenter from '../shared/lookups/lookups.presenter';
+import MemberPresenter from '../components/member/members.presenter';
 import HeaderComponent from '../components/common/header.component';
 import FormErrorComponent from '../components/common/form-error.component';
 
@@ -12,8 +13,6 @@ export default function CreateMemberPage() {
   const [organizationsLookup, copyOrganizationsToStateViewModel] = useState(null);
   const [welfareSchemesLookup, copyWelfareSchemesToStateViewModel] = useState(null);
 
-  const [location, setLocation] = useState('');
-  const [role, setRole] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
   const [fullName, setFullName] = useState('');
@@ -30,11 +29,12 @@ export default function CreateMemberPage() {
   const [bloodGroup, setBloodGroup] = useState('');
   const [houseName, setHouseName] = useState('');
   const [addressIndia, setAddressIndia] = useState('');
+  const [area, setArea] = useState('');
   const [panchayat, setPanchayat] = useState('');
   const [registeredOrganization, setRegisteredOrganization] = useState('');
   const [welfareScheme, setWelfareScheme] = useState('');
 
-  //const memberPresenter = new MemberPresenter();
+  const memberPresenter = new MemberPresenter();
   const lookupsPresenter = new LookupsPresenter();
 
   useEffect(() => {
@@ -72,7 +72,7 @@ export default function CreateMemberPage() {
     e.preventDefault();
 
     // create DTO
-    let memberDto = {
+    let memberForm = {
       fullName,
       emiratesIdNumber,
       emiratesIdExpiry,
@@ -82,28 +82,28 @@ export default function CreateMemberPage() {
       email,
       passportNumber,
       passportExpiry,
-      professionId: profession,
-      qualificationId: qualification,
+      profession,
+      qualification,
       bloodGroup,
       houseName,
       addressIndia,
-      //areaId:
-      panchayatId: panchayat,
-      registeredOrganizationId: registeredOrganization,
-      welfareSchemeId: welfareScheme,
+      area,
+      panchayat,
+      registeredOrganization,
+      welfareScheme,
     };
 
-    console.log('memberDto', memberDto);
+    console.log('Member Form', memberForm);
 
-    // await memberPresenter.createMember(
-    //   memberDto,
-    //   (success) => {
-    //     Router.push('/home');
-    //   },
-    //   (error) => {
-    //     setErrorMessage(error.data.reason);
-    //   }
-    // );
+    await memberPresenter.createMember(
+      memberForm,
+      (success) => {
+        Router.push('/home');
+      },
+      (error) => {
+        setErrorMessage(error.data.reason);
+      }
+    );
   };
 
   return (
@@ -416,6 +416,36 @@ export default function CreateMemberPage() {
                       onChange={(e) => setAddressIndia(e.target.value)}
                       className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                     />
+                  </div>
+                </div>
+
+                <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                  <label htmlFor="area" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                    {' '}
+                    Area
+                  </label>
+                  <div className="mt-1 sm:mt-0 sm:col-span-2">
+                    <select
+                      id="area"
+                      name="area"
+                      autoComplete="area"
+                      value={area}
+                      onChange={(e) => {
+                        setArea(e.target.value);
+                      }}
+                      className="max-w-lg block focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                    >
+                      <option value="">Select</option>
+                      {userLookups &&
+                        userLookups.areas &&
+                        userLookups.areas.map((org, index) => {
+                          return (
+                            <option key={index} value={org.id}>
+                              {org.name}
+                            </option>
+                          );
+                        })}
+                    </select>
                   </div>
                 </div>
 
