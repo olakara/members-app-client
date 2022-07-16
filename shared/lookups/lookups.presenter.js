@@ -9,7 +9,7 @@ export default class LookupsPresenter {
         states: lookupPm.states ?? [],
         professions: lookupPm.professions ?? [],
         qualifications: lookupPm.qualifications ?? [],
-        membershipPeriod: lookupPm.membershipPeriod ?? [],
+        membershipPeriod: lookupPm.membershipPeriod,
       };
       callback(lookupsVm);
     });
@@ -20,12 +20,10 @@ export default class LookupsPresenter {
       const lookupsVm = {
         applicableUserRole: lookupPm.applicableUserRole,
         cascadeData: lookupPm.cascadeData,
-        areas: lookupPm.areas ?? [],
+        areas: this.getLookupsVm(lookupPm.areas ?? []),
         panchayats: this.getPanchayatsVm(lookupPm.panchayats ?? []),
         cascadeTitle: lookupPm.cascadeTitle,
       };
-
-      console.log('lookupVm:', lookupsVm);
       callback(lookupsVm);
     });
   };
@@ -33,12 +31,7 @@ export default class LookupsPresenter {
   loadProfessions = async (callback) => {
     lookupsRepository.getProfessions((professionsPm) => {
       const professionsVm = {
-        professions: professionsPm.map((item) => {
-          return {
-            id: item.id,
-            name: item.name,
-          };
-        }),
+        professions: this.getLookupsVm(professionsPm ?? []),
       };
       callback(professionsVm);
     });
@@ -47,12 +40,7 @@ export default class LookupsPresenter {
   loadQualifications = async (callback) => {
     lookupsRepository.getQualifications((qualificationsPm) => {
       const qualificationsVm = {
-        qualifications: qualificationsPm.map((item) => {
-          return {
-            id: item.id,
-            name: item.name,
-          };
-        }),
+        qualifications: this.getLookupsVm(qualificationsPm ?? []),
       };
       callback(qualificationsVm);
     });
@@ -60,14 +48,14 @@ export default class LookupsPresenter {
 
   loadRegisteredOrganizations = async (callback) => {
     lookupsRepository.getRegisteredOrganizations((organizationsPm) => {
-      const organizationsVm = organizationsPm;
+      const organizationsVm = this.getLookupsVm(organizationsPm ?? []);
       callback(organizationsVm);
     });
   };
 
   loadWelfareSchemes = async (callback) => {
     lookupsRepository.getWelfareSchemes((schemesPm) => {
-      const schemesVm = schemesPm;
+      const schemesVm = this.getLookupsVm(schemesPm ?? []);
       callback(schemesVm);
     });
   };
@@ -84,5 +72,14 @@ export default class LookupsPresenter {
     } else {
       return [];
     }
+  };
+
+  getLookupsVm = (items) => {
+    return items.map((item) => {
+      return {
+        id: item.id,
+        name: item.name,
+      };
+    });
   };
 }

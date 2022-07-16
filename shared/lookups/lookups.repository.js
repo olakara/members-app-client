@@ -51,7 +51,7 @@ class LookupsRepository {
 
   getWelfareSchemes = async (callback) => {
     this.welfareSchemesProgrammersModel.subscribe(callback);
-    await this.loadQualifications();
+    await this.loadWelfareSchemes();
     this.welfareSchemesProgrammersModel.notify();
   };
 

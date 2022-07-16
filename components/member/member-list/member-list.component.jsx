@@ -51,16 +51,16 @@ export default function MemberListComponent(props) {
                 scope="col"
                 className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell"
               >
-                Email
+                Mandalam
               </th>
               <th
                 scope="col"
                 className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell capitalize"
               >
-                {locationLabel}
+                Area
               </th>
               <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                Status
+                Panchayat
               </th>
             </tr>
           </thead>
