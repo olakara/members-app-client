@@ -4,6 +4,7 @@ import Router from 'next/router';
 import LookupsPresenter from '../shared/lookups/lookups.presenter';
 import MemberPresenter from '../components/member/members.presenter';
 import HeaderComponent from '../components/common/header.component';
+import UploadsPresenter from '../shared/uploads/uploads.presenter';
 import FormErrorComponent from '../components/common/form-error.component';
 
 export default function CreateMemberPage() {
@@ -36,6 +37,7 @@ export default function CreateMemberPage() {
 
   const memberPresenter = new MemberPresenter();
   const lookupsPresenter = new LookupsPresenter();
+  const uploadPresenter = new UploadsPresenter();
 
   useEffect(() => {
     async function load() {
@@ -106,6 +108,14 @@ export default function CreateMemberPage() {
     );
   };
 
+  const onSelectingEmiratesIdFront = async (event) => {
+    debugger;
+    let file = event.target.files[0];
+    await uploadPresenter.uploadEmiratesIdFront((generatedViewModel) => {
+      console.log('Upload result', generatedViewModel);
+    }, file);
+  };
+
   return (
     <>
       <Head>
@@ -125,6 +135,25 @@ export default function CreateMemberPage() {
           <form className="space-y-8 divide-y divide-gray-200" onSubmit={handleSubmit}>
             <div className="pt-8 space-y-6 sm:pt-10 sm:space-y-5">
               <div className="space-y-6 sm:space-y-5">
+                <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                  <label
+                    htmlFor="emiratesIdNumber"
+                    className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
+                  >
+                    {' '}
+                    Emirates ID Front
+                  </label>
+                  <div className="mt-1 sm:mt-0 sm:col-span-2">
+                    <input
+                      type="file"
+                      name="emiratesIdFront"
+                      id="emiratesIdFront"
+                      onChange={(e) => onSelectingEmiratesIdFront(e)}
+                      className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                    />
+                  </div>
+                </div>
+
                 <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                   <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                     {' '}

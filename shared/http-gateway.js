@@ -71,6 +71,40 @@ class HttpGateway {
     }
   };
 
+  upload = async (url, fileDto) => {
+    let headers = this.authHeader(url);
+
+    const data = new FormData();
+    data.append('file', fileDto);
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        body: data,
+        headers: { ...headers },
+      });
+
+      if (response.ok) {
+        const stringResponse = await response.text();
+        const responseDto =
+          stringResponse === '' ? { success: true, data: {} } : { success: false, data: JSON.parse(stringResponse) };
+        return responseDto;
+      } else {
+        const responseMessage = await response.json();
+        if (response.status >= 400 && response.status < 600) {
+          const responseDto = {
+            success: false,
+            data: responseMessage,
+          };
+          return responseDto;
+        }
+      }
+    } catch (error) {
+      console.error('error', error);
+      return { success: false, data: error };
+    }
+  };
+
   authHeader = (url) => {
     const token = localStorage.getItem('token');
     if (token) {
