@@ -113,6 +113,7 @@ export default function CreateMemberPage() {
     let file = event.target.files[0];
     await uploadPresenter.uploadEmiratesIdFront((generatedViewModel) => {
       console.log('Upload result', generatedViewModel);
+      
     }, file);
   };
 
