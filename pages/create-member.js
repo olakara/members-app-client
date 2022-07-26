@@ -1,13 +1,62 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Head from 'next/head';
 import Router from 'next/router';
+import Image from 'next/image';
+import { Transition } from '@headlessui/react';
 import LookupsPresenter from '../shared/lookups/lookups.presenter';
 import MemberPresenter from '../components/member/members.presenter';
 import HeaderComponent from '../components/common/header.component';
 import UploadsPresenter from '../shared/uploads/uploads.presenter';
 import FormErrorComponent from '../components/common/form-error.component';
+import ImagePreviewComponent from '../components/common/image-preview.component';
 
 export default function CreateMemberPage() {
+  const [currentStep, setCurrentStep] = useState(0);
+  const [moving, setMoving] = useState('right');
+
+  const [steps, setSteps] = useState([
+    { name: 'Step 1', href: '#', status: 'current' },
+    { name: 'Step 2', href: '#', status: 'upcoming' },
+    { name: 'Step 3', href: '#', status: 'upcoming' },
+    { name: 'Step 4', href: '#', status: 'upcoming' },
+  ]);
+
+  const prevStep = () => {
+    setMoving('left');
+    setSteps((old) =>
+      old.map((v, i) => {
+        if (i === currentStep) {
+          v.status = 'upcoming';
+        } else if (i === currentStep - 1) {
+          v.status = 'current';
+        }
+        return v;
+      })
+    );
+    setCurrentStep(currentStep - 1);
+    return false;
+  };
+
+  const nextStep = async () => {
+    setMoving('right');
+    // getValues('firstname')
+
+    if (true) {
+      setSteps((old) =>
+        old.map((v, i) => {
+          if (i === currentStep) {
+            v.status = 'complete';
+          } else if (i === currentStep + 1) {
+            v.status = 'current';
+          }
+          return v;
+        })
+      );
+      setCurrentStep(currentStep + 1);
+    }
+    return false;
+  };
+
   const [userLookups, copyUserLookupsToStateViewModel] = useState(null);
   const [professionsLookup, copyProfessionsToStateViewModel] = useState(null);
   const [qualificationsLookup, copyQualificationsToStateViewModel] = useState(null);
@@ -35,9 +84,16 @@ export default function CreateMemberPage() {
   const [registeredOrganization, setRegisteredOrganization] = useState('');
   const [welfareScheme, setWelfareScheme] = useState('');
 
+  const [emiratesIdFrontImagePath, setEmiratesIdFrontImagePath] = useState(null);
+  const [emiratesIdBackImagePath, setEmiratesIdBackImagePath] = useState(null);
+  const [photoImagePath, setPhotoImagePath] = useState(null);
+
   const memberPresenter = new MemberPresenter();
   const lookupsPresenter = new LookupsPresenter();
   const uploadPresenter = new UploadsPresenter();
+
+  const wrapper = useRef(null);
+  const [wrapperWidth, setWrapperWidth] = useState(1);
 
   useEffect(() => {
     async function load() {
@@ -67,7 +123,17 @@ export default function CreateMemberPage() {
       });
     }
 
+    function handleResize() {
+      if (wrapper.current !== null) {
+        setWrapperWidth(wrapper.current.offsetWidth);
+      }
+    }
+
     load();
+    window.addEventListener('resize', handleResize);
+    handleResize();
+
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   const handleSubmit = async (e) => {
@@ -109,12 +175,39 @@ export default function CreateMemberPage() {
   };
 
   const onSelectingEmiratesIdFront = async (event) => {
-    debugger;
     let file = event.target.files[0];
-    await uploadPresenter.uploadEmiratesIdFront((generatedViewModel) => {
-      console.log('Upload result', generatedViewModel);
-      
-    }, file);
+    if (file) {
+      setEmiratesIdFrontImagePath(URL.createObjectURL(file));
+      await uploadPresenter.uploadEmiratesIdFront((generatedViewModel) => {
+        console.log('Upload result', generatedViewModel);
+      }, file);
+    } else {
+      setEmiratesIdFrontImagePath(null);
+    }
+  };
+
+  const onSelectingEmiratesIdBack = async (event) => {
+    let file = event.target.files[0];
+    if (file) {
+      setEmiratesIdBackImagePath(URL.createObjectURL(file));
+      await uploadPresenter.uploadEmiratesIdBack((generatedViewModel) => {
+        console.log('Upload result', generatedViewModel);
+      }, file);
+    } else {
+      setEmiratesIdBackImagePath(null);
+    }
+  };
+
+  const onSelectingPhoto = async (event) => {
+    let file = event.target.files[0];
+    if (file) {
+      setPhotoImagePath(URL.createObjectURL(file));
+      await uploadPresenter.uploadPhoto((generatedViewModel) => {
+        console.log('Upload result', generatedViewModel);
+      }, file);
+    } else {
+      setPhotoImagePath(null);
+    }
   };
 
   return (
@@ -133,32 +226,173 @@ export default function CreateMemberPage() {
         </header>
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {errorMessage && <FormErrorComponent vm={errorMessage} />}
+          <div className="space-y-8 divide-y divide-gray-200" ref={wrapper}>
+            <div className="flex flex-nowrap ">
+              <Transition
+                appear={false}
+                unmount={false}
+                show={currentStep === 0}
+                enter="transform transition ease-in-out duration-500"
+                enterFrom={moving === 'right' ? `translate-x-96 opacity-0` : `-translate-x-96 opacity-0`}
+                enterTo={`translate-x-0 opacity-100`}
+                leave="transform transition ease-in-out duration-500 "
+                leaveFrom={`translate-x-0 opacity-100`}
+                leaveTo={moving === 'right' ? `-translate-x-full opacity-0` : `translate-x-full opacity-0`}
+                className="w-0 bg-green-200 overflow-visible"
+                as="div"
+              >
+                <div style={{ width: `${wrapperWidth}px` }}>
+                  <h2 className="text-xl font-bold leading-tight text-gray-900">
+                    Membership Registration - Basic Details
+                  </h2>
+                </div>
+              </Transition>
+
+              <Transition
+                appear={false}
+                unmount={false}
+                show={currentStep === 1}
+                enter="transform transition ease-in-out duration-500"
+                enterFrom={moving === 'right' ? `translate-x-96 opacity-0` : `-translate-x-96 opacity-0`}
+                enterTo={`translate-x-0 opacity-100`}
+                leave="transform transition ease-in-out duration-500 "
+                leaveFrom={`translate-x-0 opacity-100`}
+                leaveTo={moving === 'right' ? `-translate-x-96 opacity-0` : `translate-x-96 opacity-0`}
+                className="bg-red-200 w-0 overflow-visible"
+                as="div"
+              >
+                <div style={{ width: `${wrapperWidth}px` }}>
+                  <h2 className="text-xl font-bold leading-tight text-gray-900">
+                    Membership Registration - Basic Details
+                  </h2>
+                </div>
+              </Transition>
+
+              <Transition
+                appear={false}
+                unmount={false}
+                show={currentStep === 2}
+                enter="transform transition ease-in-out duration-500"
+                enterFrom={moving === 'right' ? `translate-x-96 opacity-0` : `-translate-x-96 opacity-0`}
+                enterTo={`translate-x-0 opacity-100`}
+                leave="transform transition ease-in-out duration-500 "
+                leaveFrom={`translate-x-0 opacity-100`}
+                leaveTo={moving === 'right' ? `-translate-x-96 opacity-0` : `translate-x-96 opacity-0`}
+                className="w-0 overflow-visible"
+                as="div"
+              >
+                <div style={{ width: `${wrapperWidth}px` }}>
+                  <h2 className="text-xl font-bold leading-tight text-gray-900">
+                    Membership Registration - Home Country Details
+                  </h2>
+                </div>
+              </Transition>
+
+              <Transition
+                appear={false}
+                unmount={false}
+                show={currentStep === 3}
+                enter="transform transition ease-in-out duration-500"
+                enterFrom={moving === 'right' ? `translate-x-96 opacity-0` : `-translate-x-96 opacity-0`}
+                enterTo={`translate-x-0 opacity-100`}
+                leave="transform transition ease-in-out duration-500 "
+                leaveFrom={`translate-x-0 opacity-100`}
+                leaveTo={moving === 'right' ? `-translate-x-96 opacity-0` : `translate-x-96 opacity-0`}
+                className="bg-blue-200 w-0 overflow-visible"
+                as="div"
+              >
+                <div style={{ width: `${wrapperWidth}px` }}>
+                  <h2 className="text-xl font-bold leading-tight text-gray-900">
+                    Membership Registration - UAE Details
+                  </h2>
+                </div>
+              </Transition>
+            </div>
+          </div>
+          <div className={`mt-2`}>
+            <p className="text-sm font-medium mb-1 mt-3 text-center">
+              Step {steps.findIndex((step) => step.status === 'current') + 1} of {steps.length}
+            </p>
+            <nav className="flex items-center justify-center" aria-label="Progress">
+              <button type="button" disabled={currentStep === 0} onClick={() => prevStep()}>
+                Prev
+              </button>
+              <ol className="mx-8 flex items-center space-x-5">
+                {steps.map((step, i) => (
+                  <li key={`step_${i}`}>
+                    {step.status === 'complete' ? (
+                      <a href={step.href} className="block w-2.5 h-2.5 bg-indigo-600 rounded-full hover:bg-indigo-900">
+                        <span className="sr-only"></span>
+                      </a>
+                    ) : step.status === 'current' ? (
+                      <a href={step.href} className="relative flex items-center justify-center" aria-current="step">
+                        <span className="absolute w-5 h-5 p-px flex" aria-hidden="true">
+                          <span className="w-full h-full rounded-full bg-indigo-200" />
+                        </span>
+                        <span className="relative block w-2.5 h-2.5 bg-indigo-600 rounded-full" aria-hidden="true" />
+                        <span className="sr-only"></span>
+                      </a>
+                    ) : (
+                      <a href={step.href} className="block w-2.5 h-2.5 bg-gray-200 rounded-full hover:bg-gray-400">
+                        <span className="sr-only"></span>
+                      </a>
+                    )}
+                  </li>
+                ))}
+              </ol>
+              <button type="button" disabled={currentStep === 3} onClick={() => nextStep()}>
+                Next
+              </button>
+            </nav>
+          </div>
+
           <form className="space-y-8 divide-y divide-gray-200" onSubmit={handleSubmit}>
             <div className="pt-8 space-y-6 sm:pt-10 sm:space-y-5">
               <div className="space-y-6 sm:space-y-5">
                 <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                   <label
-                    htmlFor="emiratesIdNumber"
+                    htmlFor="emiratesIdFrontImagePath"
                     className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
                   >
                     {' '}
-                    Emirates ID Front
+                    Emirates ID Front <span className="text-red-600">*</span>
                   </label>
                   <div className="mt-1 sm:mt-0 sm:col-span-2">
                     <input
                       type="file"
-                      name="emiratesIdFront"
-                      id="emiratesIdFront"
+                      accept="image/*"
+                      name="emiratesIdFrontImagePath"
+                      id="emiratesIdFrontImagePath"
                       onChange={(e) => onSelectingEmiratesIdFront(e)}
                       className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                     />
                   </div>
+                  <ImagePreviewComponent vm={emiratesIdFrontImagePath} />
                 </div>
-
+                <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                  <label
+                    htmlFor="emiratesIdBackImagePath"
+                    className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
+                  >
+                    {' '}
+                    Emirates ID Back <span className="text-red-600">*</span>
+                  </label>
+                  <div className="mt-1 sm:mt-0 sm:col-span-2">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      name="emiratesIdBackImagePath"
+                      id="emiratesIdBackImagePath"
+                      onChange={(e) => onSelectingEmiratesIdBack(e)}
+                      className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                    />
+                  </div>
+                  <ImagePreviewComponent vm={emiratesIdBackImagePath} />
+                </div>
                 <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                   <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                     {' '}
-                    Full Name
+                    Full Name <span className="text-red-600">*</span>
                   </label>
                   <div className="mt-1 sm:mt-0 sm:col-span-2">
                     <input
@@ -172,14 +406,13 @@ export default function CreateMemberPage() {
                     />
                   </div>
                 </div>
-
                 <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                   <label
                     htmlFor="emiratesIdNumber"
                     className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
                   >
                     {' '}
-                    Emirates ID
+                    Emirates ID Number
                   </label>
                   <div className="mt-1 sm:mt-0 sm:col-span-2">
                     <input
@@ -193,7 +426,6 @@ export default function CreateMemberPage() {
                     />
                   </div>
                 </div>
-
                 <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                   <label
                     htmlFor="emiratesIdExpiry"
@@ -214,7 +446,6 @@ export default function CreateMemberPage() {
                     />
                   </div>
                 </div>
-
                 <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                   <label htmlFor="dateOfBirth" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                     {' '}
@@ -232,7 +463,6 @@ export default function CreateMemberPage() {
                     />
                   </div>
                 </div>
-
                 <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                   <label htmlFor="mobile" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                     {' '}
@@ -249,6 +479,37 @@ export default function CreateMemberPage() {
                       className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                     />
                   </div>
+                </div>
+                <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                  <label htmlFor="gender" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                    {' '}
+                    Gender
+                  </label>
+                  <div className="mt-1 sm:mt-0 sm:col-span-2">
+                    <label>
+                      <input type="radio" value="0" name="gender" /> Male
+                    </label>
+                    <label className="m-14">
+                      <input type="radio" value="1" name="gender" /> Female
+                    </label>
+                  </div>
+                </div>
+                <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                  <label htmlFor="photoImagePath" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                    {' '}
+                    Photo <span className="text-red-600">*</span>
+                  </label>
+                  <div className="mt-1 sm:mt-0 sm:col-span-2">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      name="photoImagePath"
+                      id="photoImagePath"
+                      onChange={(e) => onSelectingPhoto(e)}
+                      className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                    />
+                  </div>
+                  <ImagePreviewComponent vm={photoImagePath} />
                 </div>
 
                 <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
@@ -268,7 +529,6 @@ export default function CreateMemberPage() {
                     />
                   </div>
                 </div>
-
                 <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                   <label htmlFor="email" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                     {' '}
@@ -286,7 +546,6 @@ export default function CreateMemberPage() {
                     />
                   </div>
                 </div>
-
                 <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                   <label htmlFor="passportNumber" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                     {' '}
@@ -304,7 +563,6 @@ export default function CreateMemberPage() {
                     />
                   </div>
                 </div>
-
                 <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                   <label htmlFor="passportExpiry" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                     {' '}
@@ -322,7 +580,6 @@ export default function CreateMemberPage() {
                     />
                   </div>
                 </div>
-
                 <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                   <label htmlFor="profession" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                     {' '}
@@ -352,7 +609,6 @@ export default function CreateMemberPage() {
                     </select>
                   </div>
                 </div>
-
                 <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                   <label htmlFor="qualification" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                     {' '}
@@ -382,7 +638,6 @@ export default function CreateMemberPage() {
                     </select>
                   </div>
                 </div>
-
                 <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                   <label htmlFor="bloodGroup" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                     {' '}
@@ -412,7 +667,6 @@ export default function CreateMemberPage() {
                     </select>
                   </div>
                 </div>
-
                 <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                   <label htmlFor="houseName" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                     {' '}
@@ -430,7 +684,6 @@ export default function CreateMemberPage() {
                     />
                   </div>
                 </div>
-
                 <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                   <label htmlFor="addressIndia" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                     {' '}
@@ -448,7 +701,6 @@ export default function CreateMemberPage() {
                     />
                   </div>
                 </div>
-
                 <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                   <label htmlFor="area" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                     {' '}
@@ -478,7 +730,6 @@ export default function CreateMemberPage() {
                     </select>
                   </div>
                 </div>
-
                 <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                   <label htmlFor="area" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                     {' '}
@@ -508,7 +759,6 @@ export default function CreateMemberPage() {
                     </select>
                   </div>
                 </div>
-
                 <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                   <label htmlFor="role" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                     {' '}
@@ -537,7 +787,6 @@ export default function CreateMemberPage() {
                     </select>
                   </div>
                 </div>
-
                 <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                   <label htmlFor="role" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                     {' '}
