@@ -69,7 +69,6 @@ export default function CreateMemberPage() {
   const [emiratesIdExpiry, setEmiratesIdExpiry] = useState('');
   const [dateOfBirth, setDateOfBirth] = useState('');
   const [mobile, setMobile] = useState('');
-  const [alternateMobile, setAlternateMobile] = useState('');
   const [email, setEmail] = useState('');
   const [passportNumber, setPassportNumber] = useState('');
   const [passportExpiry, setPassportExpiry] = useState('');
@@ -82,6 +81,7 @@ export default function CreateMemberPage() {
   const [panchayat, setPanchayat] = useState('');
   const [registeredOrganization, setRegisteredOrganization] = useState('');
   const [welfareScheme, setWelfareScheme] = useState('');
+  const [agreeTerms, setAgreeTerms] = useState(false);
 
   const [emiratesIdFrontImagePath, setEmiratesIdFrontImagePath] = useState(null);
   const [emiratesIdBackImagePath, setEmiratesIdBackImagePath] = useState(null);
@@ -147,7 +147,6 @@ export default function CreateMemberPage() {
       emiratesIdExpiry,
       dateOfBirth,
       mobile,
-      alternateMobile,
       email,
       passportNumber,
       passportExpiry,
@@ -312,6 +311,14 @@ export default function CreateMemberPage() {
                         </div>
                         <ImagePreviewComponent vm={emiratesIdBackImagePath} />
                       </div>
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start pt-1 pb-5">
+                        <div className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"></div>
+                        <div className="mt-1 sm:mt-0 sm:col-span-2">
+                          <button className="ml-3 py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white disabled:bg-gray-500 bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                            Upload and Process ID Card
+                          </button>
+                        </div>
+                      </div>
                       <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                           {' '}
@@ -408,7 +415,6 @@ export default function CreateMemberPage() {
                       </div>
                       <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label htmlFor="gender" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                          {' '}
                           Gender
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
@@ -672,34 +678,45 @@ export default function CreateMemberPage() {
                         Membership Registration - Home Country Details
                       </h2>
                       <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
-                        <label htmlFor="area" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                          {' '}
-                          Area
+                        <label htmlFor="houseName" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                          State
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
-                          <select
-                            id="area"
-                            name="area"
-                            autoComplete="area"
-                            value={area}
-                            onChange={(e) => {
-                              setArea(e.target.value);
-                            }}
-                            className="max-w-lg block focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-                          >
-                            <option value="">Select</option>
-                            {userLookups &&
-                              userLookups.areas &&
-                              userLookups.areas.map((org, index) => {
-                                return (
-                                  <option key={index} value={org.id}>
-                                    {org.name}
-                                  </option>
-                                );
-                              })}
-                          </select>
+                          <input
+                            type="text"
+                            disabled
+                            value={userLookups && userLookups.stateName}
+                            className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                          />
                         </div>
                       </div>
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
+                        <label htmlFor="houseName" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                          District
+                        </label>
+                        <div className="mt-1 sm:mt-0 sm:col-span-2">
+                          <input
+                            type="text"
+                            disabled
+                            value={userLookups && userLookups.districtsName}
+                            className="max-w-lg block w-full disabled:bg-gray-100 shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                          />
+                        </div>
+                      </div>
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
+                        <label htmlFor="houseName" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                          Mandalam
+                        </label>
+                        <div className="mt-1 sm:mt-0 sm:col-span-2">
+                          <input
+                            type="text"
+                            disabled
+                            value={userLookups && userLookups.cascadeTitle}
+                            className="max-w-lg block w-full disabled:bg-gray-100 shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                          />
+                        </div>
+                      </div>
+
                       <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label htmlFor="area" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                           {' '}
@@ -844,40 +861,124 @@ export default function CreateMemberPage() {
                       </div>
 
                       <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
-                        <label htmlFor="terms" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                          Declaration
+                        <label htmlFor="houseName" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                          State
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
-                          <textarea
-                            rows="10"
-                            className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
+                          <input
+                            type="text"
                             disabled
-                          >
-                            മെമ്പര്‍ഷിപ്പ് ചേര്‍ക്കുന്നതിനുള്ള യു.എ.ഇ കെ.എം.സി.സി യുടെ അംഗീകൃത Agent എന്ന നിലയില്‍
-                            മുകളില്‍ കൊടുത്തിരിക്കുന്ന മുഴുവൻ വിവരങ്ങളും പരിപൂർണ്ണമായും സത്യസന്ധമായ കാര്യങ്ങളാണെന്ന് ഞാൻ
-                            ഉറപ്പ് നൽകുന്നു.&#13;&#10; 
-                            
-                            ഞാന്‍ ചേര്‍ക്കുന്ന ഈ വ്യക്തി, കേരളീയനാണെന്നും എന്റെ
-                            ജില്ലക്കാരനാണെന്നും യു.എ.ഇ കെ എം സി സി യുടെ നയപരിപാടികളും ആദര്‍ശലക്ഷ്യങ്ങളും നിലപാടുകളും
-                            അനുസരിച്ച് പ്രവര്‍ത്തിക്കുന്ന വ്യക്തിയാണെന്നും ഞാന്‍ ഉറപ്പ് നല്‍കുന്നു.&#13;&#10; 
-                            
-                            യു.എ.ഇ കെ എം സി സി യുടെ നിയമാവലിക്ക് വിരുദ്ധമായ രീതിയില്‍ ആളുകളെ ചേര്‍ത്താല്‍ , യു.എ.ഇ - കെ എം സി സി
-                            നല്‍കുന്ന ഏത് അച്ചടക്ക നടപടിയും സ്വീകരിക്കുകയും അനുസരിക്കുകയും ചെയ്യുമെന്ന് ഇതിനാൽ ഞാന്‍
-                            ഉറപ്പ് നല്‍കുന്നു.
-                          </textarea>
+                            value={userLookups && userLookups.stateName}
+                            className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                          />
+                        </div>
+                      </div>
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
+                        <label htmlFor="houseName" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                          District
+                        </label>
+                        <div className="mt-1 sm:mt-0 sm:col-span-2">
+                          <input
+                            type="text"
+                            disabled
+                            value={userLookups && userLookups.districtsName}
+                            className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                          />
+                        </div>
+                      </div>
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
+                        <label htmlFor="houseName" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                          Mandalam
+                        </label>
+                        <div className="mt-1 sm:mt-0 sm:col-span-2">
+                          <input
+                            type="text"
+                            disabled
+                            value={userLookups && userLookups.cascadeTitle}
+                            className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                          />
                         </div>
                       </div>
 
                       <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
-                        <label
-                          htmlFor="alternateMobile"
-                          className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
-                        ></label>
+                        <label htmlFor="houseName" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                          Panchayath
+                        </label>
+                        <div className="mt-1 sm:mt-0 sm:col-span-2">
+                          <input
+                            type="text"
+                            disabled
+                            value={panchayat}
+                            className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
+                        <label htmlFor="area" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                          Area
+                        </label>
+                        <div className="mt-1 sm:mt-0 sm:col-span-2">
+                          <select
+                            id="area"
+                            name="area"
+                            autoComplete="area"
+                            value={area}
+                            onChange={(e) => {
+                              setArea(e.target.value);
+                            }}
+                            className="max-w-lg block focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                          >
+                            <option value="">Select</option>
+                            {userLookups &&
+                              userLookups.areas &&
+                              userLookups.areas.map((org, index) => {
+                                return (
+                                  <option key={index} value={org.id}>
+                                    {org.name}
+                                  </option>
+                                );
+                              })}
+                          </select>
+                        </div>
+                      </div>
+
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
+                        <label htmlFor="terms" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                          Declaration
+                        </label>
+                        <div className="mt-1 sm:mt-0 sm:col-span-2">
+                          <div className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500">
+                            <p className="pb-5">
+                              മെമ്പര്‍ഷിപ്പ് ചേര്‍ക്കുന്നതിനുള്ള യു.എ.ഇ കെ.എം.സി.സി യുടെ അംഗീകൃത Agent എന്ന നിലയില്‍
+                              മുകളില്‍ കൊടുത്തിരിക്കുന്ന മുഴുവൻ വിവരങ്ങളും പരിപൂർണ്ണമായും സത്യസന്ധമായ കാര്യങ്ങളാണെന്ന്
+                              ഞാൻ ഉറപ്പ് നൽകുന്നു.
+                            </p>
+                            <p className="pb-5">
+                              ഞാന്‍ ചേര്‍ക്കുന്ന ഈ വ്യക്തി, കേരളീയനാണെന്നും എന്റെ ജില്ലക്കാരനാണെന്നും യു.എ.ഇ കെ എം സി സി
+                              യുടെ നയപരിപാടികളും ആദര്‍ശലക്ഷ്യങ്ങളും നിലപാടുകളും അനുസരിച്ച് പ്രവര്‍ത്തിക്കുന്ന
+                              വ്യക്തിയാണെന്നും ഞാന്‍ ഉറപ്പ് നല്‍കുന്നു.
+                            </p>
+                            <p className="pb-5">
+                              യു.എ.ഇ കെ എം സി സി യുടെ നിയമാവലിക്ക് വിരുദ്ധമായ രീതിയില്‍ ആളുകളെ ചേര്‍ത്താല്‍ , യു.എ.ഇ -
+                              കെ എം സി സി നല്‍കുന്ന ഏത് അച്ചടക്ക നടപടിയും സ്വീകരിക്കുകയും അനുസരിക്കുകയും ചെയ്യുമെന്ന്
+                              ഇതിനാൽ ഞാന്‍ ഉറപ്പ് നല്‍കുന്നു.
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
+                        <label className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"></label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
                           <input
                             id="default-checkbox"
+                            name="terms"
                             type="checkbox"
-                            value=""
+                            value={agreeTerms}
+                            onChange={(e) => {
+                              setAgreeTerms(e.target.value);
+                            }}
                             className="w-4 h-4 text-green-600 bg-gray-100 rounded border-gray-300 focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                           />
                           <label
@@ -922,6 +1023,7 @@ export default function CreateMemberPage() {
                   </button>
                   <button
                     type="submit"
+                    disabled={!fullName || !email || !mobile || !location || (isLocationNeeded && !role)}
                     className="ml-3 py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white disabled:bg-gray-500 bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                   >
                     Register
