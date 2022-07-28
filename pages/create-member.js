@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Head from 'next/head';
 import Router from 'next/router';
-import Image from 'next/image';
 import { Transition } from '@headlessui/react';
 import LookupsPresenter from '../shared/lookups/lookups.presenter';
 import MemberPresenter from '../components/member/members.presenter';
@@ -87,6 +86,8 @@ export default function CreateMemberPage() {
   const [emiratesIdFrontImagePath, setEmiratesIdFrontImagePath] = useState(null);
   const [emiratesIdBackImagePath, setEmiratesIdBackImagePath] = useState(null);
   const [photoImagePath, setPhotoImagePath] = useState(null);
+  const [passportFrontImagePath, setPassportFrontPage] = useState(null);
+  const [passportBackImagePath, setPassportBackPage] = useState(null);
 
   const memberPresenter = new MemberPresenter();
   const lookupsPresenter = new LookupsPresenter();
@@ -210,6 +211,30 @@ export default function CreateMemberPage() {
     }
   };
 
+  const onSelectingPassportFrontPage = async (event) => {
+    let file = event.target.files[0];
+    if (file) {
+      setPassportFrontPage(URL.createObjectURL(file));
+      await uploadPresenter.uploadPassportFirstPage((generatedViewModel) => {
+        console.log('Upload result', generatedViewModel);
+      }, file);
+    } else {
+      setPassportFrontPage(null);
+    }
+  };
+
+  const onSelectingPassportBackPage = async (event) => {
+    let file = event.target.files[0];
+    if (file) {
+      setPassportBackPage(URL.createObjectURL(file));
+      await uploadPresenter.uploadPassportLastPage((generatedViewModel) => {
+        console.log('Upload result', generatedViewModel);
+      }, file);
+    } else {
+      setPassportBackPage(null);
+    }
+  };
+
   return (
     <>
       <Head>
@@ -244,10 +269,10 @@ export default function CreateMemberPage() {
                     as="div"
                   >
                     <div style={{ width: `${wrapperWidth}px` }}>
-                      <h2 className="text-xl font-bold leading-tight text-gray-900">
+                      <h2 className="text-xl font-bold leading-tight text-gray-900 pb-5">
                         Membership Registration - Basic Details
                       </h2>
-                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label
                           htmlFor="emiratesIdFrontImagePath"
                           className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
@@ -267,7 +292,7 @@ export default function CreateMemberPage() {
                         </div>
                         <ImagePreviewComponent vm={emiratesIdFrontImagePath} />
                       </div>
-                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label
                           htmlFor="emiratesIdBackImagePath"
                           className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
@@ -287,7 +312,7 @@ export default function CreateMemberPage() {
                         </div>
                         <ImagePreviewComponent vm={emiratesIdBackImagePath} />
                       </div>
-                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                           {' '}
                           Full Name <span className="text-red-600">*</span>
@@ -304,7 +329,7 @@ export default function CreateMemberPage() {
                           />
                         </div>
                       </div>
-                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label
                           htmlFor="emiratesIdNumber"
                           className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
@@ -324,7 +349,7 @@ export default function CreateMemberPage() {
                           />
                         </div>
                       </div>
-                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label
                           htmlFor="emiratesIdExpiry"
                           className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
@@ -344,7 +369,7 @@ export default function CreateMemberPage() {
                           />
                         </div>
                       </div>
-                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label
                           htmlFor="dateOfBirth"
                           className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
@@ -364,7 +389,7 @@ export default function CreateMemberPage() {
                           />
                         </div>
                       </div>
-                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label htmlFor="mobile" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                           {' '}
                           Mobile Number
@@ -381,7 +406,7 @@ export default function CreateMemberPage() {
                           />
                         </div>
                       </div>
-                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label htmlFor="gender" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                           {' '}
                           Gender
@@ -395,7 +420,7 @@ export default function CreateMemberPage() {
                           </label>
                         </div>
                       </div>
-                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label
                           htmlFor="photoImagePath"
                           className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
@@ -432,52 +457,55 @@ export default function CreateMemberPage() {
                     as="div"
                   >
                     <div style={{ width: `${wrapperWidth}px` }}>
-                      <h2 className="text-xl font-bold leading-tight text-gray-900">
+                      <h2 className="text-xl font-bold leading-tight text-gray-900 pb-5">
                         Membership Registration - Basic Details
                       </h2>
-                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label
-                          htmlFor="alternateMobile"
+                          htmlFor="passportFrontImagePath"
                           className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
                         >
-                          {' '}
-                          Alternate Mobile
+                          Passport First Page
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
                           <input
-                            type="text"
-                            name="alternateMobile"
-                            id="alternateMobile"
-                            autoComplete="alternateMobile"
-                            value={alternateMobile}
-                            onChange={(e) => setAlternateMobile(e.target.value)}
+                            type="file"
+                            accept="image/*"
+                            name="passportFrontImagePath"
+                            id="passportFrontImagePath"
+                            onChange={(e) => onSelectingPassportFrontPage(e)}
                             className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                           />
                         </div>
+                        <ImagePreviewComponent vm={passportFrontImagePath} />
                       </div>
-                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-                        <label htmlFor="email" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                          {' '}
-                          Email
+
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
+                        <label
+                          htmlFor="passportBackImagePath"
+                          className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
+                        >
+                          Passport Visa Page
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
                           <input
-                            type="email"
-                            name="email"
-                            id="email"
-                            autoComplete="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            type="file"
+                            accept="image/*"
+                            name="passportBackImagePath"
+                            id="passportBackImagePath"
+                            onChange={(e) => onSelectingPassportBackPage(e)}
                             className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                           />
                         </div>
+                        <ImagePreviewComponent vm={passportBackImagePath} />
                       </div>
-                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label
                           htmlFor="passportNumber"
                           className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
                         >
-                          {' '}
                           Passport Number
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
@@ -492,12 +520,12 @@ export default function CreateMemberPage() {
                           />
                         </div>
                       </div>
-                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label
                           htmlFor="passportExpiry"
                           className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
                         >
-                          {' '}
                           Passport Expiry
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
@@ -512,12 +540,29 @@ export default function CreateMemberPage() {
                           />
                         </div>
                       </div>
-                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
+                        <label htmlFor="email" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                          Email
+                        </label>
+                        <div className="mt-1 sm:mt-0 sm:col-span-2">
+                          <input
+                            type="email"
+                            name="email"
+                            id="email"
+                            autoComplete="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label
                           htmlFor="profession"
                           className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
                         >
-                          {' '}
                           Profession
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
@@ -544,12 +589,11 @@ export default function CreateMemberPage() {
                           </select>
                         </div>
                       </div>
-                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label
                           htmlFor="qualification"
                           className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
                         >
-                          {' '}
                           Qualification
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
@@ -576,12 +620,11 @@ export default function CreateMemberPage() {
                           </select>
                         </div>
                       </div>
-                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label
                           htmlFor="bloodGroup"
                           className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
                         >
-                          {' '}
                           Blood Group
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
@@ -625,10 +668,10 @@ export default function CreateMemberPage() {
                     as="div"
                   >
                     <div style={{ width: `${wrapperWidth}px` }}>
-                      <h2 className="text-xl font-bold leading-tight text-gray-900">
+                      <h2 className="text-xl font-bold leading-tight text-gray-900 pb-5">
                         Membership Registration - Home Country Details
                       </h2>
-                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label htmlFor="area" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                           {' '}
                           Area
@@ -657,7 +700,7 @@ export default function CreateMemberPage() {
                           </select>
                         </div>
                       </div>
-                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label htmlFor="area" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                           {' '}
                           Panchayat
@@ -686,7 +729,7 @@ export default function CreateMemberPage() {
                           </select>
                         </div>
                       </div>
-                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label htmlFor="houseName" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                           {' '}
                           House Name
@@ -703,7 +746,7 @@ export default function CreateMemberPage() {
                           />
                         </div>
                       </div>
-                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label
                           htmlFor="addressIndia"
                           className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
@@ -740,10 +783,10 @@ export default function CreateMemberPage() {
                     as="div"
                   >
                     <div style={{ width: `${wrapperWidth}px` }}>
-                      <h2 className="text-xl font-bold leading-tight text-gray-900">
+                      <h2 className="text-xl font-bold leading-tight text-gray-900 pb-5">
                         Membership Registration - UAE Details
                       </h2>
-                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label htmlFor="role" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                           {' '}
                           Registered Organization
@@ -771,7 +814,7 @@ export default function CreateMemberPage() {
                           </select>
                         </div>
                       </div>
-                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label htmlFor="role" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                           {' '}
                           Welfare Scheme
@@ -800,22 +843,32 @@ export default function CreateMemberPage() {
                         </div>
                       </div>
 
-                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label htmlFor="terms" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                           Declaration
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
                           <textarea
                             rows="10"
-                            className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-blue-500"
+                            className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
                             disabled
                           >
-                            declaration text
+                            മെമ്പര്‍ഷിപ്പ് ചേര്‍ക്കുന്നതിനുള്ള യു.എ.ഇ കെ.എം.സി.സി യുടെ അംഗീകൃത Agent എന്ന നിലയില്‍
+                            മുകളില്‍ കൊടുത്തിരിക്കുന്ന മുഴുവൻ വിവരങ്ങളും പരിപൂർണ്ണമായും സത്യസന്ധമായ കാര്യങ്ങളാണെന്ന് ഞാൻ
+                            ഉറപ്പ് നൽകുന്നു.&#13;&#10; 
+                            
+                            ഞാന്‍ ചേര്‍ക്കുന്ന ഈ വ്യക്തി, കേരളീയനാണെന്നും എന്റെ
+                            ജില്ലക്കാരനാണെന്നും യു.എ.ഇ കെ എം സി സി യുടെ നയപരിപാടികളും ആദര്‍ശലക്ഷ്യങ്ങളും നിലപാടുകളും
+                            അനുസരിച്ച് പ്രവര്‍ത്തിക്കുന്ന വ്യക്തിയാണെന്നും ഞാന്‍ ഉറപ്പ് നല്‍കുന്നു.&#13;&#10; 
+                            
+                            യു.എ.ഇ കെ എം സി സി യുടെ നിയമാവലിക്ക് വിരുദ്ധമായ രീതിയില്‍ ആളുകളെ ചേര്‍ത്താല്‍ , യു.എ.ഇ - കെ എം സി സി
+                            നല്‍കുന്ന ഏത് അച്ചടക്ക നടപടിയും സ്വീകരിക്കുകയും അനുസരിക്കുകയും ചെയ്യുമെന്ന് ഇതിനാൽ ഞാന്‍
+                            ഉറപ്പ് നല്‍കുന്നു.
                           </textarea>
                         </div>
                       </div>
 
-                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label
                           htmlFor="alternateMobile"
                           className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
@@ -859,15 +912,6 @@ export default function CreateMemberPage() {
                   </p>
                 </div>
                 <div>
-                  {/* <button
-                    type="button"
-                    onClick={() => {
-                      Router.push('/home');
-                    }}
-                    className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-                  >
-                    Cancel
-                  </button> */}
                   <button
                     type="button"
                     disabled={currentStep === 3}

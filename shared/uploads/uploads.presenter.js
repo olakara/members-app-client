@@ -25,6 +25,12 @@ export default class UploadsPresenter {
     }, file);
   };
 
+  uploadPassportVisaPage = async (callback, file) => {
+    uploadsRepository.uploadPassportVisaPage((resultPm) => {
+      callback(resultPm);
+    }, file);
+  };
+
   uploadPassportLastPage = async (callback, file) => {
     uploadsRepository.uploadPassportLastPage((resultPm) => {
       callback(resultPm);

@@ -8,6 +8,7 @@ class UploadsRepository {
   photoProgrammersModel = null;
   passportFirstProgrammersModel = null;
   passportLastProgrammersModel = null;
+  passportVisaProgrammersModel = null;
 
   constructor() {
     this.emiratesIdFrontPageProgrammersModel = new Observable({});
@@ -15,6 +16,7 @@ class UploadsRepository {
     this.photoProgrammersModel = new Observable({});
     this.passportFirstProgrammersModel = new Observable({});
     this.passportLastProgrammersModel = new Observable({});
+    this.passportVisaProgrammersModel = new Observable({});
   }
 
   uploadPhoto = async (callback, fileDto) => {
@@ -41,6 +43,12 @@ class UploadsRepository {
     this.passportFirstProgrammersModel.notify();
   };
 
+  uploadPassportVisaPage = async (callback, fileDto) => {
+    this.passportVisaProgrammersModel.subscribe(callback);
+    await this.passportVisaApi(fileDto);
+    this.passortVisaProgrammersModel.notify();
+  };
+
   uploadPassportLastPage = async (callback, fileDto) => {
     this.passportLastProgrammersModel.subscribe(callback);
     await this.passportLastApi(fileDto);
@@ -63,6 +71,11 @@ class UploadsRepository {
   };
 
   passportFirstApi = async (fileDto) => {
+    const resultDto = await httpGateway.upload(config.BASE_URL + 'fileupload/passport-first', fileDto);
+    this.passportFirstProgrammersModel.value = resultDto;
+  };
+
+  passportVisaApi = async (fileDto) => {
     const resultDto = await httpGateway.upload(config.BASE_URL + 'fileupload/passport-first', fileDto);
     this.passportFirstProgrammersModel.value = resultDto;
   };
