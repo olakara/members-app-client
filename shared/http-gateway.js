@@ -22,7 +22,7 @@ class HttpGateway {
       if (response.ok) {
         const stringResponse = await response.text();
         const responseDto =
-          stringResponse === '' ? { success: true, data: {} } : { success: false, data: JSON.parse(stringResponse) };
+          stringResponse === '' ? { success: false, data: {} } : { success: true, data: JSON.parse(stringResponse) };
         return responseDto;
       } else {
         const responseMessage = await response.json();
@@ -87,7 +87,7 @@ class HttpGateway {
       if (response.ok) {
         const stringResponse = await response.text();
         const responseDto =
-          stringResponse === '' ? { success: true, data: {} } : { success: false, data: JSON.parse(stringResponse) };
+          stringResponse === '' ? { success: false, data: {} } : { success: true, data: JSON.parse(stringResponse) };
         return responseDto;
       } else {
         const responseMessage = await response.json();

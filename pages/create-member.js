@@ -83,11 +83,17 @@ export default function CreateMemberPage() {
   const [welfareScheme, setWelfareScheme] = useState('');
   const [agreeTerms, setAgreeTerms] = useState(false);
 
+  const [emiratesIdFrontPage, setEmiratesIdFrontPage] = useState(null);
+  const [emiratesIdLastPage, setEmiratesIdLastPage] = useState(null);
+  const [passportFrontPage, setPassportFrontPage] = useState(null);
+  const [passportLastPage, setPassportLastPage] = useState(null);
+  const [photo, setPhoto] = useState(null);
+
   const [emiratesIdFrontImagePath, setEmiratesIdFrontImagePath] = useState(null);
   const [emiratesIdBackImagePath, setEmiratesIdBackImagePath] = useState(null);
   const [photoImagePath, setPhotoImagePath] = useState(null);
-  const [passportFrontImagePath, setPassportFrontPage] = useState(null);
-  const [passportBackImagePath, setPassportBackPage] = useState(null);
+  const [passportFrontImagePath, setPassportFrontImagePath] = useState(null);
+  const [passportBackImagePath, setPassportBackImagePath] = useState(null);
 
   const memberPresenter = new MemberPresenter();
   const lookupsPresenter = new LookupsPresenter();
@@ -180,6 +186,7 @@ export default function CreateMemberPage() {
       setEmiratesIdFrontImagePath(URL.createObjectURL(file));
       await uploadPresenter.uploadEmiratesIdFront((generatedViewModel) => {
         console.log('Upload result', generatedViewModel);
+        setEmiratesIdFrontPage(generatedViewModel.data);
       }, file);
     } else {
       setEmiratesIdFrontImagePath(null);
@@ -192,6 +199,7 @@ export default function CreateMemberPage() {
       setEmiratesIdBackImagePath(URL.createObjectURL(file));
       await uploadPresenter.uploadEmiratesIdBack((generatedViewModel) => {
         console.log('Upload result', generatedViewModel);
+        setEmiratesIdLastPage(generatedViewModel.data);
       }, file);
     } else {
       setEmiratesIdBackImagePath(null);
@@ -204,6 +212,7 @@ export default function CreateMemberPage() {
       setPhotoImagePath(URL.createObjectURL(file));
       await uploadPresenter.uploadPhoto((generatedViewModel) => {
         console.log('Upload result', generatedViewModel);
+        setPhoto(generatedViewModel.data);
       }, file);
     } else {
       setPhotoImagePath(null);
@@ -213,24 +222,44 @@ export default function CreateMemberPage() {
   const onSelectingPassportFrontPage = async (event) => {
     let file = event.target.files[0];
     if (file) {
-      setPassportFrontPage(URL.createObjectURL(file));
+      setPassportFrontImagePath(URL.createObjectURL(file));
       await uploadPresenter.uploadPassportFirstPage((generatedViewModel) => {
         console.log('Upload result', generatedViewModel);
+        setPassportFrontPage(generatedViewModel.data);
       }, file);
     } else {
-      setPassportFrontPage(null);
+      setPassportFrontImagePath(null);
     }
   };
 
   const onSelectingPassportBackPage = async (event) => {
     let file = event.target.files[0];
     if (file) {
-      setPassportBackPage(URL.createObjectURL(file));
+      setPassportBackImagePath(URL.createObjectURL(file));
       await uploadPresenter.uploadPassportLastPage((generatedViewModel) => {
         console.log('Upload result', generatedViewModel);
+        setPassportLastPage(generatedViewModel.data);
       }, file);
     } else {
-      setPassportBackPage(null);
+      setPassportBackImagePath(null);
+    }
+  };
+
+  const processEmiratesID = async (event) => {
+    event.preventDefault();
+    if (emiratesIdFrontPage && emiratesIdLastPage) {
+      const emiratesIdData = {
+        frontPageId: emiratesIdFrontPage,
+        lastPageId: emiratesIdLastPage,
+      };
+      console.log('OCR request object', emiratesIdData);
+      await memberPresenter.getOcrData(
+        emiratesIdData,
+        (success) => {
+          console.log('OCR data from server', success);
+        },
+        (error) => {}
+      );
     }
   };
 
@@ -276,7 +305,6 @@ export default function CreateMemberPage() {
                           htmlFor="emiratesIdFrontImagePath"
                           className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
                         >
-                          {' '}
                           Emirates ID Front <span className="text-red-600">*</span>
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
@@ -296,7 +324,6 @@ export default function CreateMemberPage() {
                           htmlFor="emiratesIdBackImagePath"
                           className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
                         >
-                          {' '}
                           Emirates ID Back <span className="text-red-600">*</span>
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
@@ -314,14 +341,16 @@ export default function CreateMemberPage() {
                       <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start pt-1 pb-5">
                         <div className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"></div>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
-                          <button className="ml-3 py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white disabled:bg-gray-500 bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                          <button
+                            onClick={processEmiratesID}
+                            className="ml-3 py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white disabled:bg-gray-500 bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                          >
                             Upload and Process ID Card
                           </button>
                         </div>
                       </div>
                       <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                          {' '}
                           Full Name <span className="text-red-600">*</span>
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
@@ -341,7 +370,6 @@ export default function CreateMemberPage() {
                           htmlFor="emiratesIdNumber"
                           className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
                         >
-                          {' '}
                           Emirates ID Number
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
@@ -361,7 +389,6 @@ export default function CreateMemberPage() {
                           htmlFor="emiratesIdExpiry"
                           className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
                         >
-                          {' '}
                           Emirates ID Expiry
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
@@ -381,7 +408,6 @@ export default function CreateMemberPage() {
                           htmlFor="dateOfBirth"
                           className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
                         >
-                          {' '}
                           Date Of Birth
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
@@ -398,7 +424,6 @@ export default function CreateMemberPage() {
                       </div>
                       <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label htmlFor="mobile" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                          {' '}
                           Mobile Number
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
@@ -431,7 +456,6 @@ export default function CreateMemberPage() {
                           htmlFor="photoImagePath"
                           className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
                         >
-                          {' '}
                           Photo <span className="text-red-600">*</span>
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
@@ -719,7 +743,6 @@ export default function CreateMemberPage() {
 
                       <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label htmlFor="area" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                          {' '}
                           Panchayat
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
@@ -748,7 +771,6 @@ export default function CreateMemberPage() {
                       </div>
                       <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label htmlFor="houseName" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                          {' '}
                           House Name
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
@@ -768,7 +790,6 @@ export default function CreateMemberPage() {
                           htmlFor="addressIndia"
                           className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
                         >
-                          {' '}
                           Address India
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
@@ -805,7 +826,6 @@ export default function CreateMemberPage() {
                       </h2>
                       <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label htmlFor="role" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                          {' '}
                           Registered Organization
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
@@ -833,7 +853,6 @@ export default function CreateMemberPage() {
                       </div>
                       <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label htmlFor="role" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                          {' '}
                           Welfare Scheme
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
@@ -1004,7 +1023,7 @@ export default function CreateMemberPage() {
                     className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 disabled:bg-gray-500 disabled:text-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                   >
                     Prev
-                  </button>{' '}
+                  </button>
                 </div>
 
                 <div className="flex-auto">

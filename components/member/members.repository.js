@@ -4,15 +4,33 @@ import Observable from '../../shared/observable';
 
 class MembersRepostory {
   programmersModel = null;
+  ocrProgrammersModel = null;
 
   constructor() {
     this.programmersModel = new Observable([]);
+    this.ocrProgrammersModel = new Observable({});
   }
 
   getMembers = async (callback) => {
     this.programmersModel.subscribe(callback);
     await this.loadData();
     this.programmersModel.notify();
+  };
+
+  getOcrData = async (eidPm, successCallback, errorCallback) => {
+    this.ocrProgrammersModel.subscribe(successCallback);
+    const eidDto = {
+      frontPageId: eidPm.frontPageId,
+      lastPageId: eidPm.lastPageId,
+    };
+    const ocrResultDto = await httpGateway.post(config.BASE_URL + 'ocr', eidDto);
+
+    if (ocrResultDto.success) {
+      this.ocrProgrammersModel.value = ocrResultDto.data;
+      this.ocrProgrammersModel.notify();
+    } else {
+      errorCallback(ocrResultDto);
+    }
   };
 
   createMember = async (memberPm, successCallback, errorCallback) => {
@@ -35,11 +53,11 @@ class MembersRepostory {
       panchayatId: memberPm.panchayat,
       registeredOrganizationId: memberPm.registeredOrganization,
       welfareSchemeId: memberPm.welfareScheme,
-      emiratesIdFrontPage: null,
-      emiratesIdLastPage: null,
-      passportFrontPage: null,
-      passportLastPage: null,
-      photo: null,
+      emiratesIdFrontPage: memberPm.emiratesIdFrontPage,
+      emiratesIdLastPage: memberPm.emiratesIdLastPage,
+      passportFrontPage: memberPm.passportFrontPage,
+      passportLastPage: memberPm.passportLastPage,
+      photo: memberPm.photo,
     };
 
     let result = await httpGateway.post(config.BASE_URL + 'members', memberDto);
