@@ -82,6 +82,7 @@ export default function CreateMemberPage() {
   const [registeredOrganization, setRegisteredOrganization] = useState('');
   const [welfareScheme, setWelfareScheme] = useState('');
   const [agreeTerms, setAgreeTerms] = useState(false);
+  const [gender, setGender] = useState(0);
 
   const [emiratesIdFrontPage, setEmiratesIdFrontPage] = useState(null);
   const [emiratesIdLastPage, setEmiratesIdLastPage] = useState(null);
@@ -165,6 +166,11 @@ export default function CreateMemberPage() {
       panchayat,
       registeredOrganization,
       welfareScheme,
+      emiratesIdFirstPage,
+      emiratesIdLastPage,
+      passportFrontPage,
+      passportLastPage,
+      photo,
     };
 
     console.log('Member Form', memberForm);
@@ -255,12 +261,21 @@ export default function CreateMemberPage() {
       console.log('OCR request object', emiratesIdData);
       await memberPresenter.getOcrData(
         emiratesIdData,
-        (success) => {
-          console.log('OCR data from server', success);
+        (ocrData) => {
+          console.log('OCR data from server', ocrData);
+          setFullName(ocrData.name);
+          setEmiratesId(ocrData.idNumber);
+          setGender(ocrData.gender);
+          setDateOfBirth(ocrData.dateofBirth);
+          setEmiratesIdExpiry(ocrData.expiryDate);
         },
         (error) => {}
       );
     }
+  };
+
+  const handleGenderChange = (event) => {
+    setGender(event.traget.value);
   };
 
   return (
@@ -443,12 +458,28 @@ export default function CreateMemberPage() {
                           Gender
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
-                          <label>
-                            <input type="radio" value="0" name="gender" /> Male
-                          </label>
-                          <label className="m-14">
-                            <input type="radio" value="1" name="gender" /> Female
-                          </label>
+                          <fieldset>
+                            <label>
+                              <input
+                                type="radio"
+                                value="0"
+                                name="gender"
+                                checked={gender === 0}
+                                onChange={handleGenderChange}
+                              />{' '}
+                              Male
+                            </label>
+                            <label className="m-14">
+                              <input
+                                type="radio"
+                                value="1"
+                                name="gender"
+                                checked={gender === 1}
+                                onChange={handleGenderChange}
+                              />{' '}
+                              Female
+                            </label>
+                          </fieldset>
                         </div>
                       </div>
                       <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
