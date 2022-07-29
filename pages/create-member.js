@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Head from 'next/head';
 import Router from 'next/router';
-import Image from 'next/image';
 import { Transition } from '@headlessui/react';
 import LookupsPresenter from '../shared/lookups/lookups.presenter';
 import MemberPresenter from '../components/member/members.presenter';
@@ -70,7 +69,6 @@ export default function CreateMemberPage() {
   const [emiratesIdExpiry, setEmiratesIdExpiry] = useState('');
   const [dateOfBirth, setDateOfBirth] = useState('');
   const [mobile, setMobile] = useState('');
-  const [alternateMobile, setAlternateMobile] = useState('');
   const [email, setEmail] = useState('');
   const [passportNumber, setPassportNumber] = useState('');
   const [passportExpiry, setPassportExpiry] = useState('');
@@ -83,10 +81,20 @@ export default function CreateMemberPage() {
   const [panchayat, setPanchayat] = useState('');
   const [registeredOrganization, setRegisteredOrganization] = useState('');
   const [welfareScheme, setWelfareScheme] = useState('');
+  const [agreeTerms, setAgreeTerms] = useState(false);
+  const [gender, setGender] = useState(0);
+
+  const [emiratesIdFrontPage, setEmiratesIdFrontPage] = useState(null);
+  const [emiratesIdLastPage, setEmiratesIdLastPage] = useState(null);
+  const [passportFrontPage, setPassportFrontPage] = useState(null);
+  const [passportLastPage, setPassportLastPage] = useState(null);
+  const [photo, setPhoto] = useState(null);
 
   const [emiratesIdFrontImagePath, setEmiratesIdFrontImagePath] = useState(null);
   const [emiratesIdBackImagePath, setEmiratesIdBackImagePath] = useState(null);
   const [photoImagePath, setPhotoImagePath] = useState(null);
+  const [passportFrontImagePath, setPassportFrontImagePath] = useState(null);
+  const [passportBackImagePath, setPassportBackImagePath] = useState(null);
 
   const memberPresenter = new MemberPresenter();
   const lookupsPresenter = new LookupsPresenter();
@@ -146,7 +154,6 @@ export default function CreateMemberPage() {
       emiratesIdExpiry,
       dateOfBirth,
       mobile,
-      alternateMobile,
       email,
       passportNumber,
       passportExpiry,
@@ -159,6 +166,11 @@ export default function CreateMemberPage() {
       panchayat,
       registeredOrganization,
       welfareScheme,
+      emiratesIdFirstPage,
+      emiratesIdLastPage,
+      passportFrontPage,
+      passportLastPage,
+      photo,
     };
 
     console.log('Member Form', memberForm);
@@ -180,6 +192,7 @@ export default function CreateMemberPage() {
       setEmiratesIdFrontImagePath(URL.createObjectURL(file));
       await uploadPresenter.uploadEmiratesIdFront((generatedViewModel) => {
         console.log('Upload result', generatedViewModel);
+        setEmiratesIdFrontPage(generatedViewModel.data);
       }, file);
     } else {
       setEmiratesIdFrontImagePath(null);
@@ -192,6 +205,7 @@ export default function CreateMemberPage() {
       setEmiratesIdBackImagePath(URL.createObjectURL(file));
       await uploadPresenter.uploadEmiratesIdBack((generatedViewModel) => {
         console.log('Upload result', generatedViewModel);
+        setEmiratesIdLastPage(generatedViewModel.data);
       }, file);
     } else {
       setEmiratesIdBackImagePath(null);
@@ -204,10 +218,64 @@ export default function CreateMemberPage() {
       setPhotoImagePath(URL.createObjectURL(file));
       await uploadPresenter.uploadPhoto((generatedViewModel) => {
         console.log('Upload result', generatedViewModel);
+        setPhoto(generatedViewModel.data);
       }, file);
     } else {
       setPhotoImagePath(null);
     }
+  };
+
+  const onSelectingPassportFrontPage = async (event) => {
+    let file = event.target.files[0];
+    if (file) {
+      setPassportFrontImagePath(URL.createObjectURL(file));
+      await uploadPresenter.uploadPassportFirstPage((generatedViewModel) => {
+        console.log('Upload result', generatedViewModel);
+        setPassportFrontPage(generatedViewModel.data);
+      }, file);
+    } else {
+      setPassportFrontImagePath(null);
+    }
+  };
+
+  const onSelectingPassportBackPage = async (event) => {
+    let file = event.target.files[0];
+    if (file) {
+      setPassportBackImagePath(URL.createObjectURL(file));
+      await uploadPresenter.uploadPassportLastPage((generatedViewModel) => {
+        console.log('Upload result', generatedViewModel);
+        setPassportLastPage(generatedViewModel.data);
+      }, file);
+    } else {
+      setPassportBackImagePath(null);
+    }
+  };
+
+  const processEmiratesID = async (event) => {
+    event.preventDefault();
+    if (emiratesIdFrontPage && emiratesIdLastPage) {
+      const emiratesIdData = {
+        frontPageId: emiratesIdFrontPage,
+        lastPageId: emiratesIdLastPage,
+      };
+      console.log('OCR request object', emiratesIdData);
+      await memberPresenter.getOcrData(
+        emiratesIdData,
+        (ocrData) => {
+          console.log('OCR data from server', ocrData);
+          setFullName(ocrData.name);
+          setEmiratesId(ocrData.idNumber);
+          setGender(ocrData.gender);
+          setDateOfBirth(ocrData.dateofBirth);
+          setEmiratesIdExpiry(ocrData.expiryDate);
+        },
+        (error) => {}
+      );
+    }
+  };
+
+  const handleGenderChange = (event) => {
+    setGender(event.traget.value);
   };
 
   return (
@@ -244,15 +312,14 @@ export default function CreateMemberPage() {
                     as="div"
                   >
                     <div style={{ width: `${wrapperWidth}px` }}>
-                      <h2 className="text-xl font-bold leading-tight text-gray-900">
+                      <h2 className="text-xl font-bold leading-tight text-gray-900 pb-5">
                         Membership Registration - Basic Details
                       </h2>
-                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label
                           htmlFor="emiratesIdFrontImagePath"
                           className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
                         >
-                          {' '}
                           Emirates ID Front <span className="text-red-600">*</span>
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
@@ -267,12 +334,11 @@ export default function CreateMemberPage() {
                         </div>
                         <ImagePreviewComponent vm={emiratesIdFrontImagePath} />
                       </div>
-                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label
                           htmlFor="emiratesIdBackImagePath"
                           className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
                         >
-                          {' '}
                           Emirates ID Back <span className="text-red-600">*</span>
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
@@ -287,9 +353,19 @@ export default function CreateMemberPage() {
                         </div>
                         <ImagePreviewComponent vm={emiratesIdBackImagePath} />
                       </div>
-                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start pt-1 pb-5">
+                        <div className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"></div>
+                        <div className="mt-1 sm:mt-0 sm:col-span-2">
+                          <button
+                            onClick={processEmiratesID}
+                            className="ml-3 py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white disabled:bg-gray-500 bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                          >
+                            Upload and Process ID Card
+                          </button>
+                        </div>
+                      </div>
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                          {' '}
                           Full Name <span className="text-red-600">*</span>
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
@@ -304,12 +380,11 @@ export default function CreateMemberPage() {
                           />
                         </div>
                       </div>
-                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label
                           htmlFor="emiratesIdNumber"
                           className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
                         >
-                          {' '}
                           Emirates ID Number
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
@@ -324,12 +399,11 @@ export default function CreateMemberPage() {
                           />
                         </div>
                       </div>
-                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label
                           htmlFor="emiratesIdExpiry"
                           className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
                         >
-                          {' '}
                           Emirates ID Expiry
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
@@ -344,12 +418,11 @@ export default function CreateMemberPage() {
                           />
                         </div>
                       </div>
-                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label
                           htmlFor="dateOfBirth"
                           className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
                         >
-                          {' '}
                           Date Of Birth
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
@@ -364,9 +437,8 @@ export default function CreateMemberPage() {
                           />
                         </div>
                       </div>
-                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label htmlFor="mobile" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                          {' '}
                           Mobile Number
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
@@ -381,26 +453,40 @@ export default function CreateMemberPage() {
                           />
                         </div>
                       </div>
-                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label htmlFor="gender" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                          {' '}
                           Gender
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
-                          <label>
-                            <input type="radio" value="0" name="gender" /> Male
-                          </label>
-                          <label className="m-14">
-                            <input type="radio" value="1" name="gender" /> Female
-                          </label>
+                          <fieldset>
+                            <label>
+                              <input
+                                type="radio"
+                                value="0"
+                                name="gender"
+                                checked={gender === 0}
+                                onChange={handleGenderChange}
+                              />{' '}
+                              Male
+                            </label>
+                            <label className="m-14">
+                              <input
+                                type="radio"
+                                value="1"
+                                name="gender"
+                                checked={gender === 1}
+                                onChange={handleGenderChange}
+                              />{' '}
+                              Female
+                            </label>
+                          </fieldset>
                         </div>
                       </div>
-                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label
                           htmlFor="photoImagePath"
                           className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
                         >
-                          {' '}
                           Photo <span className="text-red-600">*</span>
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
@@ -432,52 +518,55 @@ export default function CreateMemberPage() {
                     as="div"
                   >
                     <div style={{ width: `${wrapperWidth}px` }}>
-                      <h2 className="text-xl font-bold leading-tight text-gray-900">
+                      <h2 className="text-xl font-bold leading-tight text-gray-900 pb-5">
                         Membership Registration - Basic Details
                       </h2>
-                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label
-                          htmlFor="alternateMobile"
+                          htmlFor="passportFrontImagePath"
                           className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
                         >
-                          {' '}
-                          Alternate Mobile
+                          Passport First Page
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
                           <input
-                            type="text"
-                            name="alternateMobile"
-                            id="alternateMobile"
-                            autoComplete="alternateMobile"
-                            value={alternateMobile}
-                            onChange={(e) => setAlternateMobile(e.target.value)}
+                            type="file"
+                            accept="image/*"
+                            name="passportFrontImagePath"
+                            id="passportFrontImagePath"
+                            onChange={(e) => onSelectingPassportFrontPage(e)}
                             className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                           />
                         </div>
+                        <ImagePreviewComponent vm={passportFrontImagePath} />
                       </div>
-                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-                        <label htmlFor="email" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                          {' '}
-                          Email
+
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
+                        <label
+                          htmlFor="passportBackImagePath"
+                          className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
+                        >
+                          Passport Visa Page
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
                           <input
-                            type="email"
-                            name="email"
-                            id="email"
-                            autoComplete="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            type="file"
+                            accept="image/*"
+                            name="passportBackImagePath"
+                            id="passportBackImagePath"
+                            onChange={(e) => onSelectingPassportBackPage(e)}
                             className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                           />
                         </div>
+                        <ImagePreviewComponent vm={passportBackImagePath} />
                       </div>
-                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label
                           htmlFor="passportNumber"
                           className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
                         >
-                          {' '}
                           Passport Number
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
@@ -492,12 +581,12 @@ export default function CreateMemberPage() {
                           />
                         </div>
                       </div>
-                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label
                           htmlFor="passportExpiry"
                           className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
                         >
-                          {' '}
                           Passport Expiry
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
@@ -512,12 +601,29 @@ export default function CreateMemberPage() {
                           />
                         </div>
                       </div>
-                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
+                        <label htmlFor="email" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                          Email
+                        </label>
+                        <div className="mt-1 sm:mt-0 sm:col-span-2">
+                          <input
+                            type="email"
+                            name="email"
+                            id="email"
+                            autoComplete="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label
                           htmlFor="profession"
                           className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
                         >
-                          {' '}
                           Profession
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
@@ -544,12 +650,11 @@ export default function CreateMemberPage() {
                           </select>
                         </div>
                       </div>
-                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label
                           htmlFor="qualification"
                           className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
                         >
-                          {' '}
                           Qualification
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
@@ -576,12 +681,11 @@ export default function CreateMemberPage() {
                           </select>
                         </div>
                       </div>
-                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label
                           htmlFor="bloodGroup"
                           className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
                         >
-                          {' '}
                           Blood Group
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
@@ -625,41 +729,51 @@ export default function CreateMemberPage() {
                     as="div"
                   >
                     <div style={{ width: `${wrapperWidth}px` }}>
-                      <h2 className="text-xl font-bold leading-tight text-gray-900">
+                      <h2 className="text-xl font-bold leading-tight text-gray-900 pb-5">
                         Membership Registration - Home Country Details
                       </h2>
-                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-                        <label htmlFor="area" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                          {' '}
-                          Area
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
+                        <label htmlFor="houseName" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                          State
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
-                          <select
-                            id="area"
-                            name="area"
-                            autoComplete="area"
-                            value={area}
-                            onChange={(e) => {
-                              setArea(e.target.value);
-                            }}
-                            className="max-w-lg block focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-                          >
-                            <option value="">Select</option>
-                            {userLookups &&
-                              userLookups.areas &&
-                              userLookups.areas.map((org, index) => {
-                                return (
-                                  <option key={index} value={org.id}>
-                                    {org.name}
-                                  </option>
-                                );
-                              })}
-                          </select>
+                          <input
+                            type="text"
+                            disabled
+                            value={userLookups && userLookups.stateName}
+                            className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                          />
                         </div>
                       </div>
-                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
+                        <label htmlFor="houseName" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                          District
+                        </label>
+                        <div className="mt-1 sm:mt-0 sm:col-span-2">
+                          <input
+                            type="text"
+                            disabled
+                            value={userLookups && userLookups.districtsName}
+                            className="max-w-lg block w-full disabled:bg-gray-100 shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                          />
+                        </div>
+                      </div>
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
+                        <label htmlFor="houseName" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                          Mandalam
+                        </label>
+                        <div className="mt-1 sm:mt-0 sm:col-span-2">
+                          <input
+                            type="text"
+                            disabled
+                            value={userLookups && userLookups.cascadeTitle}
+                            className="max-w-lg block w-full disabled:bg-gray-100 shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label htmlFor="area" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                          {' '}
                           Panchayat
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
@@ -686,9 +800,8 @@ export default function CreateMemberPage() {
                           </select>
                         </div>
                       </div>
-                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label htmlFor="houseName" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                          {' '}
                           House Name
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
@@ -703,12 +816,11 @@ export default function CreateMemberPage() {
                           />
                         </div>
                       </div>
-                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label
                           htmlFor="addressIndia"
                           className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
                         >
-                          {' '}
                           Address India
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
@@ -740,12 +852,11 @@ export default function CreateMemberPage() {
                     as="div"
                   >
                     <div style={{ width: `${wrapperWidth}px` }}>
-                      <h2 className="text-xl font-bold leading-tight text-gray-900">
+                      <h2 className="text-xl font-bold leading-tight text-gray-900 pb-5">
                         Membership Registration - UAE Details
                       </h2>
-                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label htmlFor="role" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                          {' '}
                           Registered Organization
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
@@ -771,9 +882,8 @@ export default function CreateMemberPage() {
                           </select>
                         </div>
                       </div>
-                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label htmlFor="role" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                          {' '}
                           Welfare Scheme
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
@@ -800,31 +910,125 @@ export default function CreateMemberPage() {
                         </div>
                       </div>
 
-                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
+                        <label htmlFor="houseName" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                          State
+                        </label>
+                        <div className="mt-1 sm:mt-0 sm:col-span-2">
+                          <input
+                            type="text"
+                            disabled
+                            value={userLookups && userLookups.stateName}
+                            className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                          />
+                        </div>
+                      </div>
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
+                        <label htmlFor="houseName" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                          District
+                        </label>
+                        <div className="mt-1 sm:mt-0 sm:col-span-2">
+                          <input
+                            type="text"
+                            disabled
+                            value={userLookups && userLookups.districtsName}
+                            className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                          />
+                        </div>
+                      </div>
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
+                        <label htmlFor="houseName" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                          Mandalam
+                        </label>
+                        <div className="mt-1 sm:mt-0 sm:col-span-2">
+                          <input
+                            type="text"
+                            disabled
+                            value={userLookups && userLookups.cascadeTitle}
+                            className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
+                        <label htmlFor="houseName" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                          Panchayath
+                        </label>
+                        <div className="mt-1 sm:mt-0 sm:col-span-2">
+                          <input
+                            type="text"
+                            disabled
+                            value={panchayat}
+                            className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
+                        <label htmlFor="area" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                          Area
+                        </label>
+                        <div className="mt-1 sm:mt-0 sm:col-span-2">
+                          <select
+                            id="area"
+                            name="area"
+                            autoComplete="area"
+                            value={area}
+                            onChange={(e) => {
+                              setArea(e.target.value);
+                            }}
+                            className="max-w-lg block focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                          >
+                            <option value="">Select</option>
+                            {userLookups &&
+                              userLookups.areas &&
+                              userLookups.areas.map((org, index) => {
+                                return (
+                                  <option key={index} value={org.id}>
+                                    {org.name}
+                                  </option>
+                                );
+                              })}
+                          </select>
+                        </div>
+                      </div>
+
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label htmlFor="terms" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                           Declaration
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
-                          <textarea
-                            rows="10"
-                            className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-blue-500"
-                            disabled
-                          >
-                            declaration text
-                          </textarea>
+                          <div className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500">
+                            <p className="pb-5">
+                              മെമ്പര്‍ഷിപ്പ് ചേര്‍ക്കുന്നതിനുള്ള യു.എ.ഇ കെ.എം.സി.സി യുടെ അംഗീകൃത Agent എന്ന നിലയില്‍
+                              മുകളില്‍ കൊടുത്തിരിക്കുന്ന മുഴുവൻ വിവരങ്ങളും പരിപൂർണ്ണമായും സത്യസന്ധമായ കാര്യങ്ങളാണെന്ന്
+                              ഞാൻ ഉറപ്പ് നൽകുന്നു.
+                            </p>
+                            <p className="pb-5">
+                              ഞാന്‍ ചേര്‍ക്കുന്ന ഈ വ്യക്തി, കേരളീയനാണെന്നും എന്റെ ജില്ലക്കാരനാണെന്നും യു.എ.ഇ കെ എം സി സി
+                              യുടെ നയപരിപാടികളും ആദര്‍ശലക്ഷ്യങ്ങളും നിലപാടുകളും അനുസരിച്ച് പ്രവര്‍ത്തിക്കുന്ന
+                              വ്യക്തിയാണെന്നും ഞാന്‍ ഉറപ്പ് നല്‍കുന്നു.
+                            </p>
+                            <p className="pb-5">
+                              യു.എ.ഇ കെ എം സി സി യുടെ നിയമാവലിക്ക് വിരുദ്ധമായ രീതിയില്‍ ആളുകളെ ചേര്‍ത്താല്‍ , യു.എ.ഇ -
+                              കെ എം സി സി നല്‍കുന്ന ഏത് അച്ചടക്ക നടപടിയും സ്വീകരിക്കുകയും അനുസരിക്കുകയും ചെയ്യുമെന്ന്
+                              ഇതിനാൽ ഞാന്‍ ഉറപ്പ് നല്‍കുന്നു.
+                            </p>
+                          </div>
                         </div>
                       </div>
 
-                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-                        <label
-                          htmlFor="alternateMobile"
-                          className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
-                        ></label>
+                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
+                        <label className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"></label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
                           <input
                             id="default-checkbox"
+                            name="terms"
                             type="checkbox"
-                            value=""
+                            value={agreeTerms}
+                            onChange={(e) => {
+                              setAgreeTerms(e.target.value);
+                            }}
                             className="w-4 h-4 text-green-600 bg-gray-100 rounded border-gray-300 focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                           />
                           <label
@@ -850,7 +1054,7 @@ export default function CreateMemberPage() {
                     className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 disabled:bg-gray-500 disabled:text-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                   >
                     Prev
-                  </button>{' '}
+                  </button>
                 </div>
 
                 <div className="flex-auto">
@@ -859,15 +1063,6 @@ export default function CreateMemberPage() {
                   </p>
                 </div>
                 <div>
-                  {/* <button
-                    type="button"
-                    onClick={() => {
-                      Router.push('/home');
-                    }}
-                    className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-                  >
-                    Cancel
-                  </button> */}
                   <button
                     type="button"
                     disabled={currentStep === 3}
@@ -878,6 +1073,7 @@ export default function CreateMemberPage() {
                   </button>
                   <button
                     type="submit"
+                    disabled={!fullName || !email || !mobile || !location || (isLocationNeeded && !role)}
                     className="ml-3 py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white disabled:bg-gray-500 bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                   >
                     Register

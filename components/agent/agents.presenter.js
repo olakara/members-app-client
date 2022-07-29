@@ -12,6 +12,7 @@ export default class AgentsPresenter {
           isActive: agentPm.isActive,
           mobileNumber: agentPm.mobileNumber,
           fullName: agentPm.fullName,
+          isDisputeCommittee: agentPm.isDisputeCommittee,
         };
       });
       callback(agentsVm);
@@ -27,6 +28,7 @@ export default class AgentsPresenter {
       designation: agentDto.designation,
       role: agentDto.role,
       cascadeId: agentDto.location,
+      isDisputeCommittee: agentDto.isDisputeCommittee,
     };
     await agentsRepository.createAgent(agentPm, successCallback, errorCallback);
   };

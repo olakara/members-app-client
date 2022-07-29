@@ -23,6 +23,9 @@ export default class LookupsPresenter {
         areas: this.getLookupsVm(lookupPm.areas ?? []),
         panchayats: this.getPanchayatsVm(lookupPm.panchayats ?? []),
         cascadeTitle: lookupPm.cascadeTitle,
+        stateName: lookupPm.stateName,
+        districtsName: lookupPm.districtsName,
+        canDisputeCommittee: lookupPm.canDisputeCommittee,
       };
       callback(lookupsVm);
     });
