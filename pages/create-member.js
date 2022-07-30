@@ -273,12 +273,21 @@ export default function CreateMemberPage() {
         emiratesIdData,
         (ocrData) => {
           if (ocrData && !isEmptyObject(ocrData)) {
-            console.log(ocrData.gender);
+            if (ocrData.isDispute) {
+              Router.push({
+                pathname: '/create-dispute',
+                query: {
+                  id: ocrData.idNumber,
+                },
+              });
+            }
+
             setFullName(ocrData.name);
             setEmiratesId(ocrData.idNumber);
             setGender(ocrData.gender + '');
             setDateOfBirth(convertDateToISOFormat(ocrData.dateofBirth));
             setEmiratesIdExpiry(convertDateToISOFormat(ocrData.expiryDate));
+
             setIsLoading(false);
           }
         },
@@ -568,7 +577,7 @@ export default function CreateMemberPage() {
                           htmlFor="passportBackImagePath"
                           className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
                         >
-                          Passport Visa Page
+                          Passport Last Page
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
                           <input
