@@ -1,0 +1,27 @@
+import { useEffect } from 'react';
+import Head from 'next/head';
+import Router, { useRouter } from 'next/router';
+import UserPresenter from '../components/user/user.presenter';
+import HeaderComponent from '../components/common/header.component';
+
+export default function CreateDisputePage() {
+  let userPresenter = new UserPresenter();
+
+  const { query, isReady } = useRouter();
+
+  useEffect(() => {
+    if (!isReady) return;
+    let id = query.id;
+    console.log('id from router', id);
+  }, [isReady]);
+
+  return (
+    <>
+      <Head>
+        <title>Create Dispute page</title>
+      </Head>
+      <HeaderComponent />
+      <div>Dispute form.</div>
+    </>
+  );
+}

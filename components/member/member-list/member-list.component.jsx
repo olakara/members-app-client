@@ -44,23 +44,26 @@ export default function MemberListComponent(props) {
         <table className="min-w-full divide-y divide-gray-300">
           <thead className="bg-gray-50">
             <tr>
-              <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
+              <th
+                scope="col"
+                className="hidden py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:table-cell"
+              >
+                Membership #
+              </th>
+              <th scope="col" className=" px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                 Name
+              </th>
+              <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 capitalize">
+                Panchayath
               </th>
               <th
                 scope="col"
                 className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell"
               >
-                Mandalam
+                Mobile
               </th>
-              <th
-                scope="col"
-                className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell capitalize"
-              >
-                Area
-              </th>
-              <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                Panchayat
+              <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 ">
+                Recipt
               </th>
             </tr>
           </thead>
@@ -71,7 +74,7 @@ export default function MemberListComponent(props) {
               })}
 
             {vm.length === 0 && (
-              <td colSpan={4} className="py-3.5 pl-4 text-center text-lg">
+              <td colSpan={5} className="py-3.5 pl-4 text-center text-lg">
                 Data not available
               </td>
             )}

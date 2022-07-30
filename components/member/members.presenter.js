@@ -6,10 +6,10 @@ export default class MembersPresenter {
       const membersVm = membersPm.map((memberPm) => {
         return {
           id: memberPm.id,
+          membershipId: memberPm.membershipId,
           fullName: memberPm.fullName,
-          mandalam: memberPm.mandalam.name,
-          area: memberPm.area.name,
           panchayat: memberPm.panchayat.name,
+          mobile: memberPm.mobileNumber,
         };
       });
       callback(membersVm);

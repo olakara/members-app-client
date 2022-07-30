@@ -273,12 +273,21 @@ export default function CreateMemberPage() {
         emiratesIdData,
         (ocrData) => {
           if (ocrData && !isEmptyObject(ocrData)) {
-            console.log(ocrData.gender);
+            if (ocrData.isDispute) {
+              Router.push({
+                pathname: '/create-dispute',
+                query: {
+                  id: ocrData.idNumber,
+                },
+              });
+            }
+
             setFullName(ocrData.name);
             setEmiratesId(ocrData.idNumber);
             setGender(ocrData.gender + '');
             setDateOfBirth(convertDateToISOFormat(ocrData.dateofBirth));
             setEmiratesIdExpiry(convertDateToISOFormat(ocrData.expiryDate));
+
             setIsLoading(false);
           }
         },
