@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Router from 'next/router';
@@ -31,8 +32,12 @@ export default function HeaderComponent() {
         <div className="flex justify-between h-16">
           <div className="flex">
             <div className="flex-shrink-0 flex items-center">
-              <img className="block lg:hidden h-8 w-auto" src="/images/logo.jpg" alt="Logo" />
-              <img className="hidden lg:block h-8 w-auto" src="/images/logo.jpg" alt="Logo" />
+              <Link href="/">
+                <img className="block lg:hidden h-8 w-auto" src="/images/logo.jpg" alt="Logo" />
+              </Link>
+              <Link href="/">
+                <img className="hidden lg:block h-8 w-auto" src="/images/logo.jpg" alt="Logo" />
+              </Link>
             </div>
           </div>
 
