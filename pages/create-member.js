@@ -8,8 +8,11 @@ import HeaderComponent from '../components/common/header.component';
 import UploadsPresenter from '../shared/uploads/uploads.presenter';
 import FormErrorComponent from '../components/common/form-error.component';
 import ImagePreviewComponent from '../components/common/image-preview.component';
+import Spinner from '../components/common/spinner';
+import { convertDateToISOFormat, isEmptyObject, getItemNameById } from '../shared/utilities';
 
 export default function CreateMemberPage() {
+  const [isLoading, setIsLoading] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [moving, setMoving] = useState('right');
 
@@ -82,19 +85,24 @@ export default function CreateMemberPage() {
   const [registeredOrganization, setRegisteredOrganization] = useState('');
   const [welfareScheme, setWelfareScheme] = useState('');
   const [agreeTerms, setAgreeTerms] = useState(false);
-  const [gender, setGender] = useState(0);
+  const [gender, setGender] = useState('0');
 
-  const [emiratesIdFrontPage, setEmiratesIdFrontPage] = useState(null);
-  const [emiratesIdLastPage, setEmiratesIdLastPage] = useState(null);
-  const [passportFrontPage, setPassportFrontPage] = useState(null);
-  const [passportLastPage, setPassportLastPage] = useState(null);
-  const [photo, setPhoto] = useState(null);
+  const [emiratesIdFrontPage, setEmiratesIdFrontPage] = useState('');
+  const [emiratesIdLastPage, setEmiratesIdLastPage] = useState('');
+  const [passportFrontPage, setPassportFrontPage] = useState('');
+  const [passportLastPage, setPassportLastPage] = useState('');
+  const [photo, setPhoto] = useState('');
 
-  const [emiratesIdFrontImagePath, setEmiratesIdFrontImagePath] = useState(null);
-  const [emiratesIdBackImagePath, setEmiratesIdBackImagePath] = useState(null);
-  const [photoImagePath, setPhotoImagePath] = useState(null);
-  const [passportFrontImagePath, setPassportFrontImagePath] = useState(null);
-  const [passportBackImagePath, setPassportBackImagePath] = useState(null);
+  const [emiratesIdFrontImagePath, setEmiratesIdFrontImagePath] = useState('');
+  const [emiratesIdBackImagePath, setEmiratesIdBackImagePath] = useState('');
+  const [photoImagePath, setPhotoImagePath] = useState('');
+  const [passportFrontImagePath, setPassportFrontImagePath] = useState('');
+  const [passportBackImagePath, setPassportBackImagePath] = useState('');
+
+  const [isNameDisabled, setNameDisabled] = useState(true);
+  const [isIDNumberDisabled, setIDNumberDisabled] = useState(true);
+  const [isIDExpiryDisabled, setIDExpiryDisabled] = useState(true);
+  const [isDoBDisabled, setDobBisabled] = useState(true);
 
   const memberPresenter = new MemberPresenter();
   const lookupsPresenter = new LookupsPresenter();
@@ -152,25 +160,26 @@ export default function CreateMemberPage() {
       fullName,
       emiratesIdNumber,
       emiratesIdExpiry,
+      emiratesIdFrontPage,
+      emiratesIdLastPage,
       dateOfBirth,
       mobile,
       email,
       passportNumber,
       passportExpiry,
+      passportFrontPage,
+      passportLastPage,
       profession,
       qualification,
       bloodGroup,
+      gender,
+      photo,
       houseName,
       addressIndia,
       area,
       panchayat,
       registeredOrganization,
       welfareScheme,
-      emiratesIdFirstPage,
-      emiratesIdLastPage,
-      passportFrontPage,
-      passportLastPage,
-      photo,
     };
 
     console.log('Member Form', memberForm);
@@ -254,28 +263,34 @@ export default function CreateMemberPage() {
   const processEmiratesID = async (event) => {
     event.preventDefault();
     if (emiratesIdFrontPage && emiratesIdLastPage) {
+      setIsLoading(true);
       const emiratesIdData = {
         frontPageId: emiratesIdFrontPage,
         lastPageId: emiratesIdLastPage,
       };
-      console.log('OCR request object', emiratesIdData);
+
       await memberPresenter.getOcrData(
         emiratesIdData,
         (ocrData) => {
-          console.log('OCR data from server', ocrData);
-          setFullName(ocrData.name);
-          setEmiratesId(ocrData.idNumber);
-          setGender(ocrData.gender);
-          setDateOfBirth(ocrData.dateofBirth);
-          setEmiratesIdExpiry(ocrData.expiryDate);
+          if (ocrData && !isEmptyObject(ocrData)) {
+            console.log(ocrData.gender);
+            setFullName(ocrData.name);
+            setEmiratesId(ocrData.idNumber);
+            setGender(ocrData.gender + '');
+            setDateOfBirth(convertDateToISOFormat(ocrData.dateofBirth));
+            setEmiratesIdExpiry(convertDateToISOFormat(ocrData.expiryDate));
+            setIsLoading(false);
+          }
         },
-        (error) => {}
+        (error) => {
+          setIsLoading(false);
+        }
       );
     }
   };
 
   const handleGenderChange = (event) => {
-    setGender(event.traget.value);
+    setGender(event.target.value);
   };
 
   return (
@@ -284,6 +299,7 @@ export default function CreateMemberPage() {
         <title>Add Member</title>
       </Head>
       <HeaderComponent />
+      {isLoading && <Spinner isMessageNeeded={true} />}
       <div className="py-10">
         <header className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="-ml-4 -mt-2 flex items-center justify-between flex-wrap sm:flex-nowrap">
@@ -358,6 +374,7 @@ export default function CreateMemberPage() {
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
                           <button
                             onClick={processEmiratesID}
+                            disabled={!(emiratesIdFrontPage && emiratesIdLastPage)}
                             className="ml-3 py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white disabled:bg-gray-500 bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                           >
                             Upload and Process ID Card
@@ -374,9 +391,10 @@ export default function CreateMemberPage() {
                             name="fullName"
                             id="fullName"
                             autoComplete="given-name"
+                            disabled={isNameDisabled}
                             value={fullName}
                             onChange={(e) => setFullName(e.target.value)}
-                            className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                            className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                           />
                         </div>
                       </div>
@@ -393,9 +411,10 @@ export default function CreateMemberPage() {
                             name="emiratesIdNumber"
                             id="emiratesIdNumber"
                             autoComplete="emirates-id"
+                            disabled={isIDNumberDisabled}
                             value={emiratesIdNumber}
                             onChange={(e) => setEmiratesId(e.target.value)}
-                            className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                            className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                           />
                         </div>
                       </div>
@@ -412,9 +431,10 @@ export default function CreateMemberPage() {
                             name="emiratesIdExpiry"
                             id="emiratesIdExpiry"
                             autoComplete="emirates-id-expiry"
+                            disabled={isIDExpiryDisabled}
                             value={emiratesIdExpiry}
                             onChange={(e) => setEmiratesIdExpiry(e.target.value)}
-                            className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                            className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                           />
                         </div>
                       </div>
@@ -431,9 +451,10 @@ export default function CreateMemberPage() {
                             name="dateOfBirth"
                             id="dateOfBirth"
                             autoComplete="dateOfBirth"
+                            disabled={isDoBDisabled}
                             value={dateOfBirth}
                             onChange={(e) => setDateOfBirth(e.target.value)}
-                            className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                            className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                           />
                         </div>
                       </div>
@@ -464,20 +485,20 @@ export default function CreateMemberPage() {
                                 type="radio"
                                 value="0"
                                 name="gender"
-                                checked={gender === 0}
+                                checked={gender === '0'}
                                 onChange={handleGenderChange}
-                              />{' '}
-                              Male
+                              />
+                              <span className="ml-2">Male </span>
                             </label>
                             <label className="m-14">
                               <input
                                 type="radio"
                                 value="1"
                                 name="gender"
-                                checked={gender === 1}
+                                checked={gender === '1'}
                                 onChange={handleGenderChange}
-                              />{' '}
-                              Female
+                              />
+                              <span className="ml-2">Female </span>
                             </label>
                           </fieldset>
                         </div>
@@ -958,7 +979,7 @@ export default function CreateMemberPage() {
                           <input
                             type="text"
                             disabled
-                            value={panchayat}
+                            value={userLookups && getItemNameById(userLookups.panchayats, panchayat)}
                             className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                           />
                         </div>
@@ -1073,7 +1094,6 @@ export default function CreateMemberPage() {
                   </button>
                   <button
                     type="submit"
-                    disabled={!fullName || !email || !mobile || !location || (isLocationNeeded && !role)}
                     className="ml-3 py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white disabled:bg-gray-500 bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                   >
                     Register
