@@ -577,7 +577,7 @@ export default function CreateMemberPage() {
                           htmlFor="passportBackImagePath"
                           className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
                         >
-                          Passport Visa Page
+                          Passport Last Page
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
                           <input

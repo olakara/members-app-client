@@ -53,7 +53,10 @@ export default function MemberListComponent(props) {
               <th scope="col" className=" px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                 Name
               </th>
-              <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 capitalize">
+              <th
+                scope="col"
+                className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 capitalize sm:table-cell"
+              >
                 Panchayath
               </th>
               <th
