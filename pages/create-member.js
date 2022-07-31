@@ -84,7 +84,9 @@ export default function CreateMemberPage() {
   const [panchayat, setPanchayat] = useState('');
   const [registeredOrganization, setRegisteredOrganization] = useState('');
   const [welfareScheme, setWelfareScheme] = useState('');
-  const [agreeTerms, setAgreeTerms] = useState(false);
+  const [agreeTermsOne, setAgreeTermsOne] = useState(false);
+  const [agreeTermsTwo, setAgreeTermsTwo] = useState(false);
+
   const [gender, setGender] = useState('0');
 
   const [emiratesIdFrontPage, setEmiratesIdFrontPage] = useState('');
@@ -1042,23 +1044,21 @@ export default function CreateMemberPage() {
                         </div>
                       </div>
 
-
-
                       <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"></label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
                           <input
-                            id="default-checkbox"
-                            name="terms"
-                            type="checkbox"
-                            value={agreeTerms}
+                            id="agreeTermsOne"
+                            name="agreeTermsOne"
+                            type="radio"
+                            value={agreeTermsOne}
                             onChange={(e) => {
-                              setAgreeTerms(e.target.value);
+                              setAgreeTermsOne(e.target.value);
                             }}
                             className="w-4 h-4 text-green-600 bg-gray-100 rounded border-gray-300 focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                           />
                           <label
-                            htmlFor="default-checkbox"
+                            htmlFor="agreeTermsOne"
                             className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                           >
                             മെമ്പര്‍ഷിപ്പ് ഫീസ് പത്ത് ദിര്‍ഹം കിട്ടി ബോധിച്ചു
@@ -1070,17 +1070,17 @@ export default function CreateMemberPage() {
                         <label className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"></label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
                           <input
-                            id="default-checkbox"
-                            name="terms"
-                            type="checkbox"
-                            value={agreeTerms}
+                            id="agreeTermsTwo"
+                            name="agreeTermsTwo"
+                            type="radio"
+                            value={agreeTermsTwo}
                             onChange={(e) => {
-                              setAgreeTerms(e.target.value);
+                              setAgreeTermsTwo(e.target.value);
                             }}
                             className="w-4 h-4 text-green-600 bg-gray-100 rounded border-gray-300 focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                           />
                           <label
-                            htmlFor="default-checkbox"
+                            htmlFor="agreeTermsTwo"
                             className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                           >
                             I agree and confirm above declaration
@@ -1121,6 +1121,7 @@ export default function CreateMemberPage() {
                   </button>
                   <button
                     type="submit"
+                    disabled={!agreeTermsOne || !agreeTermsTwo}
                     className="ml-3 py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white disabled:bg-gray-500 bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                   >
                     Register

@@ -46,7 +46,7 @@ export default function HeaderComponent() {
             <div className="mt-5">
               {isLoggedIn && (
                 <Link href="/logout" className="cursor-pointer">
-                  <a>
+                  <a title="logout">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-6 w-6"

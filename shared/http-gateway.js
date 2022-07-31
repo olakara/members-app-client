@@ -19,6 +19,7 @@ class HttpGateway {
         headers: { ...headers, 'Content-Type': 'application/json' },
       });
 
+
       if (response.ok) {
         const stringResponse = await response.text();
         const responseDto =

@@ -38,6 +38,14 @@ export default function MemberListComponent(props) {
     return roleSplitArray[0];
   }
 
+  if(vm.length === 0 ) {
+    return (
+      <div className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
+        Data not available!
+      </div>
+    )
+  } else {
+
   return (
     <>
       <div className="-mx-4 mt-8 overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:-mx-6 md:mx-0 md:rounded-lg">
@@ -76,14 +84,15 @@ export default function MemberListComponent(props) {
                 return <MemberRowComponent key={index} vm={memberVm} index={index} />;
               })}
 
-            {vm.length === 0 && (
+            {/* {vm.length === 0 && (
               <td colSpan={5} className="py-3.5 pl-4 text-center text-lg">
                 Data not available
               </td>
-            )}
+            )} */}
           </tbody>
         </table>
       </div>
     </>
   );
+  }
 }

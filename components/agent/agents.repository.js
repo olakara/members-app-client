@@ -28,7 +28,6 @@ class AgentsRepository {
     };
 
     let result = await httpGateway.post(config.BASE_URL + 'users/', agentDto);
-
     if (result.success) {
       successCallback();
     } else {
