@@ -5,6 +5,7 @@ import LookupsPresenter from '../shared/lookups/lookups.presenter';
 import HeaderComponent from '../components/common/header.component';
 import AgentListComponent from '../components/agent/agent-list/agent-list.component';
 import MemberListComponent from '../components/member/member-list/member-list.component';
+import FooterComponent from '../components/common/footer.component';
 
 export default function Home() {
   const lookupsPresenter = new LookupsPresenter();
@@ -76,6 +77,9 @@ export default function Home() {
           <MemberListComponent></MemberListComponent>
         </main>
       </div>
+
+
+
     </>
   );
 }
