@@ -14,7 +14,7 @@ class MembersRepostory {
   getMembers = async (callback) => {
     this.programmersModel.subscribe(callback);
     await this.loadData();
-    this.programmersModel.notify();
+    this.programmersModel.notify(); 
   };
 
   getOcrData = async (eidPm, successCallback, errorCallback) => {
