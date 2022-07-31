@@ -21,7 +21,7 @@ export default function CreateDisputePage() {
         <title>Create Dispute page</title>
       </Head>
       <HeaderComponent />
-      <div>Dispute form.</div>
+      <div>Dispute! This person is already registered. Please use the dispute form to create a dispute</div>
     </>
   );
 }

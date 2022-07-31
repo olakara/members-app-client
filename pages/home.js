@@ -77,9 +77,6 @@ export default function Home() {
           <MemberListComponent></MemberListComponent>
         </main>
       </div>
-
-
-
     </>
   );
 }
