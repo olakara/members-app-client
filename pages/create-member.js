@@ -414,7 +414,7 @@ export default function CreateMemberPage() {
                           htmlFor="emiratesIdNumber"
                           className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
                         >
-                          Emirates ID Number
+                          Emirates ID Number <span className="text-red-600">*</span>
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
                           <input
@@ -434,7 +434,7 @@ export default function CreateMemberPage() {
                           htmlFor="emiratesIdExpiry"
                           className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
                         >
-                          Emirates ID Expiry
+                          Emirates ID Expiry <span className="text-red-600">*</span>
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
                           <input
@@ -454,7 +454,7 @@ export default function CreateMemberPage() {
                           htmlFor="dateOfBirth"
                           className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
                         >
-                          Date Of Birth
+                          Date Of Birth <span className="text-red-600">*</span>
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
                           <input
@@ -471,7 +471,7 @@ export default function CreateMemberPage() {
                       </div>
                       <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label htmlFor="mobile" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                          Mobile Number
+                          Mobile Number <span className="text-red-600">*</span>
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
                           <input
@@ -487,7 +487,7 @@ export default function CreateMemberPage() {
                       </div>
                       <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label htmlFor="gender" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                          Gender
+                          Gender <span className="text-red-600">*</span>
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
                           <fieldset>
@@ -599,7 +599,7 @@ export default function CreateMemberPage() {
                           htmlFor="passportNumber"
                           className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
                         >
-                          Passport Number
+                          Passport Number <span className="text-red-600">*</span>
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
                           <input
@@ -619,7 +619,7 @@ export default function CreateMemberPage() {
                           htmlFor="passportExpiry"
                           className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
                         >
-                          Passport Expiry
+                          Passport Expiry <span className="text-red-600">*</span>
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
                           <input
@@ -636,7 +636,7 @@ export default function CreateMemberPage() {
 
                       <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label htmlFor="email" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                          Email
+                          Email <span className="text-red-600">*</span>
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
                           <input
@@ -806,7 +806,7 @@ export default function CreateMemberPage() {
 
                       <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label htmlFor="area" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                          Panchayat
+                          Panchayat <span className="text-red-600">*</span>
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
                           <select
@@ -834,7 +834,7 @@ export default function CreateMemberPage() {
                       </div>
                       <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label htmlFor="houseName" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                          House Name
+                          House Name <span className="text-red-600">*</span>
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
                           <input
@@ -1121,7 +1121,7 @@ export default function CreateMemberPage() {
                   </button>
                   <button
                     type="submit"
-                    disabled={!agreeTermsOne || !agreeTermsTwo}
+                    disabled={!fullName || !emiratesIdNumber || !emiratesIdExpiry || !dateOfBirth || !mobile || !email || !passportNumber || !passportExpiry || !houseName || !panchayat || !agreeTermsOne || !agreeTermsTwo}
                     className="ml-3 py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white disabled:bg-gray-500 bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                   >
                     Register
