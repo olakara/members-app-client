@@ -52,7 +52,7 @@ class AgentsRepository {
   };
 
   loadData = async () => {
-    const agentsDto = await httpGateway.get(config.BASE_URL + 'users/role');
+    const agentsDto = await httpGateway.get(config.BASE_URL + 'users/me');
     this.programmersModel.value = agentsDto.map((agentDto) => {
       return agentDto;
     });
