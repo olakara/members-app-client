@@ -106,6 +106,8 @@ export default function CreateMemberPage() {
   const [isIDExpiryDisabled, setIDExpiryDisabled] = useState(true);
   const [isDoBDisabled, setDobBisabled] = useState(true);
 
+  const [isUserInDubaiState, setIsUserInDubaiState] = useState(false);
+
   const memberPresenter = new MemberPresenter();
   const lookupsPresenter = new LookupsPresenter();
   const uploadPresenter = new UploadsPresenter();
@@ -118,6 +120,9 @@ export default function CreateMemberPage() {
       await lookupsPresenter.loadUserLookups((generatedViewModel) => {
         console.log('User lookups', generatedViewModel);
         copyUserLookupsToStateViewModel(generatedViewModel);
+        if (generatedViewModel.stateName === 'DUBAI') {
+          setIsUserInDubaiState(true);
+        }
       });
 
       await lookupsPresenter.loadProfessions((generatedViewModel) => {
@@ -562,7 +567,7 @@ export default function CreateMemberPage() {
                           htmlFor="passportFrontImagePath"
                           className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
                         >
-                          Passport First Page
+                          Passport First Page {isUserInDubaiState && <span className="text-red-600">*</span>}
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
                           <input
@@ -582,7 +587,7 @@ export default function CreateMemberPage() {
                           htmlFor="passportBackImagePath"
                           className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
                         >
-                          Passport Last Page
+                          Passport Last Page {isUserInDubaiState && <span className="text-red-600">*</span>}
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
                           <input
@@ -602,7 +607,7 @@ export default function CreateMemberPage() {
                           htmlFor="passportNumber"
                           className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
                         >
-                          Passport Number <span className="text-red-600">*</span>
+                          Passport Number
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
                           <input
@@ -622,7 +627,7 @@ export default function CreateMemberPage() {
                           htmlFor="passportExpiry"
                           className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
                         >
-                          Passport Expiry <span className="text-red-600">*</span>
+                          Passport Expiry
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
                           <input
