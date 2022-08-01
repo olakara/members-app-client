@@ -59,11 +59,11 @@ export default function CreateMemberPage() {
     return false;
   };
 
-  const [userLookups, copyUserLookupsToStateViewModel] = useState(null);
-  const [professionsLookup, copyProfessionsToStateViewModel] = useState(null);
-  const [qualificationsLookup, copyQualificationsToStateViewModel] = useState(null);
-  const [organizationsLookup, copyOrganizationsToStateViewModel] = useState(null);
-  const [welfareSchemesLookup, copyWelfareSchemesToStateViewModel] = useState(null);
+  const [userLookups, copyUserLookupsToStateViewModel] = useState({});
+  const [professionsLookup, copyProfessionsToStateViewModel] = useState([]);
+  const [qualificationsLookup, copyQualificationsToStateViewModel] = useState([]);
+  const [organizationsLookup, copyOrganizationsToStateViewModel] = useState([]);
+  const [welfareSchemesLookup, copyWelfareSchemesToStateViewModel] = useState([]);
 
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -289,7 +289,6 @@ export default function CreateMemberPage() {
               });
             }
 
-            debugger;
             setFullName(ocrData.name);
             setEmiratesId(ocrData.idNumber);
             setGender(ocrData.gender + '');
