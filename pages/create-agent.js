@@ -202,38 +202,36 @@ export default function CreateAgentPage() {
                   </div>
                 </div>
 
-                {isLocationNeeded && (
-                  <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-                    <label
-                      htmlFor="location"
-                      className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2 capitalize"
+                <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                  <label
+                    htmlFor="location"
+                    className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2 capitalize"
+                  >
+                    {' '}
+                    {locationLabel}
+                  </label>
+                  <div className="mt-1 sm:mt-0 sm:col-span-2">
+                    <select
+                      id="location"
+                      name="location"
+                      autoComplete="location"
+                      value={location}
+                      onChange={(e) => setLocation(e.target.value)}
+                      className="max-w-lg block focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                     >
-                      {' '}
-                      {locationLabel}
-                    </label>
-                    <div className="mt-1 sm:mt-0 sm:col-span-2">
-                      <select
-                        id="location"
-                        name="location"
-                        autoComplete="location"
-                        value={location}
-                        onChange={(e) => setLocation(e.target.value)}
-                        className="max-w-lg block focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-                      >
-                        <option value="">Select</option>
-                        {userLookups &&
-                          userLookups.cascadeData &&
-                          userLookups.cascadeData.map((location) => {
-                            return (
-                              <option key={location.id} value={location.id}>
-                                {location.description}
-                              </option>
-                            );
-                          })}
-                      </select>
-                    </div>
+                      <option value="">Select</option>
+                      {userLookups &&
+                        userLookups.cascadeData &&
+                        userLookups.cascadeData.map((location) => {
+                          return (
+                            <option key={location.id} value={location.id}>
+                              {location.description}
+                            </option>
+                          );
+                        })}
+                    </select>
                   </div>
-                )}
+                </div>
               </div>
             </div>
             <div className="pt-5">
