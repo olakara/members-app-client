@@ -20,11 +20,10 @@ class AgentsRepository {
       fullName: agentPm.fullName,
       email: agentPm.email,
       mobileNumber: agentPm.mobileNumber,
-      alternativeContactNumber: agentPm.alternativeContactNumber,
       designation: agentPm.designation,
       role: agentPm.role,
       cascadeId: agentPm.cascadeId,
-      isDisputeCommittee: (agentPm.isDisputeCommittee === 'true')
+      isDisputeCommittee: agentPm.isDisputeCommittee === 'true',
     };
 
     let result = await httpGateway.post(config.BASE_URL + 'users/', agentDto);

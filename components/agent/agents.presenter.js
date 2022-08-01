@@ -24,7 +24,6 @@ export default class AgentsPresenter {
       fullName: agentDto.fullName,
       email: agentDto.email,
       mobileNumber: agentDto.mobile,
-      alternativeContactNumber: agentDto.alternateMobile,
       designation: agentDto.designation,
       role: agentDto.role,
       cascadeId: agentDto.location,
