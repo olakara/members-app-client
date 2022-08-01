@@ -172,26 +172,6 @@ export default function CreateAgentPage() {
                 </div>
 
                 <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-                  <label
-                    htmlFor="isDisputeCommittee"
-                    className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
-                  >
-                    Dispute Committee
-                  </label>
-                  <div className="mt-1 sm:mt-0 sm:col-span-2">
-                    <input
-                      type="checkbox"
-                      name="isDisputeCommittee"
-                      id="isDisputeCommittee"
-                      autoComplete="isDisputeCommittee"
-                      value={isDisputeCommittee}
-                      onChange={(e) => setIsDisputeCommittee(e.target.value)}
-                      className="w-4 h-4 text-green-600 bg-gray-100 rounded border-gray-300 focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                    />
-                  </div>
-                </div>
-
-                <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                   <label htmlFor="role" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                     {' '}
                     Role
