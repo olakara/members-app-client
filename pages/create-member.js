@@ -1033,7 +1033,7 @@ export default function CreateMemberPage() {
                           Declaration
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
-                          <div className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500">
+                          <div className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-green-500 focus:border-green-500 dark:focus:ring-green-500 dark:focus:border-green-500">
                             <p className="pb-5">
                               മെമ്പര്‍ഷിപ്പ് ചേര്‍ക്കുന്നതിനുള്ള യു.എ.ഇ കെ.എം.സി.സി യുടെ അംഗീകൃത ഏജന്റ് എന്ന നിലയില്‍
                               മുകളില്‍ കൊടുത്തിരിക്കുന്ന മുഴുവൻ വിവരങ്ങളും പരിപൂർണ്ണമായും സത്യസന്ധമായ കാര്യങ്ങളാണെന്ന്
@@ -1066,10 +1066,7 @@ export default function CreateMemberPage() {
                             }}
                             className="w-4 h-4 text-green-600 bg-gray-100 rounded border-gray-300 focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                           />
-                          <label
-                            htmlFor="agreeTermsOne"
-                            className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                          >
+                          <label htmlFor="agreeTermsOne" className="ml-2 text-sm font-medium text-gray-900">
                             മെമ്പര്‍ഷിപ്പ് ഫീസ് പത്ത് ദിര്‍ഹം കിട്ടി ബോധിച്ചു
                           </label>
                         </div>
@@ -1088,10 +1085,7 @@ export default function CreateMemberPage() {
                             }}
                             className="w-4 h-4 text-green-600 bg-gray-100 rounded border-gray-300 focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                           />
-                          <label
-                            htmlFor="agreeTermsTwo"
-                            className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                          >
+                          <label htmlFor="agreeTermsTwo" className="ml-2 text-sm font-medium text-gray-900">
                             I agree and confirm above declaration
                           </label>
                         </div>
