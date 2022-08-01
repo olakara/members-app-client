@@ -59,11 +59,11 @@ export default function CreateMemberPage() {
     return false;
   };
 
-  const [userLookups, copyUserLookupsToStateViewModel] = useState(null);
-  const [professionsLookup, copyProfessionsToStateViewModel] = useState(null);
-  const [qualificationsLookup, copyQualificationsToStateViewModel] = useState(null);
-  const [organizationsLookup, copyOrganizationsToStateViewModel] = useState(null);
-  const [welfareSchemesLookup, copyWelfareSchemesToStateViewModel] = useState(null);
+  const [userLookups, copyUserLookupsToStateViewModel] = useState({});
+  const [professionsLookup, copyProfessionsToStateViewModel] = useState([]);
+  const [qualificationsLookup, copyQualificationsToStateViewModel] = useState([]);
+  const [organizationsLookup, copyOrganizationsToStateViewModel] = useState([]);
+  const [welfareSchemesLookup, copyWelfareSchemesToStateViewModel] = useState([]);
 
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -106,6 +106,8 @@ export default function CreateMemberPage() {
   const [isIDExpiryDisabled, setIDExpiryDisabled] = useState(true);
   const [isDoBDisabled, setDobBisabled] = useState(true);
 
+  const [isUserInDubaiState, setIsUserInDubaiState] = useState(false);
+
   const memberPresenter = new MemberPresenter();
   const lookupsPresenter = new LookupsPresenter();
   const uploadPresenter = new UploadsPresenter();
@@ -118,6 +120,9 @@ export default function CreateMemberPage() {
       await lookupsPresenter.loadUserLookups((generatedViewModel) => {
         console.log('User lookups', generatedViewModel);
         copyUserLookupsToStateViewModel(generatedViewModel);
+        if (generatedViewModel.stateName === 'DUBAI') {
+          setIsUserInDubaiState(true);
+        }
       });
 
       await lookupsPresenter.loadProfessions((generatedViewModel) => {
@@ -355,6 +360,7 @@ export default function CreateMemberPage() {
                             accept="image/*"
                             name="emiratesIdFrontImagePath"
                             id="emiratesIdFrontImagePath"
+                            disabled={emiratesIdFrontImagePath}
                             onChange={(e) => onSelectingEmiratesIdFront(e)}
                             className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                           />
@@ -374,6 +380,7 @@ export default function CreateMemberPage() {
                             accept="image/*"
                             name="emiratesIdBackImagePath"
                             id="emiratesIdBackImagePath"
+                            disabled={emiratesIdBackImagePath}
                             onChange={(e) => onSelectingEmiratesIdBack(e)}
                             className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                           />
@@ -559,7 +566,7 @@ export default function CreateMemberPage() {
                           htmlFor="passportFrontImagePath"
                           className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
                         >
-                          Passport First Page
+                          Passport First Page {isUserInDubaiState && <span className="text-red-600">*</span>}
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
                           <input
@@ -579,7 +586,7 @@ export default function CreateMemberPage() {
                           htmlFor="passportBackImagePath"
                           className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
                         >
-                          Passport Last Page
+                          Passport Last Page {isUserInDubaiState && <span className="text-red-600">*</span>}
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
                           <input
@@ -599,7 +606,7 @@ export default function CreateMemberPage() {
                           htmlFor="passportNumber"
                           className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
                         >
-                          Passport Number <span className="text-red-600">*</span>
+                          Passport Number
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
                           <input
@@ -619,7 +626,7 @@ export default function CreateMemberPage() {
                           htmlFor="passportExpiry"
                           className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
                         >
-                          Passport Expiry <span className="text-red-600">*</span>
+                          Passport Expiry
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
                           <input
@@ -1030,15 +1037,21 @@ export default function CreateMemberPage() {
                           Declaration
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
-                          <div className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500">
+                          <div className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-green-500 focus:border-green-500 dark:focus:ring-green-500 dark:focus:border-green-500">
                             <p className="pb-5">
-                              മെമ്പര്‍ഷിപ്പ് ചേര്‍ക്കുന്നതിനുള്ള യു.എ.ഇ കെ.എം.സി.സി യുടെ അംഗീകൃത ഏജന്റ് എന്ന നിലയില്‍ മുകളില്‍ കൊടുത്തിരിക്കുന്ന മുഴുവൻ വിവരങ്ങളും പരിപൂർണ്ണമായും സത്യസന്ധമായ കാര്യങ്ങളാണെന്ന് ഞാൻ ഉറപ്പ് നൽകുന്നു.
+                              മെമ്പര്‍ഷിപ്പ് ചേര്‍ക്കുന്നതിനുള്ള യു.എ.ഇ കെ.എം.സി.സി യുടെ അംഗീകൃത ഏജന്റ് എന്ന നിലയില്‍
+                              മുകളില്‍ കൊടുത്തിരിക്കുന്ന മുഴുവൻ വിവരങ്ങളും പരിപൂർണ്ണമായും സത്യസന്ധമായ കാര്യങ്ങളാണെന്ന്
+                              ഞാൻ ഉറപ്പ് നൽകുന്നു.
                             </p>
                             <p className="pb-5">
-                              ഞാന്‍ ചേര്‍ക്കുന്ന ഈ വ്യക്തി, കേരളീയനാണെന്നും എന്റെ ജില്ലക്കാരനാണെന്നും ഇന്ത്യന്‍ യൂണിയന്‍ മുസ്ലിം ലീഗിന്റെയും യു.എ.ഇ കെ എം സി സി യുടെയും നയപരിപാടികളും ആദര്‍ശലക്ഷ്യങ്ങളും നിലപാടുകളും അനുസരിച്ച് പ്രവര്‍ത്തിക്കുന്ന വ്യക്തിയാണെന്നും ഞാന്‍ ഉറപ്പ് നല്‍കുന്നു.
+                              ഞാന്‍ ചേര്‍ക്കുന്ന ഈ വ്യക്തി, കേരളീയനാണെന്നും എന്റെ ജില്ലക്കാരനാണെന്നും ഇന്ത്യന്‍ യൂണിയന്‍
+                              മുസ്ലിം ലീഗിന്റെയും യു.എ.ഇ കെ എം സി സി യുടെയും നയപരിപാടികളും ആദര്‍ശലക്ഷ്യങ്ങളും
+                              നിലപാടുകളും അനുസരിച്ച് പ്രവര്‍ത്തിക്കുന്ന വ്യക്തിയാണെന്നും ഞാന്‍ ഉറപ്പ് നല്‍കുന്നു.
                             </p>
                             <p className="pb-5">
-                              യു.എ.ഇ കെ എം സി സി യുടെ നിയമാവലിക്ക് വിരുദ്ധമായ രീതിയില്‍ ആളുകളെ ചേര്‍ത്താല്‍ , യു.എ.ഇ - കെ എം സി സി നല്‍കുന്ന ഏത് അച്ചടക്ക നടപടിയും സ്വീകരിക്കുകയും അനുസരിക്കുകയും ചെയ്യുമെന്ന് ഇതിനാൽ  ഞാന്‍ ഉറപ്പ് നല്‍കുന്നു.
+                              യു.എ.ഇ കെ എം സി സി യുടെ നിയമാവലിക്ക് വിരുദ്ധമായ രീതിയില്‍ ആളുകളെ ചേര്‍ത്താല്‍ , യു.എ.ഇ -
+                              കെ എം സി സി നല്‍കുന്ന ഏത് അച്ചടക്ക നടപടിയും സ്വീകരിക്കുകയും അനുസരിക്കുകയും ചെയ്യുമെന്ന്
+                              ഇതിനാൽ ഞാന്‍ ഉറപ്പ് നല്‍കുന്നു.
                             </p>
                           </div>
                         </div>
@@ -1057,10 +1070,7 @@ export default function CreateMemberPage() {
                             }}
                             className="w-4 h-4 text-green-600 bg-gray-100 rounded border-gray-300 focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                           />
-                          <label
-                            htmlFor="agreeTermsOne"
-                            className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                          >
+                          <label htmlFor="agreeTermsOne" className="ml-2 text-sm font-medium text-gray-900">
                             മെമ്പര്‍ഷിപ്പ് ഫീസ് പത്ത് ദിര്‍ഹം കിട്ടി ബോധിച്ചു
                           </label>
                         </div>
@@ -1079,10 +1089,7 @@ export default function CreateMemberPage() {
                             }}
                             className="w-4 h-4 text-green-600 bg-gray-100 rounded border-gray-300 focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                           />
-                          <label
-                            htmlFor="agreeTermsTwo"
-                            className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                          >
+                          <label htmlFor="agreeTermsTwo" className="ml-2 text-sm font-medium text-gray-900">
                             I agree and confirm above declaration
                           </label>
                         </div>
@@ -1121,7 +1128,20 @@ export default function CreateMemberPage() {
                   </button>
                   <button
                     type="submit"
-                    disabled={!fullName || !emiratesIdNumber || !emiratesIdExpiry || !dateOfBirth || !mobile || !email || !passportNumber || !passportExpiry || !houseName || !panchayat || !agreeTermsOne || !agreeTermsTwo}
+                    disabled={
+                      !fullName ||
+                      !emiratesIdNumber ||
+                      !emiratesIdExpiry ||
+                      !dateOfBirth ||
+                      !mobile ||
+                      !email ||
+                      !passportNumber ||
+                      !passportExpiry ||
+                      !houseName ||
+                      !panchayat ||
+                      !agreeTermsOne ||
+                      !agreeTermsTwo
+                    }
                     className="ml-3 py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white disabled:bg-gray-500 bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                   >
                     Register

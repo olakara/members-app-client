@@ -1,10 +1,9 @@
 export function convertDateToISOFormat(date) {
   if (!date) return;
-  if (dateIsValid(date)) return date.toISOString().split('T')[0];
 
-  let sampleDate = Date.parse(date);
-  if (sampleDate) return new Date(date).toISOString().split('T')[0];
-  else console.log('Could not convert date', date);
+  if (!dateIsValid(date)) return date.split('T')[0];
+
+  return date.toISOString().split('T')[0];
 }
 
 export function isEmptyObject(obj) {

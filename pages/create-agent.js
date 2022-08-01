@@ -102,7 +102,7 @@ export default function CreateAgentPage() {
                 <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                   <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                     {' '}
-                    Full Name
+                    Full Name <span className="text-red-600">*</span>
                   </label>
                   <div className="mt-1 sm:mt-0 sm:col-span-2">
                     <input
@@ -120,7 +120,7 @@ export default function CreateAgentPage() {
                 <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                   <label htmlFor="email" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                     {' '}
-                    Email (Login)
+                    Email (Login) <span className="text-red-600">*</span>
                   </label>
                   <div className="mt-1 sm:mt-0 sm:col-span-2">
                     <input
@@ -138,7 +138,7 @@ export default function CreateAgentPage() {
                 <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                   <label htmlFor="mobile" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                     {' '}
-                    Mobile Number
+                    Mobile Number <span className="text-red-600">*</span>
                   </label>
                   <div className="mt-1 sm:mt-0 sm:col-span-2">
                     <input
@@ -174,7 +174,7 @@ export default function CreateAgentPage() {
                 <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                   <label htmlFor="role" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                     {' '}
-                    Role
+                    Role <span className="text-red-600">*</span>
                   </label>
                   <div className="mt-1 sm:mt-0 sm:col-span-2">
                     <select
@@ -207,8 +207,7 @@ export default function CreateAgentPage() {
                     htmlFor="location"
                     className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2 capitalize"
                   >
-                    {' '}
-                    {locationLabel}
+                    {locationLabel} <span className="text-red-600">*</span>
                   </label>
                   <div className="mt-1 sm:mt-0 sm:col-span-2">
                     <select
