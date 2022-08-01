@@ -12,7 +12,6 @@ export default function CreateAgentPage() {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [mobile, setMobile] = useState('');
-  const [alternateMobile, setAlternateMobile] = useState('');
   const [designation, setDesignation] = useState('');
   const [location, setLocation] = useState('');
   const [role, setRole] = useState('');
@@ -64,7 +63,6 @@ export default function CreateAgentPage() {
       fullName,
       email,
       mobile,
-      alternateMobile,
       designation,
       role,
       location,
@@ -150,24 +148,6 @@ export default function CreateAgentPage() {
                       autoComplete="mobile"
                       value={mobile}
                       onChange={(e) => setMobile(e.target.value)}
-                      className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-                    />
-                  </div>
-                </div>
-
-                <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-                  <label htmlFor="alternateMobile" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                    {' '}
-                    Alternate Mobile
-                  </label>
-                  <div className="mt-1 sm:mt-0 sm:col-span-2">
-                    <input
-                      type="text"
-                      name="alternateMobile"
-                      id="alternateMobile"
-                      autoComplete="alternateMobile"
-                      value={alternateMobile}
-                      onChange={(e) => setAlternateMobile(e.target.value)}
                       className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                     />
                   </div>
