@@ -9,7 +9,7 @@ import UploadsPresenter from '../shared/uploads/uploads.presenter';
 import FormErrorComponent from '../components/common/form-error.component';
 import ImagePreviewComponent from '../components/common/image-preview.component';
 import Spinner from '../components/common/spinner';
-import { convertDateToISOFormat, isEmptyObject, getItemNameById } from '../shared/utilities';
+import { getDateInRegionalFormat, isEmptyObject, getItemNameById } from '../shared/utilities';
 
 export default function CreateMemberPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -292,8 +292,8 @@ export default function CreateMemberPage() {
             setFullName(ocrData.name);
             setEmiratesId(ocrData.idNumber);
             setGender(ocrData.gender + '');
-            setDateOfBirth(convertDateToISOFormat(ocrData.dateofBirth));
-            setEmiratesIdExpiry(convertDateToISOFormat(ocrData.expiryDate));
+            setDateOfBirth(getDateInRegionalFormat(ocrData.dateofBirth));
+            setEmiratesIdExpiry(getDateInRegionalFormat(ocrData.expiryDate));
 
             setIsLoading(false);
           }
@@ -307,6 +307,28 @@ export default function CreateMemberPage() {
 
   const handleGenderChange = (event) => {
     setGender(event.target.value);
+  };
+
+  const isStepOneValid = () => {
+    return (
+      fullName &&
+      emiratesIdNumber &&
+      emiratesIdExpiry &&
+      emiratesIdFrontPage &&
+      emiratesIdLastPage &&
+      dateOfBirth &&
+      gender &&
+      mobile
+    );
+  };
+
+  const isStepTwoValid = () => {
+    if (isUserInDubaiState) return passportFrontPage && passportLastPage && email;
+    else return email;
+  };
+
+  const isStepThreeValid = () => {
+    return houseName;
   };
 
   return (
@@ -445,7 +467,7 @@ export default function CreateMemberPage() {
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
                           <input
-                            type="date"
+                            type="text"
                             name="emiratesIdExpiry"
                             id="emiratesIdExpiry"
                             autoComplete="emirates-id-expiry"
@@ -465,7 +487,7 @@ export default function CreateMemberPage() {
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
                           <input
-                            type="date"
+                            type="text"
                             name="dateOfBirth"
                             id="dateOfBirth"
                             autoComplete="dateOfBirth"
@@ -526,7 +548,7 @@ export default function CreateMemberPage() {
                           htmlFor="photoImagePath"
                           className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
                         >
-                          Photo <span className="text-red-600">*</span>
+                          Photo
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
                           <input
@@ -1118,30 +1140,23 @@ export default function CreateMemberPage() {
                   </p>
                 </div>
                 <div>
-                  <button
-                    type="button"
-                    disabled={currentStep === 3}
-                    onClick={() => nextStep()}
-                    className="ml-3 py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white disabled:bg-gray-500 bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-                  >
-                    Next
-                  </button>
+                  {currentStep !== 3 && (
+                    <button
+                      type="button"
+                      disabled={
+                        (currentStep === 0 && !isStepOneValid()) ||
+                        (currentStep === 1 && !isStepTwoValid()) ||
+                        (currentStep === 2 && !isStepThreeValid())
+                      }
+                      onClick={() => nextStep()}
+                      className="ml-3 py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white disabled:bg-gray-500 bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                    >
+                      Next
+                    </button>
+                  )}
                   <button
                     type="submit"
-                    disabled={
-                      !fullName ||
-                      !emiratesIdNumber ||
-                      !emiratesIdExpiry ||
-                      !dateOfBirth ||
-                      !mobile ||
-                      !email ||
-                      !passportNumber ||
-                      !passportExpiry ||
-                      !houseName ||
-                      !panchayat ||
-                      !agreeTermsOne ||
-                      !agreeTermsTwo
-                    }
+                    disabled={!agreeTermsOne || !agreeTermsTwo}
                     className="ml-3 py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white disabled:bg-gray-500 bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                   >
                     Register
