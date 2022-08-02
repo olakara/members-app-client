@@ -14,7 +14,7 @@ class MembersRepostory {
   getMembers = async (callback) => {
     this.programmersModel.subscribe(callback);
     await this.loadData();
-    this.programmersModel.notify(); 
+    this.programmersModel.notify();
   };
 
   getOcrData = async (eidPm, successCallback, errorCallback) => {
@@ -55,6 +55,9 @@ class MembersRepostory {
       photo: memberPm.photo,
       houseName: memberPm.houseName,
       addressIndia: memberPm.addressIndia,
+      addressInDistrictId: memberPm.addressInDistrict,
+      addressInMandalamId: memberPm.addressInMandalam,
+      addressInPanchayatId: memberPm.addressInPanchayat,
       areaId: memberPm.area,
       panchayatId: memberPm.panchayat,
       registeredOrganizationId: memberPm.registeredOrganization,

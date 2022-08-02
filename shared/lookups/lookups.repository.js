@@ -9,6 +9,8 @@ class LookupsRepository {
   qualificationsProgrammersModel = null;
   registeredOrganizationsProgrammersModel = null;
   welfareSchemesProgrammersModel = null;
+  mandalamsProgrammersModel = null;
+  panchayathsProgrammersModel = null;
 
   constructor() {
     this.generalLookupsPogrammersModel = new Observable({});
@@ -17,7 +19,21 @@ class LookupsRepository {
     this.qualificationsProgrammersModel = new Observable([]);
     this.registeredOrganizationsProgrammersModel = new Observable([]);
     this.welfareSchemesProgrammersModel = new Observable([]);
+    this.mandalamsProgrammersModel = new Observable([]);
+    this.panchayathsProgrammersModel = new Observable([]);
   }
+
+  getMandalams = async (id, callback) => {
+    this.mandalamsProgrammersModel.subscribe(callback);
+    await this.loadMandalamsLookupData(id);
+    this.mandalamsProgrammersModel.notify();
+  };
+
+  getPanchayaths = async (id, callback) => {
+    this.panchayathsProgrammersModel.subscribe(callback);
+    await this.loadPanchayathsLookupData(id);
+    this.panchayathsProgrammersModel.notify();
+  };
 
   getLookups = async (callback) => {
     this.generalLookupsPogrammersModel.subscribe(callback);
@@ -83,6 +99,15 @@ class LookupsRepository {
   loadWelfareSchemes = async () => {
     const schemesDto = await httpGateway.get(config.BASE_URL + 'welfareSchemes');
     this.welfareSchemesProgrammersModel.value = schemesDto;
+  };
+
+  loadMandalamsLookupData = async (id) => {
+    const dto = await httpGateway.get(config.BASE_URL + 'mandalams/district/' + id);
+    this.mandalamsProgrammersModel.value = dto;
+  };
+  loadPanchayathsLookupData = async (id) => {
+    const dto = await httpGateway.get(config.BASE_URL + 'panchayats/mandalam/' + id);
+    this.panchayathsProgrammersModel.value = dto;
   };
 }
 
