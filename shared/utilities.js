@@ -6,6 +6,14 @@ export function convertDateToISOFormat(date) {
   return date.toISOString().split('T')[0];
 }
 
+export function getDateInRegionalFormat(date) {
+  let isoDate = convertDateToISOFormat(date);
+  let tempDate = new Date(isoDate);
+  let dateInRegionalFormat = `${tempDate.getDate()}/${tempDate.getMonth() + 1}/${tempDate.getFullYear()}`;
+  console.log(dateInRegionalFormat);
+  return dateInRegionalFormat;
+}
+
 export function isEmptyObject(obj) {
   return obj && Object.keys(obj).length === 0 && Object.getPrototypeOf(obj) === Object.prototype;
 }

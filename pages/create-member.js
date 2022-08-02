@@ -9,7 +9,7 @@ import UploadsPresenter from '../shared/uploads/uploads.presenter';
 import FormErrorComponent from '../components/common/form-error.component';
 import ImagePreviewComponent from '../components/common/image-preview.component';
 import Spinner from '../components/common/spinner';
-import { convertDateToISOFormat, isEmptyObject, getItemNameById } from '../shared/utilities';
+import { getDateInRegionalFormat, isEmptyObject, getItemNameById } from '../shared/utilities';
 
 export default function CreateMemberPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -292,8 +292,8 @@ export default function CreateMemberPage() {
             setFullName(ocrData.name);
             setEmiratesId(ocrData.idNumber);
             setGender(ocrData.gender + '');
-            setDateOfBirth(convertDateToISOFormat(ocrData.dateofBirth));
-            setEmiratesIdExpiry(convertDateToISOFormat(ocrData.expiryDate));
+            setDateOfBirth(getDateInRegionalFormat(ocrData.dateofBirth));
+            setEmiratesIdExpiry(getDateInRegionalFormat(ocrData.expiryDate));
 
             setIsLoading(false);
           }
@@ -467,7 +467,7 @@ export default function CreateMemberPage() {
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
                           <input
-                            type="date"
+                            type="text"
                             name="emiratesIdExpiry"
                             id="emiratesIdExpiry"
                             autoComplete="emirates-id-expiry"
@@ -487,7 +487,7 @@ export default function CreateMemberPage() {
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
                           <input
-                            type="date"
+                            type="text"
                             name="dateOfBirth"
                             id="dateOfBirth"
                             autoComplete="dateOfBirth"
