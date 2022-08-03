@@ -609,7 +609,7 @@ export default function CreateMemberPage() {
                             className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                           />
                         </div>
-                        <ImagePreviewComponent vm={passportFrontImagePath} />
+                        {/* <ImagePreviewComponent vm={passportFrontImagePath} /> */}
                       </div>
 
                       <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
@@ -629,7 +629,7 @@ export default function CreateMemberPage() {
                             className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                           />
                         </div>
-                        <ImagePreviewComponent vm={passportBackImagePath} />
+                        {/* <ImagePreviewComponent vm={passportBackImagePath} /> */}
                       </div>
 
                       <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
