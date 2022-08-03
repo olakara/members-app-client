@@ -12,7 +12,7 @@ import ImagePreviewComponent from '../components/common/image-preview.component'
 import PhotoPreviewComponent from '../components/common/photo-preview.component';
 
 import Spinner from '../components/common/spinner';
-import { getDateInRegionalFormat, isEmptyObject, getItemNameById } from '../shared/utilities';
+import { dateToServerSideFormat, getDateInRegionalFormat, isEmptyObject, getItemNameById } from '../shared/utilities';
 
 export default function CreateMemberPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -91,6 +91,7 @@ export default function CreateMemberPage() {
 
   const [area, setArea] = useState('');
   const [panchayat, setPanchayat] = useState('');
+  const [mandalam, setMandalam] = useState('');
   const [registeredOrganization, setRegisteredOrganization] = useState('');
   const [welfareScheme, setWelfareScheme] = useState('');
   const [agreeTermsOne, setAgreeTermsOne] = useState(false);
@@ -148,6 +149,7 @@ export default function CreateMemberPage() {
           console.log('Mandalams', mandalamsViewModel);
           copyMandalamLookupsToStateViewModel(mandalamsViewModel);
           setAddressInMandalam(generatedViewModel.agentMandalamId);
+          setMandalam(generatedViewModel.agentMandalamId);
         });
 
         await lookupsPresenter.loadPanchayaths(generatedViewModel.agentMandalamId, (panchayathsViewModel) => {
@@ -197,10 +199,10 @@ export default function CreateMemberPage() {
     let memberForm = {
       fullName,
       emiratesIdNumber,
-      emiratesIdExpiry,
+      emiratesIdExpiry: dateToServerSideFormat(emiratesIdExpiry),
       emiratesIdFrontPage,
       emiratesIdLastPage,
-      dateOfBirth,
+      dateOfBirth: dateToServerSideFormat(dateOfBirth),
       mobile,
       email,
       passportNumber,
@@ -219,6 +221,7 @@ export default function CreateMemberPage() {
       addressInPanchayat,
       area,
       panchayat,
+      mandalam,
       registeredOrganization,
       welfareScheme,
     };
@@ -328,7 +331,6 @@ export default function CreateMemberPage() {
             setGender(ocrData.gender + '');
             setDateOfBirth(getDateInRegionalFormat(ocrData.dateofBirth));
             setEmiratesIdExpiry(getDateInRegionalFormat(ocrData.expiryDate));
-
             setIsLoading(false);
           }
         },
@@ -363,7 +365,7 @@ export default function CreateMemberPage() {
   };
 
   const isStepThreeValid = () => {
-    return houseName;
+    return addressInPanchayat && houseName;
   };
 
   return (
@@ -926,7 +928,7 @@ export default function CreateMemberPage() {
                             }}
                             className="max-w-lg block focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                           >
-                            {/* <option value="">Select</option> */}
+                            {<option value="">Select</option>}
                             {panchayatLookups &&
                               panchayatLookups.panchayaths &&
                               panchayatLookups.panchayaths.map((org, index) => {
@@ -1081,12 +1083,32 @@ export default function CreateMemberPage() {
                           Mandalam
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
-                          <input
-                            type="text"
-                            disabled
-                            value={userLookups && userLookups.cascadeTitle}
-                            className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-                          />
+                          <select
+                            id="mandalam"
+                            name="mandalam"
+                            autoComplete="mandalam"
+                            value={mandalam}
+                            disabled={!isDistrictAgent}
+                            onChange={async (e) => {
+                              setMandalam(e.target.value);
+                              await lookupsPresenter.loadPanchayaths(e.target.value, (generatedViewModel) => {
+                                console.log('Panchayaths', generatedViewModel);
+                                copyPanchayatLookupsToStateViewModel(generatedViewModel);
+                              });
+                            }}
+                            className="max-w-lg block focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                          >
+                            {/* <option value="">Select</option> */}
+                            {mandalamLookups &&
+                              mandalamLookups.mandalams &&
+                              mandalamLookups.mandalams.map((org, index) => {
+                                return (
+                                  <option key={index} value={org.id}>
+                                    {org.name}
+                                  </option>
+                                );
+                              })}
+                          </select>
                         </div>
                       </div>
 
@@ -1133,6 +1155,7 @@ export default function CreateMemberPage() {
                             }}
                             className="max-w-lg block focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                           >
+                            <option value="">Select</option>
                             {userLookups &&
                               userLookups.areas &&
                               userLookups.areas.map((org, index) => {
@@ -1246,13 +1269,15 @@ export default function CreateMemberPage() {
                       Next
                     </button>
                   )}
-                  <button
-                    type="submit"
-                    disabled={!agreeTermsOne || !agreeTermsTwo}
-                    className="ml-3 py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white disabled:bg-gray-500 bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-                  >
-                    Register
-                  </button>
+                  {currentStep === 3 && (
+                    <button
+                      type="submit"
+                      disabled={!agreeTermsOne || !agreeTermsTwo}
+                      className="ml-3 py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white disabled:bg-gray-500 bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                    >
+                      Register
+                    </button>
+                  )}
                 </div>
               </div>
             </div>

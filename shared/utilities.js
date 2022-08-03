@@ -14,6 +14,19 @@ export function getDateInRegionalFormat(date) {
   return dateInRegionalFormat;
 }
 
+export function dateToServerSideFormat(date) {
+  let dateParts = date.split('/');
+  var dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
+  let month = '' + (dateObject.getMonth() + 1),
+    day = '' + dateObject.getDate(),
+    year = dateObject.getFullYear();
+
+  if (month.length < 2) month = '0' + month;
+  if (day.length < 2) day = '0' + day;
+
+  return [year, month, day].join('-');
+}
+
 export function isEmptyObject(obj) {
   return obj && Object.keys(obj).length === 0 && Object.getPrototypeOf(obj) === Object.prototype;
 }
@@ -29,3 +42,5 @@ export function getItemNameById(list, id) {
 function dateIsValid(date) {
   return date instanceof Date && !isNaN(date);
 }
+
+
