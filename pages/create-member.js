@@ -1076,7 +1076,7 @@ export default function CreateMemberPage() {
 
                       <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label htmlFor="area" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                          Area
+                          Area <span className="text-red-600">*</span>
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
                           <select
@@ -1089,7 +1089,6 @@ export default function CreateMemberPage() {
                             }}
                             className="max-w-lg block focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                           >
-                            <option value="">Select</option>
                             {userLookups &&
                               userLookups.areas &&
                               userLookups.areas.map((org, index) => {
