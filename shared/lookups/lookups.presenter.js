@@ -18,15 +18,17 @@ export default class LookupsPresenter {
   loadUserLookups = async (callback) => {
     lookupsRepository.getUserLookups((lookupPm) => {
       const lookupsVm = {
+        agentDistrictId: lookupPm.agentDistrictId,
+        agentMandalamId: lookupPm.agentMandalamId,
         applicableUserRole: lookupPm.applicableUserRole,
-        cascadeData: lookupPm.cascadeData,
         areas: this.getLookupsVm(lookupPm.areas ?? []),
-        district: this.getLookupsVm(lookupPm.district) ?? [],
-        panchayats: this.getPanchayatsVm(lookupPm.panchayats ?? []),
-        cascadeTitle: lookupPm.cascadeTitle,
-        stateName: lookupPm.stateName,
-        districtsName: lookupPm.districtsName,
         canDisputeCommittee: lookupPm.canDisputeCommittee,
+        cascadeData: lookupPm.cascadeData,
+        cascadeTitle: lookupPm.cascadeTitle,
+        district: this.getLookupsVm(lookupPm.district) ?? [],
+        districtsName: lookupPm.districtsName,
+        panchayats: this.getPanchayatsVm(lookupPm.panchayats ?? []),
+        stateName: lookupPm.stateName,
       };
       callback(lookupsVm);
     });

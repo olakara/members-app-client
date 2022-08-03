@@ -125,12 +125,24 @@ export default function CreateMemberPage() {
 
   useEffect(() => {
     async function load() {
-      await lookupsPresenter.loadUserLookups((generatedViewModel) => {
+      await lookupsPresenter.loadUserLookups(async (generatedViewModel) => {
         console.log('User lookups', generatedViewModel);
         copyUserLookupsToStateViewModel(generatedViewModel);
         if (generatedViewModel.stateName === 'DUBAI') {
           setIsUserInDubaiState(true);
         }
+        setAddressInDistrict(generatedViewModel.agentDistrictId);
+
+        await lookupsPresenter.loadMandalams(generatedViewModel.agentDistrictId, (mandalamsViewModel) => {
+          console.log('Mandalams', mandalamsViewModel);
+          copyMandalamLookupsToStateViewModel(mandalamsViewModel);
+          setAddressInMandalam(generatedViewModel.agentMandalamId);
+        });
+
+        await lookupsPresenter.loadPanchayaths(generatedViewModel.agentMandalamId, (panchayathsViewModel) => {
+          console.log('Panchayaths', panchayathsViewModel);
+          copyPanchayatLookupsToStateViewModel(panchayathsViewModel);
+        });
       });
 
       await lookupsPresenter.loadProfessions((generatedViewModel) => {
@@ -329,7 +341,8 @@ export default function CreateMemberPage() {
       emiratesIdLastPage &&
       dateOfBirth &&
       gender &&
-      mobile
+      mobile &&
+      mobile.length === 10
     );
   };
 
@@ -363,6 +376,7 @@ export default function CreateMemberPage() {
             <div className="pt-8 space-y-6 sm:pt-10 sm:space-y-5">
               <div className="space-y-6 sm:space-y-5">
                 <div className="flex flex-nowrap ">
+                  {/* <!-- Step 1 --> */}
                   <Transition
                     appear={false}
                     unmount={false}
@@ -576,6 +590,7 @@ export default function CreateMemberPage() {
                     </div>
                   </Transition>
 
+                  {/* <!-- Step 2 --> */}
                   <Transition
                     appear={false}
                     unmount={false}
@@ -787,6 +802,7 @@ export default function CreateMemberPage() {
                     </div>
                   </Transition>
 
+                  {/* <!-- Step 3 --> */}
                   <Transition
                     appear={false}
                     unmount={false}
@@ -950,6 +966,7 @@ export default function CreateMemberPage() {
                     </div>
                   </Transition>
 
+                  {/* <!-- Step 4 --> */}
                   <Transition
                     appear={false}
                     unmount={false}
