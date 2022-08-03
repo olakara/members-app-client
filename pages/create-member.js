@@ -4,6 +4,7 @@ import Router from 'next/router';
 import { Transition } from '@headlessui/react';
 import LookupsPresenter from '../shared/lookups/lookups.presenter';
 import MemberPresenter from '../components/member/members.presenter';
+import UserPresenter from '../components/user/user.presenter';
 import HeaderComponent from '../components/common/header.component';
 import UploadsPresenter from '../shared/uploads/uploads.presenter';
 import FormErrorComponent from '../components/common/form-error.component';
@@ -115,16 +116,26 @@ export default function CreateMemberPage() {
   const [isDoBDisabled, setDobBisabled] = useState(true);
 
   const [isUserInDubaiState, setIsUserInDubaiState] = useState(false);
+  const [isMandalamAgent, setIsMandalamAgent] = useState(false);
+  const [isDistrictAgent, setIsDistrictAgent] = useState(false);
 
   const memberPresenter = new MemberPresenter();
   const lookupsPresenter = new LookupsPresenter();
   const uploadPresenter = new UploadsPresenter();
+  const userPresenter = new UserPresenter();
 
   const wrapper = useRef(null);
   const [wrapperWidth, setWrapperWidth] = useState(1);
 
   useEffect(() => {
     async function load() {
+      await userPresenter.getCurrentUser((generatedViewModel) => {
+        const userRole = generatedViewModel.role;
+        console.log('userRole', userRole);
+        if (userRole === 'mandalam-agent') setIsMandalamAgent(true);
+        if (userRole === 'district-agent') setIsDistrictAgent(true);
+      });
+
       await lookupsPresenter.loadUserLookups(async (generatedViewModel) => {
         console.log('User lookups', generatedViewModel);
         copyUserLookupsToStateViewModel(generatedViewModel);
@@ -1084,12 +1095,26 @@ export default function CreateMemberPage() {
                           Panchayath
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
-                          <input
-                            type="text"
-                            disabled
-                            value={userLookups && getItemNameById(userLookups.panchayats, panchayat)}
-                            className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-                          />
+                          <select
+                            id="panchayat"
+                            name="panchayat"
+                            autoComplete="panchayat"
+                            value={panchayat}
+                            onChange={(e) => {
+                              setPanchayat(e.target.value);
+                            }}
+                            className="max-w-lg block focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                          >
+                            {panchayatLookups &&
+                              panchayatLookups.panchayaths &&
+                              panchayatLookups.panchayaths.map((org, index) => {
+                                return (
+                                  <option key={index} value={org.id}>
+                                    {org.name}
+                                  </option>
+                                );
+                              })}
+                          </select>
                         </div>
                       </div>
 
