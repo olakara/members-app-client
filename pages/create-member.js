@@ -8,6 +8,8 @@ import HeaderComponent from '../components/common/header.component';
 import UploadsPresenter from '../shared/uploads/uploads.presenter';
 import FormErrorComponent from '../components/common/form-error.component';
 import ImagePreviewComponent from '../components/common/image-preview.component';
+import PhotoPreviewComponent from '../components/common/photo-preview.component';
+
 import Spinner from '../components/common/spinner';
 import { getDateInRegionalFormat, isEmptyObject, getItemNameById } from '../shared/utilities';
 
@@ -569,7 +571,7 @@ export default function CreateMemberPage() {
                             className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                           />
                         </div>
-                        <ImagePreviewComponent vm={photoImagePath} />
+                        <PhotoPreviewComponent vm={photoImagePath} />
                       </div>
                     </div>
                   </Transition>
