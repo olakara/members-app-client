@@ -10,14 +10,6 @@ export default function UserList(props) {
     'from-blue-400 to-emerald-400': props.color === 'blue',
   });
 
-  const [users, setUsers] = useState([
-    { id: 1, firstName: 'Frank', lastName: 'Murphy', email: 'frank.murphy@test.com', isActive: true },
-    { id: 2, firstName: 'Vic', lastName: 'Reynolds', email: 'vic.reynolds@test.com', isActive: false },
-    { id: 3, firstName: 'Gina', lastName: 'Jabowski', email: 'gina.jabowski@test.com', isActive: false },
-    { id: 4, firstName: 'Jessi', lastName: 'Glaser', email: 'jessi.glaser@test.com', isActive: true },
-    { id: 5, firstName: 'Jay', lastName: 'Bilzerian', email: 'jay.bilzerian@test.com', isActive: true },
-  ]);
-
   return (
     <div className="-mx-4 mt-8 overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:-mx-6 md:mx-0 md:rounded-lg">
       <table className="min-w-full divide-y divide-gray-300">

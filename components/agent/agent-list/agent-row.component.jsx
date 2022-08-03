@@ -21,7 +21,7 @@ export default function AgentRowComponent(props) {
   return (
     <tr className={rowStyle}>
       <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
-        {props.vm.fullName}
+        {props.vm.fullName} <span className="italic text-gray-600">({props.vm.role})</span>
       </td>
       <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 sm:table-cell">{props.vm.email}</td>
       <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 lg:table-cell">{props.vm.cascadeName}</td>

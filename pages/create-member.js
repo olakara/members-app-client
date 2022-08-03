@@ -8,6 +8,8 @@ import HeaderComponent from '../components/common/header.component';
 import UploadsPresenter from '../shared/uploads/uploads.presenter';
 import FormErrorComponent from '../components/common/form-error.component';
 import ImagePreviewComponent from '../components/common/image-preview.component';
+import PhotoPreviewComponent from '../components/common/photo-preview.component';
+
 import Spinner from '../components/common/spinner';
 import { getDateInRegionalFormat, isEmptyObject, getItemNameById } from '../shared/utilities';
 
@@ -64,6 +66,8 @@ export default function CreateMemberPage() {
   const [qualificationsLookup, copyQualificationsToStateViewModel] = useState([]);
   const [organizationsLookup, copyOrganizationsToStateViewModel] = useState([]);
   const [welfareSchemesLookup, copyWelfareSchemesToStateViewModel] = useState([]);
+  const [mandalamLookups, copyMandalamLookupsToStateViewModel] = useState({});
+  const [panchayatLookups, copyPanchayatLookupsToStateViewModel] = useState({});
 
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -80,6 +84,10 @@ export default function CreateMemberPage() {
   const [bloodGroup, setBloodGroup] = useState('');
   const [houseName, setHouseName] = useState('');
   const [addressIndia, setAddressIndia] = useState('');
+  const [addressInDistrict, setAddressInDistrict] = useState('');
+  const [addressInMandalam, setAddressInMandalam] = useState('');
+  const [addressInPanchayat, setAddressInPanchayat] = useState('');
+
   const [area, setArea] = useState('');
   const [panchayat, setPanchayat] = useState('');
   const [registeredOrganization, setRegisteredOrganization] = useState('');
@@ -183,6 +191,9 @@ export default function CreateMemberPage() {
       photo,
       houseName,
       addressIndia,
+      addressInDistrict,
+      addressInMandalam,
+      addressInPanchayat,
       area,
       panchayat,
       registeredOrganization,
@@ -323,8 +334,8 @@ export default function CreateMemberPage() {
   };
 
   const isStepTwoValid = () => {
-    if (isUserInDubaiState) return passportFrontPage && passportLastPage && email;
-    else return email;
+    if (isUserInDubaiState) return passportFrontPage && passportLastPage;
+    else return true;
   };
 
   const isStepThreeValid = () => {
@@ -560,7 +571,7 @@ export default function CreateMemberPage() {
                             className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                           />
                         </div>
-                        <ImagePreviewComponent vm={photoImagePath} />
+                        <PhotoPreviewComponent vm={photoImagePath} />
                       </div>
                     </div>
                   </Transition>
@@ -593,14 +604,14 @@ export default function CreateMemberPage() {
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
                           <input
                             type="file"
-                            accept="image/*"
+                            accept="application/pdf,image/*"
                             name="passportFrontImagePath"
                             id="passportFrontImagePath"
                             onChange={(e) => onSelectingPassportFrontPage(e)}
                             className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                           />
                         </div>
-                        <ImagePreviewComponent vm={passportFrontImagePath} />
+                        {/* <ImagePreviewComponent vm={passportFrontImagePath} /> */}
                       </div>
 
                       <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
@@ -613,14 +624,14 @@ export default function CreateMemberPage() {
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
                           <input
                             type="file"
-                            accept="image/*"
+                            accept="application/pdf,image/*"
                             name="passportBackImagePath"
                             id="passportBackImagePath"
                             onChange={(e) => onSelectingPassportBackPage(e)}
                             className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                           />
                         </div>
-                        <ImagePreviewComponent vm={passportBackImagePath} />
+                        {/* <ImagePreviewComponent vm={passportBackImagePath} /> */}
                       </div>
 
                       <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
@@ -665,7 +676,7 @@ export default function CreateMemberPage() {
 
                       <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label htmlFor="email" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                          Email <span className="text-red-600">*</span>
+                          Email
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
                           <input
@@ -801,7 +812,7 @@ export default function CreateMemberPage() {
                           <input
                             type="text"
                             disabled
-                            value={userLookups && userLookups.stateName}
+                            value="KERALA"
                             className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                           />
                         </div>
@@ -811,12 +822,33 @@ export default function CreateMemberPage() {
                           District
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
-                          <input
-                            type="text"
-                            disabled
-                            value={userLookups && userLookups.districtsName}
-                            className="max-w-lg block w-full disabled:bg-gray-100 shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-                          />
+                          <select
+                            id="addressInDistrict"
+                            name="addressInDistrict"
+                            autoComplete="addressInDistrict"
+                            value={addressInDistrict}
+                            onChange={async (e) => {
+                              setAddressInDistrict(e.target.value);
+                              setAddressInMandalam('');
+                              setAddressInPanchayat('');
+                              await lookupsPresenter.loadMandalams(e.target.value, (generatedViewModel) => {
+                                console.log('Mandalams', generatedViewModel);
+                                copyMandalamLookupsToStateViewModel(generatedViewModel);
+                              });
+                            }}
+                            className="max-w-lg block focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                          >
+                            {/* <option value="">Select</option> */}
+                            {userLookups &&
+                              userLookups.district &&
+                              userLookups.district.map((org, index) => {
+                                return (
+                                  <option key={index} value={org.id}>
+                                    {org.name}
+                                  </option>
+                                );
+                              })}
+                          </select>
                         </div>
                       </div>
                       <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
@@ -824,12 +856,31 @@ export default function CreateMemberPage() {
                           Mandalam
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
-                          <input
-                            type="text"
-                            disabled
-                            value={userLookups && userLookups.cascadeTitle}
-                            className="max-w-lg block w-full disabled:bg-gray-100 shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-                          />
+                          <select
+                            id="addressInMandalam"
+                            name="addressInMandalam"
+                            autoComplete="addressInMandalam"
+                            value={addressInMandalam}
+                            onChange={async (e) => {
+                              setAddressInMandalam(e.target.value);
+                              await lookupsPresenter.loadPanchayaths(e.target.value, (generatedViewModel) => {
+                                console.log('Panchayaths', generatedViewModel);
+                                copyPanchayatLookupsToStateViewModel(generatedViewModel);
+                              });
+                            }}
+                            className="max-w-lg block focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                          >
+                            {/* <option value="">Select</option> */}
+                            {mandalamLookups &&
+                              mandalamLookups.mandalams &&
+                              mandalamLookups.mandalams.map((org, index) => {
+                                return (
+                                  <option key={index} value={org.id}>
+                                    {org.name}
+                                  </option>
+                                );
+                              })}
+                          </select>
                         </div>
                       </div>
 
@@ -839,19 +890,19 @@ export default function CreateMemberPage() {
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
                           <select
-                            id="panchayat"
-                            name="panchayat"
-                            autoComplete="panchayat"
-                            value={panchayat}
+                            id="addressInPanchayat"
+                            name="addressInPanchayat"
+                            autoComplete="addressInPanchayat"
+                            value={addressInPanchayat}
                             onChange={(e) => {
-                              setPanchayat(e.target.value);
+                              setAddressInPanchayat(e.target.value);
                             }}
                             className="max-w-lg block focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                           >
-                            <option value="">Select</option>
-                            {userLookups &&
-                              userLookups.panchayats &&
-                              userLookups.panchayats.map((org, index) => {
+                            {/* <option value="">Select</option> */}
+                            {panchayatLookups &&
+                              panchayatLookups.panchayaths &&
+                              panchayatLookups.panchayaths.map((org, index) => {
                                 return (
                                   <option key={index} value={org.id}>
                                     {org.name}
@@ -1027,7 +1078,7 @@ export default function CreateMemberPage() {
 
                       <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label htmlFor="area" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                          Area
+                          Area <span className="text-red-600">*</span>
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
                           <select
@@ -1040,7 +1091,6 @@ export default function CreateMemberPage() {
                             }}
                             className="max-w-lg block focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                           >
-                            <option value="">Select</option>
                             {userLookups &&
                               userLookups.areas &&
                               userLookups.areas.map((org, index) => {

@@ -21,6 +21,7 @@ export default class LookupsPresenter {
         applicableUserRole: lookupPm.applicableUserRole,
         cascadeData: lookupPm.cascadeData,
         areas: this.getLookupsVm(lookupPm.areas ?? []),
+        district: this.getLookupsVm(lookupPm.district) ?? [],
         panchayats: this.getPanchayatsVm(lookupPm.panchayats ?? []),
         cascadeTitle: lookupPm.cascadeTitle,
         stateName: lookupPm.stateName,
@@ -77,7 +78,26 @@ export default class LookupsPresenter {
     }
   };
 
+  loadMandalams = async (id, callback) => {
+    lookupsRepository.getMandalams(id, (mandalamsPm) => {
+      const mandalamsVm = {
+        mandalams: this.getLookupsVm(mandalamsPm ?? []),
+      };
+      callback(mandalamsVm);
+    });
+  };
+
+  loadPanchayaths = async (id, callback) => {
+    lookupsRepository.getPanchayaths(id, (panchayathsPm) => {
+      const panchayathsVm = {
+        panchayaths: this.getLookupsVm(panchayathsPm ?? []),
+      };
+      callback(panchayathsVm);
+    });
+  };
+
   getLookupsVm = (items) => {
+    if (!items) return;
     return items.map((item) => {
       return {
         id: item.id,
