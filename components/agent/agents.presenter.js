@@ -12,6 +12,7 @@ export default class AgentsPresenter {
           isActive: agentPm.isActive,
           mobileNumber: agentPm.mobileNumber,
           fullName: agentPm.fullName,
+          role: this.getRoleTitle(agentPm.role),
         };
       });
       callback(agentsVm);
@@ -36,5 +37,20 @@ export default class AgentsPresenter {
 
   deactivateAgent = async (agentId) => {
     await agentsRepository.deactivateAgent(agentId);
+  };
+
+  getRoleTitle = (role) => {
+    switch (role) {
+      case 'state-admin':
+        return 'State Admin';
+      case 'district-admin':
+        return 'District Admin';
+      case 'centralcommittee-admin':
+        return 'Central Committee Admin';
+      case 'district-agent':
+        return 'Agent';
+      case 'mandalam-agent':
+        return 'Agent';
+    }
   };
 }
