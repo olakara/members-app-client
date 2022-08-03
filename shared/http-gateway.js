@@ -5,8 +5,12 @@ class HttpGateway {
       headers: this.authHeader(url),
     };
     const response = await fetch(url, requestOptions);
-    const dto = response.json();
-    return dto;
+
+    if (response.ok) {
+      if (response.status === 204) return [];
+      const dto = response.json();
+      return dto;
+    }
   };
 
   post = async (url, requestDto) => {
@@ -18,7 +22,6 @@ class HttpGateway {
         body: JSON.stringify(requestDto),
         headers: { ...headers, 'Content-Type': 'application/json' },
       });
-
 
       if (response.ok) {
         const stringResponse = await response.text();

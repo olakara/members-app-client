@@ -329,7 +329,8 @@ export default function CreateMemberPage() {
       emiratesIdLastPage &&
       dateOfBirth &&
       gender &&
-      mobile
+      mobile &&
+      mobile.length === 10
     );
   };
 
