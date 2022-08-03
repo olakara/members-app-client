@@ -332,8 +332,8 @@ export default function CreateMemberPage() {
   };
 
   const isStepTwoValid = () => {
-    if (isUserInDubaiState) return passportFrontPage && passportLastPage && email;
-    else return email;
+    if (isUserInDubaiState) return passportFrontPage && passportLastPage;
+    else return true;
   };
 
   const isStepThreeValid = () => {
@@ -674,7 +674,7 @@ export default function CreateMemberPage() {
 
                       <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label htmlFor="email" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                          Email <span className="text-red-600">*</span>
+                          Email
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
                           <input
