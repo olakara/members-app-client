@@ -42,7 +42,6 @@ class MembersRepostory {
       emiratesIdLastPage: memberPm.emiratesIdLastPage,
       dateOfBirth: memberPm.dateOfBirth,
       mobileNumber: memberPm.mobile,
-      alternativeContactNumber: memberPm.mobile,
       email: memberPm.email,
       passportNumber: memberPm.passportNumber,
       passportExpiry: memberPm.passportExpiry,
@@ -54,15 +53,17 @@ class MembersRepostory {
       gender: memberPm.gender,
       photo: memberPm.photo,
       houseName: memberPm.houseName,
-      addressIndia: memberPm.addressIndia,
+      addressInIndia: memberPm.addressIndia,
       addressInDistrictId: memberPm.addressInDistrict,
       addressInMandalamId: memberPm.addressInMandalam,
       addressInPanchayatId: memberPm.addressInPanchayat,
       areaId: memberPm.area,
       panchayatId: memberPm.panchayat,
+      mandalamId: memberPm.mandalam,
       registeredOrganizationId: memberPm.registeredOrganization,
       welfareSchemeId: memberPm.welfareScheme,
     };
+    debugger;
 
     let result = await httpGateway.post(config.BASE_URL + 'members', memberDto);
 

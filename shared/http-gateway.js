@@ -109,6 +109,15 @@ class HttpGateway {
     }
   };
 
+  download = async (url) => {
+    const requestOptions = {
+      method: 'GET',
+      headers: this.authHeader(url),
+    };
+    const response = await fetch(url, requestOptions);
+    return response.blob();
+  };
+
   authHeader = (url) => {
     const token = localStorage.getItem('token');
     if (token) {
