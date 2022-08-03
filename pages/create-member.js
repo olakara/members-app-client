@@ -602,7 +602,7 @@ export default function CreateMemberPage() {
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
                           <input
                             type="file"
-                            accept="image/*"
+                            accept="application/pdf,image/*"
                             name="passportFrontImagePath"
                             id="passportFrontImagePath"
                             onChange={(e) => onSelectingPassportFrontPage(e)}
@@ -622,7 +622,7 @@ export default function CreateMemberPage() {
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
                           <input
                             type="file"
-                            accept="image/*"
+                            accept="application/pdf,image/*"
                             name="passportBackImagePath"
                             id="passportBackImagePath"
                             onChange={(e) => onSelectingPassportBackPage(e)}
