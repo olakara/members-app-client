@@ -43,15 +43,15 @@ class MembersRepostory {
       dateOfBirth: memberPm.dateOfBirth,
       mobileNumber: memberPm.mobile,
       email: memberPm.email,
-      passportNumber: memberPm.passportNumber,
-      passportExpiry: memberPm.passportExpiry,
-      passportFrontPage: memberPm.passportFrontPage,
-      passportLastPage: memberPm.passportLastPage,
-      professionId: memberPm.profession,
-      qualificationId: memberPm.qualification,
-      bloodGroup: memberPm.bloodGroup,
+      passportNumber: this.nullIfEmpty(memberPm.passportNumber),
+      passportExpiry: this.nullIfEmpty(memberPm.passportExpiry),
+      passportFrontPage: this.nullIfEmpty(memberPm.passportFrontPage),
+      passportLastPage: this.nullIfEmpty(memberPm.passportLastPage),
+      professionId: this.nullIfEmpty(memberPm.profession),
+      qualificationId: this.nullIfEmpty(memberPm.qualification),
+      bloodGroup: this.nullIfEmpty(memberPm.bloodGroup),
       gender: memberPm.gender,
-      photo: memberPm.photo,
+      photo: this.nullIfEmpty(memberPm.photo),
       houseName: memberPm.houseName,
       addressInIndia: memberPm.addressIndia,
       addressInDistrictId: memberPm.addressInDistrict,
@@ -60,10 +60,9 @@ class MembersRepostory {
       areaId: memberPm.area,
       panchayatId: memberPm.panchayat,
       mandalamId: memberPm.mandalam,
-      registeredOrganizationId: memberPm.registeredOrganization,
-      welfareSchemeId: memberPm.welfareScheme,
+      registeredOrganizationId: this.nullIfEmpty(memberPm.registeredOrganization),
+      welfareSchemeId: this.nullIfEmpty(memberPm.welfareScheme),
     };
-    debugger;
 
     let result = await httpGateway.post(config.BASE_URL + 'members', memberDto);
 
@@ -72,6 +71,10 @@ class MembersRepostory {
     } else {
       errorCallback(result);
     }
+  };
+
+  nullIfEmpty = (property) => {
+    return property && property.length !== 0 ? property : null;
   };
 
   loadData = async () => {

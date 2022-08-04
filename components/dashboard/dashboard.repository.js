@@ -17,7 +17,7 @@ class DashboardRepository {
 
   loadData = async () => {
     const dto = await httpGateway.get(config.BASE_URL + 'widgets');
-
+    if (!dto) return;
     this.programmersModel.value = dto.map((item) => {
       return item;
     });

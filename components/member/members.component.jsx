@@ -1,6 +1,45 @@
 import Link from 'next/link';
+import { useState, useEffect } from 'react';
+import MemberFilterComponent from './member-filter.component';
 import MemberListComponent from './member-list/member-list.component';
+import MembersPresenter from './members.presenter';
+import LookupsPresenter from '../../shared/lookups/lookups.presenter';
 function MembersComponent() {
+  const [members, copyMembersViewModelToStateModel] = useState([]);
+  const [panchayats, copyPanchayatsToStateModel] = useState([]);
+  const [filters, setFilters] = useState({
+    search: '',
+    panchayat: null,
+  });
+
+  const membersPresenter = new MembersPresenter();
+  const lookupsPresenter = new LookupsPresenter();
+
+  useEffect(() => {
+    async function load() {
+      await membersPresenter.load((generatedViewModel) => {
+        copyMembersViewModelToStateModel(generatedViewModel);
+      });
+
+      // await lookupsPresenter.loadPanchayaths((pachayatsViewModel) => {
+      //   copyPanchayatsToStateModel(pachayatsViewModel);
+      // });
+    }
+    load();
+  }, []);
+
+  function getDefaultRoleForUser(applicableUserRoles) {
+    if (applicableUserRoles && applicableUserRoles.includes('state-admin')) {
+      return 'state-admin';
+    }
+
+    return applicableUserRoles.length > 0 ? applicableUserRoles[0] : '';
+  }
+
+  const handleFilterChange = (filter) => {
+    setFilters(filter);
+  };
+
   return (
     <div className="py-10">
       <header className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -18,7 +57,8 @@ function MembersComponent() {
         </div>
       </header>
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <MemberListComponent></MemberListComponent>
+        <MemberFilterComponent handleFilter={handleFilterChange} panchayats={panchayats}></MemberFilterComponent>
+        <MemberListComponent filter={filters} members={members}></MemberListComponent>
       </main>
     </div>
   );
