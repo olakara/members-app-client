@@ -1,42 +1,18 @@
 import { useState, useEffect } from 'react';
-import MembersPresenter from '../members.presenter';
-import LookupsPresenter from '../../../shared/lookups/lookups.presenter';
-import MemberRowComponent from '../member-list/member-row.component';
+import MemberRowComponent from './member-row.component';
 
-export default function MemberListComponent(props) {
-  const [vm, copyViewModelToStateModel] = useState([]);
-  const [locationLabel, setLocationLabel] = useState('');
-
-  const membersPresenter = new MembersPresenter();
-  const lookupsPresenter = new LookupsPresenter();
+export default function MemberListComponent({ filter, members }) {
+  const [filteredMembers, setMembersEmployees] = useState([]);
 
   useEffect(() => {
-    async function load() {
-      await lookupsPresenter.loadUserLookups((generatedViewModel) => {
-        const userRole = getDefaultRoleForUser(generatedViewModel.applicableUserRole ?? []);
-        console.log('lookup', generatedViewModel);
-        setLocationLabel(userRole);
-      });
-
-      await membersPresenter.load((generatedViewModel) => {
-        copyViewModelToStateModel(generatedViewModel);
-      });
-    }
-    load();
-  }, []);
-
-  function getDefaultRoleForUser(applicableUserRoles) {
-    if (applicableUserRoles && applicableUserRoles.includes('state-admin')) {
-      return 'state-admin';
-    }
-
-    return applicableUserRoles.length > 0 ? applicableUserRoles[0] : '';
-  }
-
-  function getLocationLabel(roleName) {
-    const roleSplitArray = roleName.split('-');
-    return roleSplitArray[0];
-  }
+    const temp = members.filter(
+      (e) =>
+        e.fullName.toLowerCase().includes(filter.search.toLowerCase()) ||
+        e.mobile.includes(filter.search) ||
+        e.panchayat.toLowerCase().includes(filter.search.toLowerCase())
+    );
+    setMembersEmployees(temp);
+  }, [filter, members]);
 
   return (
     <>
@@ -71,12 +47,12 @@ export default function MemberListComponent(props) {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 bg-white">
-            {vm &&
-              vm.map((memberVm, index) => {
+            {filteredMembers &&
+              filteredMembers.map((memberVm, index) => {
                 return <MemberRowComponent key={index} vm={memberVm} index={index} />;
               })}
 
-            {vm.length === 0 && (
+            {filteredMembers.length === 0 && (
               <tr>
                 <td colSpan={5} className="py-3.5 pl-4 text-center text-lg">
                   Data not available
