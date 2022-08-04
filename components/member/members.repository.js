@@ -64,7 +64,6 @@ class MembersRepostory {
       welfareSchemeId: this.nullIfEmpty(memberPm.welfareScheme),
     };
 
-    debugger;
     let result = await httpGateway.post(config.BASE_URL + 'members', memberDto);
 
     if (result.success) {
