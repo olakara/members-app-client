@@ -15,7 +15,7 @@ export default function MemberRowComponent(props) {
 
   const handleDownload = async (event) => {
     event.preventDefault();
-    await httpGateway.download(config.BASE_URL + 'members/membershipcard/' + props.vm.membershipId);
+    await httpGateway.download(config.BASE_URL + 'members/membershipcard/' + props.vm.id);
   };
 
   return (
