@@ -90,7 +90,7 @@ class MembersRepostory {
   };
 
   loadData = async () => {
-    const membersDto = await httpGateway.get(config.BASE_URL + 'members');
+    const membersDto = await httpGateway.get(config.BASE_URL + 'members/role');
     this.programmersModel.value = membersDto.map((memberDto) => {
       return memberDto;
     });

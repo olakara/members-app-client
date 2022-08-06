@@ -143,22 +143,29 @@ export default function CreateMemberPage() {
       });
 
       await lookupsPresenter.loadUserLookups(async (generatedViewModel) => {
+        const { agentMandalamId, agentDistrictId } = generatedViewModel;
         copyUserLookupsToStateViewModel(generatedViewModel);
         if (generatedViewModel.stateName === 'DUBAI') {
           setIsUserInDubaiState(true);
         }
-        setAddressInDistrict(generatedViewModel.agentDistrictId);
+        setAddressInDistrict(agentDistrictId);
 
-        await lookupsPresenter.loadMandalams(generatedViewModel.agentDistrictId, (mandalamsViewModel) => {
+        await lookupsPresenter.loadMandalams(agentDistrictId, (mandalamsViewModel) => {
           copyMandalamLookupsToStateViewModel(mandalamsViewModel);
-          setAddressInMandalam(generatedViewModel.agentMandalamId);
-          setMandalamForAgentLookups(mandalamsViewModel);
-          setMandalam(generatedViewModel.agentMandalamId);
+          setAddressInMandalam(agentMandalamId);
         });
 
-        await lookupsPresenter.loadPanchayaths(generatedViewModel.agentMandalamId, (panchayathsViewModel) => {
+        await lookupsPresenter.loadMandalamsForAgent(agentDistrictId, (vm) => {
+          setMandalamForAgentLookups(vm);
+          setMandalam(agentMandalamId);
+        });
+
+        await lookupsPresenter.loadPanchayaths(agentMandalamId, (panchayathsViewModel) => {
           copyPanchayatLookupsToStateViewModel(panchayathsViewModel);
-          setPanchayatForAgentLookups(panchayathsViewModel);
+        });
+
+        await lookupsPresenter.loadPanchayathsForAgent(agentMandalamId, (vm) => {
+          setPanchayatForAgentLookups(vm);
         });
       });
 
@@ -866,7 +873,7 @@ export default function CreateMemberPage() {
                               setAddressInDistrict(e.target.value);
                               setAddressInMandalam('');
                               setAddressInPanchayat('');
-                              await lookupsPresenter.loadMandalams(addressInDistrict, (generatedViewModel) => {
+                              await lookupsPresenter.loadMandalams(e.target.value, (generatedViewModel) => {
                                 copyMandalamLookupsToStateViewModel(generatedViewModel);
                               });
                             }}
@@ -897,7 +904,7 @@ export default function CreateMemberPage() {
                             value={addressInMandalam}
                             onChange={async (e) => {
                               setAddressInMandalam(e.target.value);
-                              await lookupsPresenter.loadPanchayaths(addressInMandalam, (generatedViewModel) => {
+                              await lookupsPresenter.loadPanchayaths(e.target.value, (generatedViewModel) => {
                                 copyPanchayatLookupsToStateViewModel(generatedViewModel);
                               });
                             }}

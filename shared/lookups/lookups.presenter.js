@@ -98,6 +98,24 @@ export default class LookupsPresenter {
     });
   };
 
+  loadMandalamsForAgent = async (id, callback) => {
+    lookupsRepository.getMandalamsForAgent(id, (mandalamsPm) => {
+      const mandalamsVm = {
+        mandalams: this.getLookupsVm(mandalamsPm ?? []),
+      };
+      callback(mandalamsVm);
+    });
+  };
+
+  loadPanchayathsForAgent = async (id, callback) => {
+    lookupsRepository.getPanchayathsForAgent(id, (panchayathsPm) => {
+      const panchayathsVm = {
+        panchayaths: this.getLookupsVm(panchayathsPm ?? []),
+      };
+      callback(panchayathsVm);
+    });
+  };
+
   getLookupsVm = (items) => {
     if (!items) return;
     return items.map((item) => {

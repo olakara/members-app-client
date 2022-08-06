@@ -11,6 +11,8 @@ class LookupsRepository {
   welfareSchemesProgrammersModel = null;
   mandalamsProgrammersModel = null;
   panchayathsProgrammersModel = null;
+  mandalamsProgrammersModelForAgent = null;
+  panchayathsProgrammersModelForAgent = null;
 
   constructor() {
     this.generalLookupsPogrammersModel = new Observable({});
@@ -21,6 +23,8 @@ class LookupsRepository {
     this.welfareSchemesProgrammersModel = new Observable([]);
     this.mandalamsProgrammersModel = new Observable([]);
     this.panchayathsProgrammersModel = new Observable([]);
+    this.mandalamsProgrammersModelForAgent = new Observable([]);
+    this.panchayathsProgrammersModelForAgent = new Observable([]);
   }
 
   getMandalams = async (id, callback) => {
@@ -33,6 +37,18 @@ class LookupsRepository {
     this.panchayathsProgrammersModel.subscribe(callback);
     await this.loadPanchayathsLookupData(id);
     this.panchayathsProgrammersModel.notify();
+  };
+
+  getMandalamsForAgent = async (id, callback) => {
+    this.mandalamsProgrammersModelForAgent.subscribe(callback);
+    await this.loadMandalamsLookupDataForAgent(id);
+    this.mandalamsProgrammersModelForAgent.notify();
+  };
+
+  getPanchayathsForAgent = async (id, callback) => {
+    this.panchayathsProgrammersModelForAgent.subscribe(callback);
+    await this.loadPanchayathsLookupDataForAgent(id);
+    this.panchayathsProgrammersModelForAgent.notify();
   };
 
   getLookups = async (callback) => {
@@ -108,6 +124,15 @@ class LookupsRepository {
   loadPanchayathsLookupData = async (id) => {
     const dto = await httpGateway.get(config.BASE_URL + 'panchayats/mandalam/' + id);
     this.panchayathsProgrammersModel.value = dto;
+  };
+
+  loadMandalamsLookupDataForAgent = async (id) => {
+    const dto = await httpGateway.get(config.BASE_URL + 'mandalams/district/' + id);
+    this.mandalamsProgrammersModelForAgent.value = dto;
+  };
+  loadPanchayathsLookupDataForAgent = async (id) => {
+    const dto = await httpGateway.get(config.BASE_URL + 'panchayats/mandalam/' + id);
+    this.panchayathsProgrammersModelForAgent.value = dto;
   };
 }
 
