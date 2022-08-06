@@ -52,14 +52,13 @@ class AgentsRepository {
   };
 
   resetPassword = async (agentPm, successCallback, errorCallback) => {
-    debugger;
     const agentDto = {
       userId: agentPm.id,
       email: agentPm.email,
     };
     let result = await httpGateway.post(config.BASE_URL + 'users/resetpassword', agentDto);
     if (result.success) {
-      successCallback();
+      successCallback(result);
     } else {
       errorCallback(result);
     }

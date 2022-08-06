@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
+import Router, { useRouter } from 'next/router';
 import HeaderComponent from '../components/common/header.component';
 import AgentsPresenter from '../components/agent/agents.presenter';
 import FormErrorComponent from '../components/common/form-error.component';
@@ -23,7 +23,8 @@ function PasswordResetByAdminPage() {
     setEmail(r);
   }, [r]);
 
-  const handleResetPassword = async () => {
+  const handleResetPassword = async (event) => {
+    event.preventDefault();
     setIsLoading(true);
     const agentDto = {
       id: id,
@@ -32,7 +33,8 @@ function PasswordResetByAdminPage() {
     await agentPresenter.resetPassword(
       agentDto,
       (success) => {
-        router.push('/home');
+        console.log(success);
+        Router.push('/home');
       },
       (error) => {
         setErrorMessage(error.data.reason);
@@ -78,8 +80,8 @@ function PasswordResetByAdminPage() {
                       name="email"
                       id="email"
                       autoComplete="email"
-                      value={email}
                       onChange={(e) => setEmail(e.target.value)}
+                      value={email}
                       className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                     />
                   </div>

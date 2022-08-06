@@ -110,8 +110,8 @@ export default function CreateAgentPage() {
                       name="fullName"
                       id="fullName"
                       autoComplete="given-name"
-                      value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
+                      value={fullName}
                       className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                     />
                   </div>
@@ -128,8 +128,8 @@ export default function CreateAgentPage() {
                       name="email"
                       id="email"
                       autoComplete="email"
-                      value={email}
                       onChange={(e) => setEmail(e.target.value)}
+                      value={email}
                       className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                     />
                   </div>
@@ -146,8 +146,8 @@ export default function CreateAgentPage() {
                       name="mobile"
                       id="mobile"
                       autoComplete="mobile"
-                      value={mobile}
                       onChange={(e) => setMobile(e.target.value)}
+                      value={mobile}
                       className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                     />
                   </div>
@@ -164,8 +164,8 @@ export default function CreateAgentPage() {
                       name="designation"
                       id="designation"
                       autoComplete="designation"
-                      value={designation}
                       onChange={(e) => setDesignation(e.target.value)}
+                      value={designation}
                       className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                     />
                   </div>
@@ -181,11 +181,11 @@ export default function CreateAgentPage() {
                       id="role"
                       name="role"
                       autoComplete="role"
-                      value={role}
                       onChange={(e) => {
                         setRole(e.target.value);
                         setLocationNeeded(e.target.value);
                       }}
+                      value={role}
                       className="max-w-lg block focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                     >
                       <option value="">Select</option>
@@ -214,8 +214,8 @@ export default function CreateAgentPage() {
                       id="location"
                       name="location"
                       autoComplete="location"
-                      value={location}
                       onChange={(e) => setLocation(e.target.value)}
+                      value={location}
                       className="max-w-lg block focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                     >
                       <option value="">Select</option>
