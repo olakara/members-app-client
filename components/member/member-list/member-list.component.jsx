@@ -33,7 +33,7 @@ export default function MemberListComponent({ filter, members }) {
                 scope="col"
                 className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 capitalize sm:table-cell"
               >
-                Panchayath
+                Panchayath / Municipality
               </th>
               <th
                 scope="col"
@@ -42,7 +42,7 @@ export default function MemberListComponent({ filter, members }) {
                 Mobile
               </th>
               <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 ">
-                Recipt
+                Receipt
               </th>
             </tr>
           </thead>
