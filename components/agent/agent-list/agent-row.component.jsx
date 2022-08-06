@@ -1,3 +1,4 @@
+import Router from 'next/router';
 import classNames from 'classnames';
 import { useState } from 'react';
 import { Switch } from '@headlessui/react';
@@ -17,6 +18,11 @@ export default function AgentRowComponent(props) {
   let rowStyle = classNames({
     'bg-gray-50': props.index % 2 !== 0,
   });
+
+  const handleResetPassword = (event) => {
+    event.preventDefault();
+    Router.push({ pathname: '/password-reset-by-admin', query: { id: props.vm.id, r: props.vm.email } });
+  };
 
   return (
     <tr className={rowStyle}>
@@ -39,6 +45,26 @@ export default function AgentRowComponent(props) {
                         pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200`}
           />
         </Switch>
+      </td>
+      <td>
+        {props.vm.email !== 'admin@admin.com' && (
+          <button title="Reset Password" onClick={handleResetPassword}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"
+              />
+            </svg>
+          </button>
+        )}
       </td>
     </tr>
   );

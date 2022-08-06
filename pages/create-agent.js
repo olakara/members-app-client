@@ -5,6 +5,7 @@ import LookupsPresenter from '../shared/lookups/lookups.presenter';
 import HeaderComponent from '../components/common/header.component';
 import AgentsPresenter from '../components/agent/agents.presenter';
 import FormErrorComponent from '../components/common/form-error.component';
+import { isEmailValid } from '../shared/utilities';
 
 export default function CreateAgentPage() {
   const [userLookups, copyUserLookupsToStateViewModel] = useState(null);
@@ -101,7 +102,6 @@ export default function CreateAgentPage() {
               <div className="space-y-6 sm:space-y-5">
                 <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                   <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                    {' '}
                     Full Name <span className="text-red-600">*</span>
                   </label>
                   <div className="mt-1 sm:mt-0 sm:col-span-2">
@@ -110,8 +110,8 @@ export default function CreateAgentPage() {
                       name="fullName"
                       id="fullName"
                       autoComplete="given-name"
-                      value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
+                      value={fullName}
                       className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                     />
                   </div>
@@ -128,8 +128,8 @@ export default function CreateAgentPage() {
                       name="email"
                       id="email"
                       autoComplete="email"
-                      value={email}
                       onChange={(e) => setEmail(e.target.value)}
+                      value={email}
                       className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                     />
                   </div>
@@ -146,8 +146,8 @@ export default function CreateAgentPage() {
                       name="mobile"
                       id="mobile"
                       autoComplete="mobile"
-                      value={mobile}
                       onChange={(e) => setMobile(e.target.value)}
+                      value={mobile}
                       className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                     />
                   </div>
@@ -164,8 +164,8 @@ export default function CreateAgentPage() {
                       name="designation"
                       id="designation"
                       autoComplete="designation"
-                      value={designation}
                       onChange={(e) => setDesignation(e.target.value)}
+                      value={designation}
                       className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                     />
                   </div>
@@ -181,11 +181,11 @@ export default function CreateAgentPage() {
                       id="role"
                       name="role"
                       autoComplete="role"
-                      value={role}
                       onChange={(e) => {
                         setRole(e.target.value);
                         setLocationNeeded(e.target.value);
                       }}
+                      value={role}
                       className="max-w-lg block focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                     >
                       <option value="">Select</option>
@@ -214,8 +214,8 @@ export default function CreateAgentPage() {
                       id="location"
                       name="location"
                       autoComplete="location"
-                      value={location}
                       onChange={(e) => setLocation(e.target.value)}
+                      value={location}
                       className="max-w-lg block focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                     >
                       <option value="">Select</option>
@@ -250,7 +250,9 @@ export default function CreateAgentPage() {
                   id="submit-button"
                   title="Save"
                   type="submit"
-                  disabled={!fullName || !email || !mobile || !location || (isLocationNeeded && !role)}
+                  disabled={
+                    !fullName || !email || !mobile || !location || (isLocationNeeded && !role) || !isEmailValid(email)
+                  }
                   className="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white disabled:bg-gray-500 bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                 >
                   Save

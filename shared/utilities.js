@@ -41,3 +41,10 @@ export function getItemNameById(list, id) {
 function dateIsValid(date) {
   return date instanceof Date && !isNaN(date);
 }
+
+export function isEmailValid(email) {
+  const regex =
+    /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+  if (!email || regex.test(email) === false) return false;
+  return true;
+}

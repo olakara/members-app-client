@@ -483,8 +483,8 @@ export default function CreateMemberPage() {
                             id="fullName"
                             autoComplete="given-name"
                             disabled={isNameDisabled}
-                            value={fullName}
                             onChange={(e) => setFullName(e.target.value)}
+                            value={fullName}
                             className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                           />
                         </div>
@@ -503,8 +503,8 @@ export default function CreateMemberPage() {
                             id="emiratesIdNumber"
                             autoComplete="emirates-id"
                             disabled={isIDNumberDisabled}
-                            value={emiratesIdNumber}
                             onChange={(e) => setEmiratesId(e.target.value)}
+                            value={emiratesIdNumber}
                             className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                           />
                         </div>
@@ -523,8 +523,8 @@ export default function CreateMemberPage() {
                             id="emiratesIdExpiry"
                             autoComplete="emirates-id-expiry"
                             disabled={isIDExpiryDisabled}
-                            value={emiratesIdExpiry}
                             onChange={(e) => setEmiratesIdExpiry(e.target.value)}
+                            value={emiratesIdExpiry}
                             className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                           />
                         </div>
@@ -543,8 +543,8 @@ export default function CreateMemberPage() {
                             id="dateOfBirth"
                             autoComplete="dateOfBirth"
                             disabled={isDoBDisabled}
-                            value={dateOfBirth}
                             onChange={(e) => setDateOfBirth(e.target.value)}
+                            value={dateOfBirth}
                             className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                           />
                         </div>
@@ -559,8 +559,8 @@ export default function CreateMemberPage() {
                             name="mobile"
                             id="mobile"
                             autoComplete="mobile"
-                            value={mobile}
                             onChange={(e) => setMobile(e.target.value)}
+                            value={mobile}
                             className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                           />
                         </div>
@@ -574,20 +574,20 @@ export default function CreateMemberPage() {
                             <label>
                               <input
                                 type="radio"
+                                onChange={handleGenderChange}
                                 value="0"
                                 name="gender"
                                 checked={gender === '0'}
-                                onChange={handleGenderChange}
                               />
                               <span className="ml-2">Male </span>
                             </label>
                             <label className="m-14">
                               <input
                                 type="radio"
+                                onChange={handleGenderChange}
                                 value="1"
                                 name="gender"
                                 checked={gender === '1'}
-                                onChange={handleGenderChange}
                               />
                               <span className="ml-2">Female </span>
                             </label>
@@ -688,8 +688,8 @@ export default function CreateMemberPage() {
                             name="passportNumber"
                             id="passportNumber"
                             autoComplete="passportNumber"
-                            value={passportNumber}
                             onChange={(e) => setPassportNumber(e.target.value)}
+                            value={passportNumber}
                             className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                           />
                         </div>
@@ -708,8 +708,8 @@ export default function CreateMemberPage() {
                             name="passportExpiry"
                             id="passportExpiry"
                             autoComplete="passportExpiry"
-                            value={passportExpiry}
                             onChange={(e) => setPassportExpiry(e.target.value)}
+                            value={passportExpiry}
                             className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                           />
                         </div>
@@ -725,8 +725,8 @@ export default function CreateMemberPage() {
                             name="email"
                             id="email"
                             autoComplete="email"
-                            value={email}
                             onChange={(e) => setEmail(e.target.value)}
+                            value={email}
                             className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                           />
                         </div>
@@ -744,10 +744,10 @@ export default function CreateMemberPage() {
                             id="profession"
                             name="profession"
                             autoComplete="profession"
-                            value={profession}
                             onChange={(e) => {
                               setProfession(e.target.value);
                             }}
+                            value={profession}
                             className="max-w-lg block focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                           >
                             <option value="">Select</option>
@@ -775,10 +775,10 @@ export default function CreateMemberPage() {
                             id="qualification"
                             name="qualification"
                             autoComplete="qualification"
-                            value={qualification}
                             onChange={(e) => {
                               setQualification(e.target.value);
                             }}
+                            value={qualification}
                             className="max-w-lg block focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                           >
                             <option value="">Select</option>
@@ -806,10 +806,10 @@ export default function CreateMemberPage() {
                             id="bloodGroup"
                             name="bloodGroup"
                             autoComplete="bloodGroup"
-                            value={bloodGroup}
                             onChange={(e) => {
                               setBloodGroup(e.target.value);
                             }}
+                            value={bloodGroup}
                             className="max-w-lg block focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                           >
                             <option value="">Select</option>
@@ -868,7 +868,6 @@ export default function CreateMemberPage() {
                             id="addressInDistrict"
                             name="addressInDistrict"
                             autoComplete="addressInDistrict"
-                            value={addressInDistrict}
                             onChange={async (e) => {
                               setAddressInDistrict(e.target.value);
                               setAddressInMandalam('');
@@ -877,6 +876,7 @@ export default function CreateMemberPage() {
                                 copyMandalamLookupsToStateViewModel(generatedViewModel);
                               });
                             }}
+                            value={addressInDistrict}
                             className="max-w-lg block focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                           >
                             <option value="">Select</option>
@@ -901,13 +901,13 @@ export default function CreateMemberPage() {
                             id="addressInMandalam"
                             name="addressInMandalam"
                             autoComplete="addressInMandalam"
-                            value={addressInMandalam}
                             onChange={async (e) => {
                               setAddressInMandalam(e.target.value);
                               await lookupsPresenter.loadPanchayaths(e.target.value, (generatedViewModel) => {
                                 copyPanchayatLookupsToStateViewModel(generatedViewModel);
                               });
                             }}
+                            value={addressInMandalam}
                             className="max-w-lg block focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                           >
                             <option value="">Select</option>
@@ -933,10 +933,10 @@ export default function CreateMemberPage() {
                             id="addressInPanchayat"
                             name="addressInPanchayat"
                             autoComplete="addressInPanchayat"
-                            value={addressInPanchayat}
                             onChange={(e) => {
                               setAddressInPanchayat(e.target.value);
                             }}
+                            value={addressInPanchayat}
                             className="max-w-lg block focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                           >
                             {<option value="">Select</option>}
@@ -962,8 +962,8 @@ export default function CreateMemberPage() {
                             name="houseName"
                             id="houseName"
                             autoComplete="houseName"
-                            value={houseName}
                             onChange={(e) => setHouseName(e.target.value)}
+                            value={houseName}
                             className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                           />
                         </div>
@@ -981,8 +981,8 @@ export default function CreateMemberPage() {
                             name="addressIndia"
                             id="addressIndia"
                             autoComplete="addressIndia"
-                            value={addressIndia}
                             onChange={(e) => setAddressIndia(e.target.value)}
+                            value={addressIndia}
                             className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                           />
                         </div>
@@ -1017,10 +1017,10 @@ export default function CreateMemberPage() {
                             id="registeredOrganization"
                             name="registeredOrganization"
                             autoComplete="registeredOrganization"
-                            value={registeredOrganization}
                             onChange={(e) => {
                               setRegisteredOrganization(e.target.value);
                             }}
+                            value={registeredOrganization}
                             className="max-w-lg block focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                           >
                             <option value="">Select</option>
@@ -1044,10 +1044,10 @@ export default function CreateMemberPage() {
                             id="welfareScheme"
                             name="welfareScheme"
                             autoComplete="welfareScheme"
-                            value={welfareScheme}
                             onChange={(e) => {
                               setWelfareScheme(e.target.value);
                             }}
+                            value={welfareScheme}
                             className="max-w-lg block focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                           >
                             <option value="">Select</option>
@@ -1098,7 +1098,6 @@ export default function CreateMemberPage() {
                             id="mandalam"
                             name="mandalam"
                             autoComplete="mandalam"
-                            value={mandalam}
                             disabled={!isDistrictAgent}
                             onChange={async (e) => {
                               setMandalam(e.target.value);
@@ -1106,6 +1105,7 @@ export default function CreateMemberPage() {
                                 setPanchayatForAgentLookups(generatedViewModel);
                               });
                             }}
+                            value={mandalam}
                             className="max-w-lg block focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                           >
                             <option value="">Select</option>
@@ -1131,10 +1131,10 @@ export default function CreateMemberPage() {
                             id="panchayat"
                             name="panchayat"
                             autoComplete="panchayat"
-                            value={panchayat}
                             onChange={(e) => {
                               setPanchayat(e.target.value);
                             }}
+                            value={panchayat}
                             className="max-w-lg block focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                           >
                             <option value="">Select</option>
@@ -1160,10 +1160,10 @@ export default function CreateMemberPage() {
                             id="area"
                             name="area"
                             autoComplete="area"
-                            value={area}
                             onChange={(e) => {
                               setArea(e.target.value);
                             }}
+                            value={area}
                             className="max-w-lg block focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                           >
                             <option value="">Select</option>
@@ -1212,10 +1212,10 @@ export default function CreateMemberPage() {
                             id="agreeTermsOne"
                             name="agreeTermsOne"
                             type="radio"
-                            value={agreeTermsOne}
                             onChange={(e) => {
                               setAgreeTermsOne(e.target.value);
                             }}
+                            value={agreeTermsOne}
                             className="w-4 h-4 text-green-600 bg-gray-100 rounded border-gray-300 focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                           />
                           <label htmlFor="agreeTermsOne" className="ml-2 text-sm font-medium text-gray-900">
@@ -1231,10 +1231,10 @@ export default function CreateMemberPage() {
                             id="agreeTermsTwo"
                             name="agreeTermsTwo"
                             type="radio"
-                            value={agreeTermsTwo}
                             onChange={(e) => {
                               setAgreeTermsTwo(e.target.value);
                             }}
+                            value={agreeTermsTwo}
                             className="w-4 h-4 text-green-600 bg-gray-100 rounded border-gray-300 focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                           />
                           <label htmlFor="agreeTermsTwo" className="ml-2 text-sm font-medium text-gray-900">
