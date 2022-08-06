@@ -349,6 +349,7 @@ export default function CreateMemberPage() {
         },
         (error) => {
           setIsLoading(false);
+          setErrorMessage('Could not process Emirates ID. Please check the uploaded files are correct!');
         }
       );
     }
