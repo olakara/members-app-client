@@ -12,7 +12,7 @@ function AgentsComponent() {
     async function load() {
       await userPresenter.getCurrentUser((generatedViewModel) => {
         const userRole = generatedViewModel.role;
-        console.log('userRole', userRole);
+
         if (userRole === 'district-admin') setIsDistrictAdmin(true);
         else setIsDistrictAdmin(false);
       });

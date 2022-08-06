@@ -131,17 +131,18 @@ export default function CreateMemberPage() {
   const wrapper = useRef(null);
   const [wrapperWidth, setWrapperWidth] = useState(1);
 
+  const [memberId, setMemberId] = useState('');
+  const [membershipId, setMembershipId] = useState('');
+
   useEffect(() => {
     async function load() {
       await userPresenter.getCurrentUser((generatedViewModel) => {
         const userRole = generatedViewModel.role;
-        console.log('userRole', userRole);
         if (userRole === 'mandalam-agent') setIsMandalamAgent(true);
         if (userRole === 'district-agent') setIsDistrictAgent(true);
       });
 
       await lookupsPresenter.loadUserLookups(async (generatedViewModel) => {
-        console.log('User lookups', generatedViewModel);
         copyUserLookupsToStateViewModel(generatedViewModel);
         if (generatedViewModel.stateName === 'DUBAI') {
           setIsUserInDubaiState(true);
@@ -149,38 +150,31 @@ export default function CreateMemberPage() {
         setAddressInDistrict(generatedViewModel.agentDistrictId);
 
         await lookupsPresenter.loadMandalams(generatedViewModel.agentDistrictId, (mandalamsViewModel) => {
-          console.log('Mandalams', mandalamsViewModel);
           copyMandalamLookupsToStateViewModel(mandalamsViewModel);
           setAddressInMandalam(generatedViewModel.agentMandalamId);
           setMandalamForAgentLookups(mandalamsViewModel);
           setMandalam(generatedViewModel.agentMandalamId);
-          console.log('agent mandalam id', generatedViewModel.agentMandalamId);
         });
 
         await lookupsPresenter.loadPanchayaths(generatedViewModel.agentMandalamId, (panchayathsViewModel) => {
-          console.log('Panchayaths', panchayathsViewModel);
           copyPanchayatLookupsToStateViewModel(panchayathsViewModel);
           setPanchayatForAgentLookups(panchayathsViewModel);
         });
       });
 
       await lookupsPresenter.loadProfessions((generatedViewModel) => {
-        console.log('Professions', generatedViewModel);
         copyProfessionsToStateViewModel(generatedViewModel.professions);
       });
 
       await lookupsPresenter.loadQualifications((generatedViewModel) => {
-        console.log('Qualifications', generatedViewModel);
         copyQualificationsToStateViewModel(generatedViewModel.qualifications);
       });
 
       await lookupsPresenter.loadRegisteredOrganizations((generatedViewModel) => {
-        console.log('Registered Orgranizations', generatedViewModel);
         copyOrganizationsToStateViewModel(generatedViewModel);
       });
 
       await lookupsPresenter.loadWelfareSchemes((generatedViewModel) => {
-        console.log('Welfare Schemes', generatedViewModel);
         copyWelfareSchemesToStateViewModel(generatedViewModel);
       });
     }
@@ -232,17 +226,22 @@ export default function CreateMemberPage() {
       welfareScheme,
     };
 
-    console.log('Member Form', memberForm);
-
     await memberPresenter.createMember(
       memberForm,
       (success) => {
-        Router.push('/home');
+        setMemberId(success.data.id);
+        setMembershipId(success.data.membershipId);
+        setCurrentStep(5);
       },
       (error) => {
         setErrorMessage(error.data.reason);
       }
     );
+  };
+
+  const handleDownload = async (event) => {
+    event.preventDefault();
+    await memberPresenter.downloadReceipt(memberId, membershipId);
   };
 
   const onSelectingEmiratesIdFront = async (event) => {
@@ -251,7 +250,6 @@ export default function CreateMemberPage() {
       setIsLoading(true);
       setEmiratesIdFrontImagePath(URL.createObjectURL(file));
       await uploadPresenter.uploadEmiratesIdFront((generatedViewModel) => {
-        console.log('Upload result', generatedViewModel);
         setEmiratesIdFrontPage(generatedViewModel.data);
         setIsLoading(false);
       }, file);
@@ -266,7 +264,6 @@ export default function CreateMemberPage() {
       setIsLoading(true);
       setEmiratesIdBackImagePath(URL.createObjectURL(file));
       await uploadPresenter.uploadEmiratesIdBack((generatedViewModel) => {
-        console.log('Upload result', generatedViewModel);
         setEmiratesIdLastPage(generatedViewModel.data);
         setIsLoading(false);
       }, file);
@@ -281,7 +278,6 @@ export default function CreateMemberPage() {
       setIsLoading(true);
       setPhotoImagePath(URL.createObjectURL(file));
       await uploadPresenter.uploadPhoto((generatedViewModel) => {
-        console.log('Upload result', generatedViewModel);
         setPhoto(generatedViewModel.data);
         setIsLoading(false);
       }, file);
@@ -296,7 +292,6 @@ export default function CreateMemberPage() {
       setIsLoading(true);
       setPassportFrontImagePath(URL.createObjectURL(file));
       await uploadPresenter.uploadPassportFirstPage((generatedViewModel) => {
-        console.log('Upload result', generatedViewModel);
         setPassportFrontPage(generatedViewModel.data);
         setIsLoading(false);
       }, file);
@@ -311,7 +306,6 @@ export default function CreateMemberPage() {
       setIsLoading(true);
       setPassportBackImagePath(URL.createObjectURL(file));
       await uploadPresenter.uploadPassportLastPage((generatedViewModel) => {
-        console.log('Upload result', generatedViewModel);
         setPassportLastPage(generatedViewModel.data);
         setIsLoading(false);
       }, file);
@@ -335,12 +329,7 @@ export default function CreateMemberPage() {
           if (ocrData && !isEmptyObject(ocrData)) {
             setDisableEmiratesIdUploads(true);
             if (ocrData.isDispute) {
-              Router.push({
-                pathname: '/create-dispute',
-                query: {
-                  id: ocrData.idNumber,
-                },
-              });
+              setCurrentStep(4);
             }
 
             setFullName(ocrData.name);
@@ -878,7 +867,6 @@ export default function CreateMemberPage() {
                               setAddressInMandalam('');
                               setAddressInPanchayat('');
                               await lookupsPresenter.loadMandalams(addressInDistrict, (generatedViewModel) => {
-                                console.log('Mandalams', generatedViewModel);
                                 copyMandalamLookupsToStateViewModel(generatedViewModel);
                               });
                             }}
@@ -910,7 +898,6 @@ export default function CreateMemberPage() {
                             onChange={async (e) => {
                               setAddressInMandalam(e.target.value);
                               await lookupsPresenter.loadPanchayaths(addressInMandalam, (generatedViewModel) => {
-                                console.log('Panchayaths', generatedViewModel);
                                 copyPanchayatLookupsToStateViewModel(generatedViewModel);
                               });
                             }}
@@ -1109,7 +1096,6 @@ export default function CreateMemberPage() {
                             onChange={async (e) => {
                               setMandalam(e.target.value);
                               await lookupsPresenter.loadPanchayaths(e.target.value, (generatedViewModel) => {
-                                console.log('Panchayaths', generatedViewModel);
                                 setPanchayatForAgentLookups(generatedViewModel);
                               });
                             }}
@@ -1251,54 +1237,148 @@ export default function CreateMemberPage() {
                       </div>
                     </div>
                   </Transition>
+
+                  {/* <!-- Step 5 (Dispute Step) --> */}
+                  <Transition
+                    appear={false}
+                    unmount={false}
+                    show={currentStep === 4}
+                    enter="transform transition ease-in-out duration-500"
+                    enterFrom={moving === 'right' ? `translate-x-96 opacity-0` : `-translate-x-96 opacity-0`}
+                    enterTo={`translate-x-0 opacity-100`}
+                    leave="transform transition ease-in-out duration-500 "
+                    leaveFrom={`translate-x-0 opacity-100`}
+                    leaveTo={moving === 'right' ? `-translate-x-96 opacity-0` : `translate-x-96 opacity-0`}
+                    className="w-0 overflow-visible"
+                    as="div"
+                  >
+                    <div style={{ width: `${wrapperWidth}px` }}>
+                      <div className="h-full mt-10 text-center">
+                        <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl text-gray-900">
+                          Member already exist in the system!
+                        </h2>
+                        <p className="mt-6 mx-auto max-w-2xl text-lg text-gray-700">
+                          Please review the details. We found the member already in the system. You can create a dispute
+                          or restart the member creation process.
+                        </p>
+                      </div>
+                      <div className="mt-9 text-center">
+                        <button
+                          type="button"
+                          disabled={true}
+                          className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 disabled:bg-gray-500 disabled:text-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                        >
+                          Create Dispute
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => Router.reload(window.location.pathname)}
+                          className="ml-3 py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white disabled:bg-gray-500 bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                        >
+                          Add Member
+                        </button>
+                      </div>
+                    </div>
+                  </Transition>
+
+                  {/* <!-- Step 6 (Member Added Step) --> */}
+                  <Transition
+                    appear={false}
+                    unmount={false}
+                    show={currentStep === 5}
+                    enter="transform transition ease-in-out duration-500"
+                    enterFrom={moving === 'right' ? `translate-x-96 opacity-0` : `-translate-x-96 opacity-0`}
+                    enterTo={`translate-x-0 opacity-100`}
+                    leave="transform transition ease-in-out duration-500 "
+                    leaveFrom={`translate-x-0 opacity-100`}
+                    leaveTo={moving === 'right' ? `-translate-x-96 opacity-0` : `translate-x-96 opacity-0`}
+                    className="w-0 overflow-visible"
+                    as="div"
+                  >
+                    <div style={{ width: `${wrapperWidth}px` }}>
+                      <div className="h-full mt-10 text-center">
+                        <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl text-gray-900">
+                          Member added to the system!
+                        </h2>
+                        <p className="mt-6 mx-auto max-w-2xl text-lg text-gray-700">You can now download the receipt</p>
+                      </div>
+                      <div className="mt-9 text-center">
+                        <button
+                          type="button"
+                          onClick={() => Router.push('/home')}
+                          className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 disabled:bg-gray-500 disabled:text-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                        >
+                          Member List
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={handleDownload}
+                          className="ml-3 py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white disabled:bg-gray-500 bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                        >
+                          Print Receipt
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => Router.reload(window.location.pathname)}
+                          className="ml-3 bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 disabled:bg-gray-500 disabled:text-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                        >
+                          Add Member
+                        </button>
+                      </div>
+                    </div>
+                  </Transition>
                 </div>
               </div>
             </div>
-            <div className="pt-5">
-              <div className="flex justify-between">
-                <div>
-                  <button
-                    type="button"
-                    disabled={currentStep === 0}
-                    onClick={() => prevStep()}
-                    className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 disabled:bg-gray-500 disabled:text-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-                  >
-                    Prev
-                  </button>
-                </div>
-
-                <div className="flex-auto">
-                  <p className="text-sm font-medium mb-1 mt-3 text-center">
-                    Step {steps.findIndex((step) => step.status === 'current') + 1} of {steps.length}
-                  </p>
-                </div>
-                <div>
-                  {currentStep !== 3 && (
+            {currentStep !== 4 && currentStep !== 5 && (
+              <div className="pt-5">
+                <div className="flex justify-between">
+                  <div>
                     <button
                       type="button"
-                      disabled={
-                        (currentStep === 0 && !isStepOneValid()) ||
-                        (currentStep === 1 && !isStepTwoValid()) ||
-                        (currentStep === 2 && !isStepThreeValid())
-                      }
-                      onClick={() => nextStep()}
-                      className="ml-3 py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white disabled:bg-gray-500 bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                      disabled={currentStep === 0}
+                      onClick={() => prevStep()}
+                      className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 disabled:bg-gray-500 disabled:text-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                     >
-                      Next
+                      Prev
                     </button>
-                  )}
-                  {currentStep === 3 && (
-                    <button
-                      type="submit"
-                      disabled={!agreeTermsOne || !agreeTermsTwo || !mandalam || !panchayat || !area}
-                      className="ml-3 py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white disabled:bg-gray-500 bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-                    >
-                      Register
-                    </button>
-                  )}
+                  </div>
+
+                  <div className="flex-auto">
+                    <p className="text-sm font-medium mb-1 mt-3 text-center">
+                      Step {steps.findIndex((step) => step.status === 'current') + 1} of {steps.length}
+                    </p>
+                  </div>
+                  <div>
+                    {currentStep !== 3 && (
+                      <button
+                        type="button"
+                        disabled={
+                          (currentStep === 0 && !isStepOneValid()) ||
+                          (currentStep === 1 && !isStepTwoValid()) ||
+                          (currentStep === 2 && !isStepThreeValid())
+                        }
+                        onClick={() => nextStep()}
+                        className="ml-3 py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white disabled:bg-gray-500 bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                      >
+                        Next
+                      </button>
+                    )}
+                    {currentStep === 3 && (
+                      <button
+                        type="submit"
+                        disabled={!agreeTermsOne || !agreeTermsTwo || !mandalam || !panchayat || !area}
+                        className="ml-3 py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white disabled:bg-gray-500 bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                      >
+                        Register
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </form>
         </main>
       </div>

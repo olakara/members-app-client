@@ -67,10 +67,22 @@ class MembersRepostory {
     let result = await httpGateway.post(config.BASE_URL + 'members', memberDto);
 
     if (result.success) {
-      successCallback();
+      successCallback(result);
     } else {
       errorCallback(result);
     }
+  };
+
+  downloadReceipt = async (id, memberId) => {
+    let file = await httpGateway.download(config.BASE_URL + 'members/membershipcard/' + id);
+    const url = window.URL.createObjectURL(new Blob([file]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', memberId + `.pdf`);
+
+    document.body.appendChild(link);
+    link.click();
+    link.parentNode.removeChild(link);
   };
 
   nullIfEmpty = (property) => {
