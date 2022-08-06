@@ -53,4 +53,13 @@ export default class AgentsPresenter {
         return 'Agent';
     }
   };
+
+  resetPassword = async (agentDto, successCallback, errorCallback) => {
+    let agentPm = {
+      id: agentDto.id,
+      email: agentDto.email,
+    };
+
+    await agentsRepository.resetPassword(agentPm, successCallback, errorCallback);
+  };
 }

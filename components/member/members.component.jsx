@@ -21,10 +21,6 @@ function MembersComponent() {
       await membersPresenter.load((generatedViewModel) => {
         copyMembersViewModelToStateModel(generatedViewModel);
       });
-
-      // await lookupsPresenter.loadPanchayaths((pachayatsViewModel) => {
-      //   copyPanchayatsToStateModel(pachayatsViewModel);
-      // });
     }
     load();
   }, []);

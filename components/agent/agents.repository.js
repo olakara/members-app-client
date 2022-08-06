@@ -51,6 +51,20 @@ class AgentsRepository {
     return result;
   };
 
+  resetPassword = async (agentPm, successCallback, errorCallback) => {
+    debugger;
+    const agentDto = {
+      userId: agentPm.id,
+      email: agentPm.email,
+    };
+    let result = await httpGateway.post(config.BASE_URL + 'users/resetpassword', agentDto);
+    if (result.success) {
+      successCallback();
+    } else {
+      errorCallback(result);
+    }
+  };
+
   loadData = async () => {
     const agentsDto = await httpGateway.get(config.BASE_URL + 'users/role');
     this.programmersModel.value = agentsDto.map((agentDto) => {
