@@ -69,6 +69,8 @@ export default function CreateMemberPage() {
   const [welfareSchemesLookup, copyWelfareSchemesToStateViewModel] = useState([]);
   const [mandalamLookups, copyMandalamLookupsToStateViewModel] = useState({});
   const [panchayatLookups, copyPanchayatLookupsToStateViewModel] = useState({});
+  const [mandalamForAgentLookups, setMandalamForAgentLookups] = useState({});
+  const [panchayatForAgentLookups, setPanchayatForAgentLookups] = useState({});
 
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -82,7 +84,7 @@ export default function CreateMemberPage() {
   const [passportExpiry, setPassportExpiry] = useState('');
   const [profession, setProfession] = useState('');
   const [qualification, setQualification] = useState('');
-  const [bloodGroup, setBloodGroup] = useState('');
+  const [bloodGroup, setBloodGroup] = useState(8);
   const [houseName, setHouseName] = useState('');
   const [addressIndia, setAddressIndia] = useState('');
   const [addressInDistrict, setAddressInDistrict] = useState('');
@@ -115,6 +117,7 @@ export default function CreateMemberPage() {
   const [isIDNumberDisabled, setIDNumberDisabled] = useState(true);
   const [isIDExpiryDisabled, setIDExpiryDisabled] = useState(true);
   const [isDoBDisabled, setDobBisabled] = useState(true);
+  const [isDisableEmiratesIdUploads, setDisableEmiratesIdUploads] = useState(false);
 
   const [isUserInDubaiState, setIsUserInDubaiState] = useState(false);
   const [isMandalamAgent, setIsMandalamAgent] = useState(false);
@@ -149,12 +152,15 @@ export default function CreateMemberPage() {
           console.log('Mandalams', mandalamsViewModel);
           copyMandalamLookupsToStateViewModel(mandalamsViewModel);
           setAddressInMandalam(generatedViewModel.agentMandalamId);
+          setMandalamForAgentLookups(mandalamsViewModel);
           setMandalam(generatedViewModel.agentMandalamId);
+          console.log('agent mandalam id', generatedViewModel.agentMandalamId);
         });
 
         await lookupsPresenter.loadPanchayaths(generatedViewModel.agentMandalamId, (panchayathsViewModel) => {
           console.log('Panchayaths', panchayathsViewModel);
           copyPanchayatLookupsToStateViewModel(panchayathsViewModel);
+          setPanchayatForAgentLookups(panchayathsViewModel);
         });
       });
 
@@ -242,10 +248,12 @@ export default function CreateMemberPage() {
   const onSelectingEmiratesIdFront = async (event) => {
     let file = event.target.files[0];
     if (file) {
+      setIsLoading(true);
       setEmiratesIdFrontImagePath(URL.createObjectURL(file));
       await uploadPresenter.uploadEmiratesIdFront((generatedViewModel) => {
         console.log('Upload result', generatedViewModel);
         setEmiratesIdFrontPage(generatedViewModel.data);
+        setIsLoading(false);
       }, file);
     } else {
       setEmiratesIdFrontImagePath(null);
@@ -255,10 +263,12 @@ export default function CreateMemberPage() {
   const onSelectingEmiratesIdBack = async (event) => {
     let file = event.target.files[0];
     if (file) {
+      setIsLoading(true);
       setEmiratesIdBackImagePath(URL.createObjectURL(file));
       await uploadPresenter.uploadEmiratesIdBack((generatedViewModel) => {
         console.log('Upload result', generatedViewModel);
         setEmiratesIdLastPage(generatedViewModel.data);
+        setIsLoading(false);
       }, file);
     } else {
       setEmiratesIdBackImagePath(null);
@@ -268,10 +278,12 @@ export default function CreateMemberPage() {
   const onSelectingPhoto = async (event) => {
     let file = event.target.files[0];
     if (file) {
+      setIsLoading(true);
       setPhotoImagePath(URL.createObjectURL(file));
       await uploadPresenter.uploadPhoto((generatedViewModel) => {
         console.log('Upload result', generatedViewModel);
         setPhoto(generatedViewModel.data);
+        setIsLoading(false);
       }, file);
     } else {
       setPhotoImagePath(null);
@@ -281,10 +293,12 @@ export default function CreateMemberPage() {
   const onSelectingPassportFrontPage = async (event) => {
     let file = event.target.files[0];
     if (file) {
+      setIsLoading(true);
       setPassportFrontImagePath(URL.createObjectURL(file));
       await uploadPresenter.uploadPassportFirstPage((generatedViewModel) => {
         console.log('Upload result', generatedViewModel);
         setPassportFrontPage(generatedViewModel.data);
+        setIsLoading(false);
       }, file);
     } else {
       setPassportFrontImagePath(null);
@@ -294,10 +308,12 @@ export default function CreateMemberPage() {
   const onSelectingPassportBackPage = async (event) => {
     let file = event.target.files[0];
     if (file) {
+      setIsLoading(true);
       setPassportBackImagePath(URL.createObjectURL(file));
       await uploadPresenter.uploadPassportLastPage((generatedViewModel) => {
         console.log('Upload result', generatedViewModel);
         setPassportLastPage(generatedViewModel.data);
+        setIsLoading(false);
       }, file);
     } else {
       setPassportBackImagePath(null);
@@ -317,6 +333,7 @@ export default function CreateMemberPage() {
         emiratesIdData,
         (ocrData) => {
           if (ocrData && !isEmptyObject(ocrData)) {
+            setDisableEmiratesIdUploads(true);
             if (ocrData.isDispute) {
               Router.push({
                 pathname: '/create-dispute',
@@ -360,8 +377,8 @@ export default function CreateMemberPage() {
   };
 
   const isStepTwoValid = () => {
-    if (isUserInDubaiState) return passportFrontPage && passportLastPage;
-    else return true;
+    if (isUserInDubaiState) return passportFrontPage && passportLastPage && bloodGroup;
+    else return bloodGroup;
   };
 
   const isStepThreeValid = () => {
@@ -420,7 +437,7 @@ export default function CreateMemberPage() {
                             accept="image/*"
                             name="emiratesIdFrontImagePath"
                             id="emiratesIdFrontImagePath"
-                            disabled={emiratesIdFrontImagePath}
+                            disabled={isDisableEmiratesIdUploads}
                             onChange={(e) => onSelectingEmiratesIdFront(e)}
                             className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                           />
@@ -440,7 +457,7 @@ export default function CreateMemberPage() {
                             accept="image/*"
                             name="emiratesIdBackImagePath"
                             id="emiratesIdBackImagePath"
-                            disabled={emiratesIdBackImagePath}
+                            disabled={isDisableEmiratesIdUploads}
                             onChange={(e) => onSelectingEmiratesIdBack(e)}
                             className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                           />
@@ -786,7 +803,7 @@ export default function CreateMemberPage() {
                           htmlFor="bloodGroup"
                           className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
                         >
-                          Blood Group
+                          Blood Group <span className="text-red-600">*</span>
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
                           <select
@@ -860,7 +877,7 @@ export default function CreateMemberPage() {
                               setAddressInDistrict(e.target.value);
                               setAddressInMandalam('');
                               setAddressInPanchayat('');
-                              await lookupsPresenter.loadMandalams(e.target.value, (generatedViewModel) => {
+                              await lookupsPresenter.loadMandalams(addressInDistrict, (generatedViewModel) => {
                                 console.log('Mandalams', generatedViewModel);
                                 copyMandalamLookupsToStateViewModel(generatedViewModel);
                               });
@@ -892,7 +909,7 @@ export default function CreateMemberPage() {
                             value={addressInMandalam}
                             onChange={async (e) => {
                               setAddressInMandalam(e.target.value);
-                              await lookupsPresenter.loadPanchayaths(e.target.value, (generatedViewModel) => {
+                              await lookupsPresenter.loadPanchayaths(addressInMandalam, (generatedViewModel) => {
                                 console.log('Panchayaths', generatedViewModel);
                                 copyPanchayatLookupsToStateViewModel(generatedViewModel);
                               });
@@ -1093,15 +1110,15 @@ export default function CreateMemberPage() {
                               setMandalam(e.target.value);
                               await lookupsPresenter.loadPanchayaths(e.target.value, (generatedViewModel) => {
                                 console.log('Panchayaths', generatedViewModel);
-                                copyPanchayatLookupsToStateViewModel(generatedViewModel);
+                                setPanchayatForAgentLookups(generatedViewModel);
                               });
                             }}
                             className="max-w-lg block focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                           >
                             <option value="">Select</option>
-                            {mandalamLookups &&
-                              mandalamLookups.mandalams &&
-                              mandalamLookups.mandalams.map((org, index) => {
+                            {mandalamForAgentLookups &&
+                              mandalamForAgentLookups.mandalams &&
+                              mandalamForAgentLookups.mandalams.map((org, index) => {
                                 return (
                                   <option key={index} value={org.id}>
                                     {org.name}
@@ -1128,9 +1145,9 @@ export default function CreateMemberPage() {
                             className="max-w-lg block focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                           >
                             <option value="">Select</option>
-                            {panchayatLookups &&
-                              panchayatLookups.panchayaths &&
-                              panchayatLookups.panchayaths.map((org, index) => {
+                            {panchayatForAgentLookups &&
+                              panchayatForAgentLookups.panchayaths &&
+                              panchayatForAgentLookups.panchayaths.map((org, index) => {
                                 return (
                                   <option key={index} value={org.id}>
                                     {org.name}
