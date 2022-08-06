@@ -10,7 +10,6 @@ export function getDateInRegionalFormat(date) {
   let isoDate = convertDateToISOFormat(date);
   let tempDate = new Date(isoDate);
   let dateInRegionalFormat = `${tempDate.getDate()}/${tempDate.getMonth() + 1}/${tempDate.getFullYear()}`;
-  console.log(dateInRegionalFormat);
   return dateInRegionalFormat;
 }
 
@@ -42,5 +41,3 @@ export function getItemNameById(list, id) {
 function dateIsValid(date) {
   return date instanceof Date && !isNaN(date);
 }
-
-

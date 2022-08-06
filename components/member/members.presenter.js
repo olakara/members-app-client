@@ -23,4 +23,8 @@ export default class MembersPresenter {
   getOcrData = async (eidPm, successCallback, errorCallback) => {
     await membersRepostory.getOcrData(eidPm, successCallback, errorCallback);
   };
+
+  downloadReceipt = async (id, memberId) => {
+    await membersRepostory.downloadReceipt(id, memberId);
+  };
 }

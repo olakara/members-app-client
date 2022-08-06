@@ -13,7 +13,6 @@ export default function HeaderComponent() {
   useEffect(() => {
     async function loadCurrentUser() {
       await userPresenter.getCurrentUser((user) => {
-        console.log('user', user);
         setCurrentUser(user);
       });
     }
@@ -32,12 +31,16 @@ export default function HeaderComponent() {
         <div className="flex justify-between h-16">
           <div className="flex">
             <div className="flex-shrink-0 flex items-center">
-              <Link href="/"><a>
-                <img className="block lg:hidden h-8 w-auto" src="/images/logo.jpg" alt="Logo" />
-              </a></Link>
-              <Link href="/"><a>
-                <img className="hidden lg:block h-8 w-auto" src="/images/logo.jpg" alt="Logo" />
-              </a></Link>
+              <Link href="/">
+                <a>
+                  <img className="block lg:hidden h-8 w-auto" src="/images/logo.jpg" alt="Logo" />
+                </a>
+              </Link>
+              <Link href="/">
+                <a>
+                  <img className="hidden lg:block h-8 w-auto" src="/images/logo.jpg" alt="Logo" />
+                </a>
+              </Link>
             </div>
           </div>
 

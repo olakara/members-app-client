@@ -2,12 +2,15 @@ import classNames from 'classnames';
 import { useState } from 'react';
 import httpGateway from '../../../shared/http-gateway';
 import { config } from '../../../shared/constants';
+import MembersPresenter from '../members.presenter';
 
 export default function MemberRowComponent(props) {
   let rowStyle = classNames({
     'bg-gray-50': props.index % 2 !== 0,
   });
+
   const [displayDetails, setDisplayDetails] = useState(false);
+  const membersPresenter = new MembersPresenter();
 
   const showDetails = (event) => {
     setDisplayDetails(!displayDetails);
@@ -15,15 +18,7 @@ export default function MemberRowComponent(props) {
 
   const handleDownload = async (event) => {
     event.preventDefault();
-    let file = await httpGateway.download(config.BASE_URL + 'members/membershipcard/' + props.vm.id);
-    const url = window.URL.createObjectURL(new Blob([file]));
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', props.vm.membershipId + `.pdf`);
-
-    document.body.appendChild(link);
-    link.click();
-    link.parentNode.removeChild(link);
+    await membersPresenter.downloadReceipt(props.vm.id, props.vm.membershipId);
   };
 
   return (

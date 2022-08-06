@@ -12,7 +12,6 @@ export default function CreateDisputePage() {
   useEffect(() => {
     if (!isReady) return;
     let id = query.id;
-    console.log('id from router', id);
   }, [isReady]);
 
   return (

@@ -16,7 +16,6 @@ export default function Home() {
     async function load() {
       await userPresenter.getCurrentUser((generatedViewModel) => {
         const userRole = generatedViewModel.role;
-        console.log('userRole', userRole);
         if (userRole === 'mandalam-agent' || userRole === 'district-agent') setAbleToCreateMember(true);
         else setAbleToCreateMember(false);
       });
