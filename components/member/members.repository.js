@@ -82,7 +82,7 @@ class MembersRepostory {
   };
 
   downloadReceipt = async (id, memberId) => {
-    let file = await httpGateway.download(config.BASE_URL + 'members/membershipcard/' + id);
+    let file = await httpGateway.download(config.BASE_URL + 'members/membershipcardpdf/' + id);
     const url = window.URL.createObjectURL(new Blob([file]));
     const link = document.createElement('a');
     link.href = url;
