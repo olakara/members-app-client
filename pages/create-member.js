@@ -232,6 +232,7 @@ export default function CreateMemberPage() {
       mandalam,
       registeredOrganization,
       welfareScheme,
+      cardNumber,
     };
 
     await memberPresenter.createMember(

@@ -70,6 +70,7 @@ class MembersRepostory {
       mandalamId: memberPm.mandalam,
       registeredOrganizationId: this.nullIfEmpty(memberPm.registeredOrganization),
       welfareSchemeId: this.nullIfEmpty(memberPm.welfareScheme),
+      cardNumber: this.nullIfEmpty(memberPm.cardNumber),
     };
 
     let result = await httpGateway.post(config.BASE_URL + 'members', memberDto);
