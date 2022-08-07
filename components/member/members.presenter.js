@@ -27,4 +27,10 @@ export default class MembersPresenter {
   downloadReceipt = async (id, memberId) => {
     await membersRepostory.downloadReceipt(id, memberId);
   };
+
+  getMembershipDetails = async (id, callback) => {
+    await membersRepostory.getMembershipDetails(id, (membershipPm) => {
+      callback(membershipPm);
+    });
+  };
 }

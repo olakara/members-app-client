@@ -5,10 +5,12 @@ import Observable from '../../shared/observable';
 class MembersRepostory {
   programmersModel = null;
   ocrProgrammersModel = null;
+  membershipModel = null;
 
   constructor() {
     this.programmersModel = new Observable([]);
     this.ocrProgrammersModel = new Observable({});
+    this.membershipModel = new Observable({});
   }
 
   getMembers = async (callback) => {
@@ -31,6 +33,12 @@ class MembersRepostory {
     } else {
       errorCallback(ocrResultDto);
     }
+  };
+
+  getMembershipDetails = async (id, callback) => {
+    this.membershipModel.subscribe(callback);
+    await this.loadMembershipData(id);
+    this.membershipModel.notify();
   };
 
   createMember = async (memberPm, successCallback, errorCallback) => {
@@ -87,6 +95,13 @@ class MembersRepostory {
 
   nullIfEmpty = (property) => {
     return property && property.length !== 0 ? property : null;
+  };
+
+  loadMembershipData = async (id) => {
+    const dto = await httpGateway.get(config.BASE_URL + 'members/membershipcard/' + id);
+    if (!dto) return;
+    debugger;
+    this.membershipModel.value = dto;
   };
 
   loadData = async () => {
