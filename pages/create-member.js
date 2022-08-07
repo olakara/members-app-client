@@ -77,6 +77,7 @@ export default function CreateMemberPage() {
   const [fullName, setFullName] = useState('');
   const [emiratesIdNumber, setEmiratesId] = useState('');
   const [emiratesIdExpiry, setEmiratesIdExpiry] = useState('');
+  const [cardNumber, setCardNumber] = useState('');
   const [dateOfBirth, setDateOfBirth] = useState('');
   const [mobile, setMobile] = useState('');
   const [email, setEmail] = useState('');
@@ -231,6 +232,7 @@ export default function CreateMemberPage() {
       mandalam,
       registeredOrganization,
       welfareScheme,
+      cardNumber,
     };
 
     await memberPresenter.createMember(
@@ -345,6 +347,7 @@ export default function CreateMemberPage() {
             setGender(ocrData.gender + '');
             setDateOfBirth(getDateInRegionalFormat(ocrData.dateofBirth));
             setEmiratesIdExpiry(getDateInRegionalFormat(ocrData.expiryDate));
+            setCardNumber(ocrData.cardNumber);
             setIsLoading(false);
           }
         },
