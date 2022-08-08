@@ -48,3 +48,7 @@ export function isEmailValid(email) {
   if (!email || regex.test(email) === false) return false;
   return true;
 }
+
+export function isValidDate(d) {
+  return d instanceof Date && !isNaN(d);
+}

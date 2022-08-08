@@ -12,7 +12,14 @@ import ImagePreviewComponent from '../components/common/image-preview.component'
 import PhotoPreviewComponent from '../components/common/photo-preview.component';
 
 import Spinner from '../components/common/spinner';
-import { dateToServerSideFormat, getDateInRegionalFormat, isEmptyObject, getItemNameById } from '../shared/utilities';
+import {
+  dateToServerSideFormat,
+  getDateInRegionalFormat,
+  isEmptyObject,
+  getItemNameById,
+  isValidDate,
+  convertDateToISOFormat,
+} from '../shared/utilities';
 
 export default function CreateMemberPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -210,10 +217,12 @@ export default function CreateMemberPage() {
     let memberForm = {
       fullName,
       emiratesIdNumber,
-      emiratesIdExpiry: dateToServerSideFormat(emiratesIdExpiry),
+      emiratesIdExpiry: isIDExpiryDisabled
+        ? dateToServerSideFormat(emiratesIdExpiry)
+        : convertDateToISOFormat(emiratesIdExpiry),
       emiratesIdFrontPage,
       emiratesIdLastPage,
-      dateOfBirth: dateToServerSideFormat(dateOfBirth),
+      dateOfBirth: isDoBDisabled ? dateToServerSideFormat(dateOfBirth) : convertDateToISOFormat(dateOfBirth),
       mobile,
       email,
       passportNumber,
@@ -353,6 +362,7 @@ export default function CreateMemberPage() {
             /*  STATUS: No Data Available */
             if (ocrData.status === 2) {
               setErrorMessage('Could not read data from Emirates ID. Please provide a better image!');
+              setIsLoading(false);
               return;
             }
 
@@ -364,37 +374,39 @@ export default function CreateMemberPage() {
               setDateOfBirth(getDateInRegionalFormat(ocrData.dateOfBirth));
               setEmiratesIdExpiry(getDateInRegionalFormat(ocrData.expiryDate));
               setCardNumber(ocrData.cardNumber);
-              setIsLoading(false);
-              setDisableEmiratesIdUploads(true);
             }
 
             /*  STATUS: PartiallyVerified  */
             if (ocrData.isValidate && ocrData.status === 1) {
               setManualEntry(true);
-              if (ocrData.name) {
+              if (ocrData.name && ocrData.name.length > 0) {
                 setFullName(ocrData.name);
               } else {
                 setNameDisabled(false);
               }
 
-              if (ocrData.idNumber) {
+              if (ocrData.idNumber && ocrData.idNumber.length === 18) {
                 setEmiratesId(ocrData.idNumber);
               } else {
                 setIDNumberDisabled(false);
               }
 
               if (ocrData.expiryDate) {
-                setEmiratesIdExpiry(getDateInRegionalFormat(ocrData.expiryDate));
+                let tempDate = getDateInRegionalFormat(ocrData.expiryDate);
+                setEmiratesIdExpiry(tempDate);
               } else {
                 setIDExpiryDisabled(false);
               }
 
               if (ocrData.dateOfBirth) {
-                setDateOfBirth(getDateInRegionalFormat(ocrData.dateOfBirth));
+                let tempDate = getDateInRegionalFormat(ocrData.dateOfBirth);
+                setDateOfBirth(tempDate);
               } else {
                 setDobBDisabled(false);
               }
             }
+            setIsLoading(false);
+            setDisableEmiratesIdUploads(true);
           }
         },
         (error) => {
@@ -568,16 +580,28 @@ export default function CreateMemberPage() {
                           Emirates ID Expiry <span className="text-red-600">*</span>
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
-                          <input
-                            type="text"
-                            name="emiratesIdExpiry"
-                            id="emiratesIdExpiry"
-                            autoComplete="emirates-id-expiry"
-                            disabled={isIDExpiryDisabled}
-                            onChange={(e) => setEmiratesIdExpiry(e.target.value)}
-                            value={emiratesIdExpiry}
-                            className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-                          />
+                          {isIDExpiryDisabled && (
+                            <input
+                              type="text"
+                              name="emiratesIdExpiry"
+                              id="emiratesIdExpiry"
+                              autoComplete="emirates-id-expiry"
+                              disabled={isIDExpiryDisabled}
+                              value={emiratesIdExpiry}
+                              className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                            />
+                          )}
+                          {!isIDExpiryDisabled && (
+                            <input
+                              type="date"
+                              name="emiratesIdExpiry"
+                              id="emiratesIdExpiry"
+                              autoComplete="emirates-id-expiry"
+                              onChange={(e) => setEmiratesIdExpiry(e.target.value)}
+                              value={emiratesIdExpiry}
+                              className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                            />
+                          )}
                         </div>
                       </div>
                       <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
@@ -588,16 +612,29 @@ export default function CreateMemberPage() {
                           Date Of Birth <span className="text-red-600">*</span>
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
-                          <input
-                            type="text"
-                            name="dateOfBirth"
-                            id="dateOfBirth"
-                            autoComplete="dateOfBirth"
-                            disabled={isDoBDisabled}
-                            onChange={(e) => setDateOfBirth(e.target.value)}
-                            value={dateOfBirth}
-                            className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-                          />
+                          {isDoBDisabled && (
+                            <input
+                              type="text"
+                              name="dateOfBirth"
+                              id="dateOfBirth"
+                              autoComplete="dateOfBirth"
+                              disabled={isDoBDisabled}
+                              value={dateOfBirth}
+                              className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                            />
+                          )}
+                          {!isDoBDisabled && (
+                            <input
+                              type="date"
+                              name="dateOfBirth"
+                              id="dateOfBirth"
+                              autoComplete="dateOfBirth"
+                              disabled={isDoBDisabled}
+                              onChange={(e) => setDateOfBirth(e.target.value)}
+                              value={dateOfBirth}
+                              className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                            />
+                          )}
                         </div>
                       </div>
                       <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
