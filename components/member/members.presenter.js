@@ -1,4 +1,5 @@
 import membersRepostory from './members.repository';
+import { isEmptyObject } from '../../shared/utilities';
 
 export default class MembersPresenter {
   load = async (callback) => {
@@ -21,7 +22,28 @@ export default class MembersPresenter {
   };
 
   getOcrData = async (eidPm, successCallback, errorCallback) => {
-    await membersRepostory.getOcrData(eidPm, successCallback, errorCallback);
+    await membersRepostory.getOcrData(
+      eidPm,
+      (ocrResult) => {
+        if (isEmptyObject(ocrResult)) return;
+        const ocrDataVm = {
+          cardNumber: ocrResult.cardNumber,
+          cardType: ocrResult.cardType,
+          dateOfBirth: ocrResult.dateofBirth,
+          errorMessage: ocrResult.errorMessage,
+          expiryDate: ocrResult.expiryDate,
+          gender: ocrResult.gender,
+          idNumber: ocrResult.idNumber,
+          isDispute: ocrResult.isDispute,
+          isDuplicate: ocrResult.isDuplicate,
+          isValidate: ocrResult.isValidate,
+          name: ocrResult.name,
+          status: ocrResult.status,
+        };
+        successCallback(ocrDataVm);
+      },
+      errorCallback
+    );
   };
 
   downloadReceipt = async (id, memberId) => {

@@ -117,7 +117,7 @@ export default function CreateMemberPage() {
   const [isNameDisabled, setNameDisabled] = useState(true);
   const [isIDNumberDisabled, setIDNumberDisabled] = useState(true);
   const [isIDExpiryDisabled, setIDExpiryDisabled] = useState(true);
-  const [isDoBDisabled, setDobBisabled] = useState(true);
+  const [isDoBDisabled, setDobBDisabled] = useState(true);
   const [isDisableEmiratesIdUploads, setDisableEmiratesIdUploads] = useState(false);
 
   const [isUserInDubaiState, setIsUserInDubaiState] = useState(false);
@@ -125,6 +125,7 @@ export default function CreateMemberPage() {
   const [isDistrictAgent, setIsDistrictAgent] = useState(false);
 
   const [isDispute, setIsDispute] = useState(false);
+  const [isManuallyEntered, setManualEntry] = useState(false);
 
   const memberPresenter = new MemberPresenter();
   const lookupsPresenter = new LookupsPresenter();
@@ -235,6 +236,7 @@ export default function CreateMemberPage() {
       registeredOrganization,
       welfareScheme,
       cardNumber,
+      manuallyEntered: isManuallyEntered,
     };
 
     await memberPresenter.createMember(
@@ -339,7 +341,6 @@ export default function CreateMemberPage() {
         emiratesIdData,
         (ocrData) => {
           if (ocrData && !isEmptyObject(ocrData)) {
-            setDisableEmiratesIdUploads(true);
             if (ocrData.isDispute) {
               setIsDispute(true);
               setCurrentStep(4);
@@ -349,13 +350,51 @@ export default function CreateMemberPage() {
               setCurrentStep(4);
             }
 
-            setFullName(ocrData.name);
-            setEmiratesId(ocrData.idNumber);
-            setGender(ocrData.gender + '');
-            setDateOfBirth(getDateInRegionalFormat(ocrData.dateofBirth));
-            setEmiratesIdExpiry(getDateInRegionalFormat(ocrData.expiryDate));
-            setCardNumber(ocrData.cardNumber);
-            setIsLoading(false);
+            /*  STATUS: No Data Available */
+            if (ocrData.status === 2) {
+              setErrorMessage('Could not read data from Emirates ID. Please provide a better image!');
+              return;
+            }
+
+            /*  STATUS: Verified */
+            if (ocrData.isValidate && ocrData.status === 0) {
+              setFullName(ocrData.name);
+              setEmiratesId(ocrData.idNumber);
+              setGender(ocrData.gender + '');
+              setDateOfBirth(getDateInRegionalFormat(ocrData.dateOfBirth));
+              setEmiratesIdExpiry(getDateInRegionalFormat(ocrData.expiryDate));
+              setCardNumber(ocrData.cardNumber);
+              setIsLoading(false);
+              setDisableEmiratesIdUploads(true);
+            }
+
+            /*  STATUS: PartiallyVerified  */
+            if (ocrData.isValidate && ocrData.status === 1) {
+              setManualEntry(true);
+              if (ocrData.name) {
+                setFullName(ocrData.name);
+              } else {
+                setNameDisabled(false);
+              }
+
+              if (ocrData.idNumber) {
+                setEmiratesId(ocrData.idNumber);
+              } else {
+                setIDNumberDisabled(false);
+              }
+
+              if (ocrData.expiryDate) {
+                setEmiratesIdExpiry(getDateInRegionalFormat(ocrData.expiryDate));
+              } else {
+                setIDExpiryDisabled(false);
+              }
+
+              if (ocrData.dateOfBirth) {
+                setDateOfBirth(getDateInRegionalFormat(ocrData.dateOfBirth));
+              } else {
+                setDobBDisabled(false);
+              }
+            }
           }
         },
         (error) => {
