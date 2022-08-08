@@ -124,6 +124,8 @@ export default function CreateMemberPage() {
   const [isMandalamAgent, setIsMandalamAgent] = useState(false);
   const [isDistrictAgent, setIsDistrictAgent] = useState(false);
 
+  const [isDispute, setIsDispute] = useState(false);
+
   const memberPresenter = new MemberPresenter();
   const lookupsPresenter = new LookupsPresenter();
   const uploadPresenter = new UploadsPresenter();
@@ -339,6 +341,11 @@ export default function CreateMemberPage() {
           if (ocrData && !isEmptyObject(ocrData)) {
             setDisableEmiratesIdUploads(true);
             if (ocrData.isDispute) {
+              setIsDispute(true);
+              setCurrentStep(4);
+            }
+
+            if (ocrData.isDuplicate) {
               setCurrentStep(4);
             }
 
@@ -1270,18 +1277,20 @@ export default function CreateMemberPage() {
                           Member already exist in the system!
                         </h2>
                         <p className="mt-6 mx-auto max-w-2xl text-lg text-gray-700">
-                          Please review the details. We found the member already in the system. You can create a dispute
-                          or restart the member creation process.
+                          Please review the details. We found the member already in the system.
+                          {isDispute && <>You can create a dispute or restart the member creation process.</>}
                         </p>
                       </div>
                       <div className="mt-9 text-center">
-                        <button
-                          type="button"
-                          disabled={true}
-                          className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 disabled:bg-gray-500 disabled:text-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-                        >
-                          Create Dispute
-                        </button>
+                        {isDispute && (
+                          <button
+                            type="button"
+                            disabled={true}
+                            className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 disabled:bg-gray-500 disabled:text-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                          >
+                            Create Dispute
+                          </button>
+                        )}
                         <button
                           type="button"
                           onClick={() => Router.reload(window.location.pathname)}
