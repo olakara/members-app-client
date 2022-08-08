@@ -271,6 +271,14 @@ export default function CreateMemberPage() {
     let file = event.target.files[0];
     if (file) {
       setIsLoading(true);
+      var filesize = (file.size / 1024 / 1024).toFixed(4);
+      if (filesize > 2) {
+        setErrorMessage('Please upload an image with size less than 2MB');
+        setEmiratesIdFrontPage('');
+        setEmiratesIdFrontImagePath(null);
+        setIsLoading(false);
+        return;
+      }
       setEmiratesIdFrontImagePath(URL.createObjectURL(file));
       await uploadPresenter.uploadEmiratesIdFront((generatedViewModel) => {
         setEmiratesIdFrontPage(generatedViewModel.data);
@@ -285,6 +293,13 @@ export default function CreateMemberPage() {
     let file = event.target.files[0];
     if (file) {
       setIsLoading(true);
+      var filesize = (file.size / 1024 / 1024).toFixed(4);
+      if (filesize > 2) {
+        setErrorMessage('Please upload an image with size less than 2MB');
+        setEmiratesIdBackImagePath(null);
+        setIsLoading(false);
+        return;
+      }
       setEmiratesIdBackImagePath(URL.createObjectURL(file));
       await uploadPresenter.uploadEmiratesIdBack((generatedViewModel) => {
         setEmiratesIdLastPage(generatedViewModel.data);
@@ -299,6 +314,14 @@ export default function CreateMemberPage() {
     let file = event.target.files[0];
     if (file) {
       setIsLoading(true);
+      var filesize = (file.size / 1024 / 1024).toFixed(4);
+      if (filesize > 2) {
+        setErrorMessage('Please upload an image with size less than 2MB');
+        setPhotoImagePath(null);
+        setPhoto('');
+        setIsLoading(false);
+        return;
+      }
       setPhotoImagePath(URL.createObjectURL(file));
       await uploadPresenter.uploadPhoto((generatedViewModel) => {
         setPhoto(generatedViewModel.data);
@@ -313,6 +336,13 @@ export default function CreateMemberPage() {
     let file = event.target.files[0];
     if (file) {
       setIsLoading(true);
+      var filesize = (file.size / 1024 / 1024).toFixed(4);
+      if (filesize > 2) {
+        setErrorMessage('Please upload an image with size less than 2MB');
+        setPassportFrontImagePath(null);
+        setIsLoading(false);
+        return;
+      }
       setPassportFrontImagePath(URL.createObjectURL(file));
       await uploadPresenter.uploadPassportFirstPage((generatedViewModel) => {
         setPassportFrontPage(generatedViewModel.data);
@@ -327,6 +357,13 @@ export default function CreateMemberPage() {
     let file = event.target.files[0];
     if (file) {
       setIsLoading(true);
+      var filesize = (file.size / 1024 / 1024).toFixed(4);
+      if (filesize > 2) {
+        setErrorMessage('Please upload an image with size less than 2MB');
+        setPassportBackImagePath(null);
+        setIsLoading(false);
+        return;
+      }
       setPassportBackImagePath(URL.createObjectURL(file));
       await uploadPresenter.uploadPassportLastPage((generatedViewModel) => {
         setPassportLastPage(generatedViewModel.data);
