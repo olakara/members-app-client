@@ -12,7 +12,14 @@ import ImagePreviewComponent from '../components/common/image-preview.component'
 import PhotoPreviewComponent from '../components/common/photo-preview.component';
 
 import Spinner from '../components/common/spinner';
-import { dateToServerSideFormat, getDateInRegionalFormat, isEmptyObject, getItemNameById } from '../shared/utilities';
+import {
+  dateToServerSideFormat,
+  getDateInRegionalFormat,
+  isEmptyObject,
+  getItemNameById,
+  isValidDate,
+  convertDateToISOFormat,
+} from '../shared/utilities';
 
 export default function CreateMemberPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -117,12 +124,15 @@ export default function CreateMemberPage() {
   const [isNameDisabled, setNameDisabled] = useState(true);
   const [isIDNumberDisabled, setIDNumberDisabled] = useState(true);
   const [isIDExpiryDisabled, setIDExpiryDisabled] = useState(true);
-  const [isDoBDisabled, setDobBisabled] = useState(true);
+  const [isDoBDisabled, setDobBDisabled] = useState(true);
   const [isDisableEmiratesIdUploads, setDisableEmiratesIdUploads] = useState(false);
 
   const [isUserInDubaiState, setIsUserInDubaiState] = useState(false);
   const [isMandalamAgent, setIsMandalamAgent] = useState(false);
   const [isDistrictAgent, setIsDistrictAgent] = useState(false);
+
+  const [isDispute, setIsDispute] = useState(false);
+  const [isManuallyEntered, setManualEntry] = useState(false);
 
   const memberPresenter = new MemberPresenter();
   const lookupsPresenter = new LookupsPresenter();
@@ -207,10 +217,12 @@ export default function CreateMemberPage() {
     let memberForm = {
       fullName,
       emiratesIdNumber,
-      emiratesIdExpiry: dateToServerSideFormat(emiratesIdExpiry),
+      emiratesIdExpiry: isIDExpiryDisabled
+        ? dateToServerSideFormat(emiratesIdExpiry)
+        : convertDateToISOFormat(emiratesIdExpiry),
       emiratesIdFrontPage,
       emiratesIdLastPage,
-      dateOfBirth: dateToServerSideFormat(dateOfBirth),
+      dateOfBirth: isDoBDisabled ? dateToServerSideFormat(dateOfBirth) : convertDateToISOFormat(dateOfBirth),
       mobile,
       email,
       passportNumber,
@@ -233,6 +245,7 @@ export default function CreateMemberPage() {
       registeredOrganization,
       welfareScheme,
       cardNumber,
+      manuallyEntered: isManuallyEntered,
     };
 
     await memberPresenter.createMember(
@@ -258,6 +271,14 @@ export default function CreateMemberPage() {
     let file = event.target.files[0];
     if (file) {
       setIsLoading(true);
+      var filesize = (file.size / 1024 / 1024).toFixed(4);
+      if (filesize > 2) {
+        setErrorMessage('Please upload an image with size less than 2MB');
+        setEmiratesIdFrontPage('');
+        setEmiratesIdFrontImagePath(null);
+        setIsLoading(false);
+        return;
+      }
       setEmiratesIdFrontImagePath(URL.createObjectURL(file));
       await uploadPresenter.uploadEmiratesIdFront((generatedViewModel) => {
         setEmiratesIdFrontPage(generatedViewModel.data);
@@ -272,6 +293,13 @@ export default function CreateMemberPage() {
     let file = event.target.files[0];
     if (file) {
       setIsLoading(true);
+      var filesize = (file.size / 1024 / 1024).toFixed(4);
+      if (filesize > 2) {
+        setErrorMessage('Please upload an image with size less than 2MB');
+        setEmiratesIdBackImagePath(null);
+        setIsLoading(false);
+        return;
+      }
       setEmiratesIdBackImagePath(URL.createObjectURL(file));
       await uploadPresenter.uploadEmiratesIdBack((generatedViewModel) => {
         setEmiratesIdLastPage(generatedViewModel.data);
@@ -286,6 +314,14 @@ export default function CreateMemberPage() {
     let file = event.target.files[0];
     if (file) {
       setIsLoading(true);
+      var filesize = (file.size / 1024 / 1024).toFixed(4);
+      if (filesize > 2) {
+        setErrorMessage('Please upload an image with size less than 2MB');
+        setPhotoImagePath(null);
+        setPhoto('');
+        setIsLoading(false);
+        return;
+      }
       setPhotoImagePath(URL.createObjectURL(file));
       await uploadPresenter.uploadPhoto((generatedViewModel) => {
         setPhoto(generatedViewModel.data);
@@ -300,6 +336,13 @@ export default function CreateMemberPage() {
     let file = event.target.files[0];
     if (file) {
       setIsLoading(true);
+      var filesize = (file.size / 1024 / 1024).toFixed(4);
+      if (filesize > 2) {
+        setErrorMessage('Please upload an image with size less than 2MB');
+        setPassportFrontImagePath(null);
+        setIsLoading(false);
+        return;
+      }
       setPassportFrontImagePath(URL.createObjectURL(file));
       await uploadPresenter.uploadPassportFirstPage((generatedViewModel) => {
         setPassportFrontPage(generatedViewModel.data);
@@ -314,6 +357,13 @@ export default function CreateMemberPage() {
     let file = event.target.files[0];
     if (file) {
       setIsLoading(true);
+      var filesize = (file.size / 1024 / 1024).toFixed(4);
+      if (filesize > 2) {
+        setErrorMessage('Please upload an image with size less than 2MB');
+        setPassportBackImagePath(null);
+        setIsLoading(false);
+        return;
+      }
       setPassportBackImagePath(URL.createObjectURL(file));
       await uploadPresenter.uploadPassportLastPage((generatedViewModel) => {
         setPassportLastPage(generatedViewModel.data);
@@ -337,18 +387,63 @@ export default function CreateMemberPage() {
         emiratesIdData,
         (ocrData) => {
           if (ocrData && !isEmptyObject(ocrData)) {
-            setDisableEmiratesIdUploads(true);
             if (ocrData.isDispute) {
+              setIsDispute(true);
               setCurrentStep(4);
             }
 
-            setFullName(ocrData.name);
-            setEmiratesId(ocrData.idNumber);
-            setGender(ocrData.gender + '');
-            setDateOfBirth(getDateInRegionalFormat(ocrData.dateofBirth));
-            setEmiratesIdExpiry(getDateInRegionalFormat(ocrData.expiryDate));
-            setCardNumber(ocrData.cardNumber);
+            if (ocrData.isDuplicate) {
+              setCurrentStep(4);
+            }
+
+            /*  STATUS: No Data Available */
+            if (ocrData.status === 2) {
+              setErrorMessage('Could not read data from Emirates ID. Please provide a better image!');
+              setIsLoading(false);
+              return;
+            }
+
+            /*  STATUS: Verified */
+            if (ocrData.isValidate && ocrData.status === 0) {
+              setFullName(ocrData.name);
+              setEmiratesId(ocrData.idNumber);
+              setGender(ocrData.gender + '');
+              setDateOfBirth(getDateInRegionalFormat(ocrData.dateOfBirth));
+              setEmiratesIdExpiry(getDateInRegionalFormat(ocrData.expiryDate));
+              setCardNumber(ocrData.cardNumber);
+            }
+
+            /*  STATUS: PartiallyVerified  */
+            if (ocrData.isValidate && ocrData.status === 1) {
+              setManualEntry(true);
+              if (ocrData.name && ocrData.name.length > 0) {
+                setFullName(ocrData.name);
+              } else {
+                setNameDisabled(false);
+              }
+
+              if (ocrData.idNumber && ocrData.idNumber.length === 18) {
+                setEmiratesId(ocrData.idNumber);
+              } else {
+                setIDNumberDisabled(false);
+              }
+
+              if (ocrData.expiryDate) {
+                let tempDate = getDateInRegionalFormat(ocrData.expiryDate);
+                setEmiratesIdExpiry(tempDate);
+              } else {
+                setIDExpiryDisabled(false);
+              }
+
+              if (ocrData.dateOfBirth) {
+                let tempDate = getDateInRegionalFormat(ocrData.dateOfBirth);
+                setDateOfBirth(tempDate);
+              } else {
+                setDobBDisabled(false);
+              }
+            }
             setIsLoading(false);
+            setDisableEmiratesIdUploads(true);
           }
         },
         (error) => {
@@ -522,16 +617,28 @@ export default function CreateMemberPage() {
                           Emirates ID Expiry <span className="text-red-600">*</span>
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
-                          <input
-                            type="text"
-                            name="emiratesIdExpiry"
-                            id="emiratesIdExpiry"
-                            autoComplete="emirates-id-expiry"
-                            disabled={isIDExpiryDisabled}
-                            onChange={(e) => setEmiratesIdExpiry(e.target.value)}
-                            value={emiratesIdExpiry}
-                            className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-                          />
+                          {isIDExpiryDisabled && (
+                            <input
+                              type="text"
+                              name="emiratesIdExpiry"
+                              id="emiratesIdExpiry"
+                              autoComplete="emirates-id-expiry"
+                              disabled={isIDExpiryDisabled}
+                              value={emiratesIdExpiry}
+                              className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                            />
+                          )}
+                          {!isIDExpiryDisabled && (
+                            <input
+                              type="date"
+                              name="emiratesIdExpiry"
+                              id="emiratesIdExpiry"
+                              autoComplete="emirates-id-expiry"
+                              onChange={(e) => setEmiratesIdExpiry(e.target.value)}
+                              value={emiratesIdExpiry}
+                              className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                            />
+                          )}
                         </div>
                       </div>
                       <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
@@ -542,16 +649,29 @@ export default function CreateMemberPage() {
                           Date Of Birth <span className="text-red-600">*</span>
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
-                          <input
-                            type="text"
-                            name="dateOfBirth"
-                            id="dateOfBirth"
-                            autoComplete="dateOfBirth"
-                            disabled={isDoBDisabled}
-                            onChange={(e) => setDateOfBirth(e.target.value)}
-                            value={dateOfBirth}
-                            className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-                          />
+                          {isDoBDisabled && (
+                            <input
+                              type="text"
+                              name="dateOfBirth"
+                              id="dateOfBirth"
+                              autoComplete="dateOfBirth"
+                              disabled={isDoBDisabled}
+                              value={dateOfBirth}
+                              className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                            />
+                          )}
+                          {!isDoBDisabled && (
+                            <input
+                              type="date"
+                              name="dateOfBirth"
+                              id="dateOfBirth"
+                              autoComplete="dateOfBirth"
+                              disabled={isDoBDisabled}
+                              onChange={(e) => setDateOfBirth(e.target.value)}
+                              value={dateOfBirth}
+                              className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                            />
+                          )}
                         </div>
                       </div>
                       <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
@@ -1270,18 +1390,20 @@ export default function CreateMemberPage() {
                           Member already exist in the system!
                         </h2>
                         <p className="mt-6 mx-auto max-w-2xl text-lg text-gray-700">
-                          Please review the details. We found the member already in the system. You can create a dispute
-                          or restart the member creation process.
+                          Please review the details. We found the member already in the system.
+                          {isDispute && <>You can create a dispute or restart the member creation process.</>}
                         </p>
                       </div>
                       <div className="mt-9 text-center">
-                        <button
-                          type="button"
-                          disabled={true}
-                          className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 disabled:bg-gray-500 disabled:text-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-                        >
-                          Create Dispute
-                        </button>
+                        {isDispute && (
+                          <button
+                            type="button"
+                            disabled={true}
+                            className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 disabled:bg-gray-500 disabled:text-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                          >
+                            Create Dispute
+                          </button>
+                        )}
                         <button
                           type="button"
                           onClick={() => Router.reload(window.location.pathname)}

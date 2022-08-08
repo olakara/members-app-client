@@ -71,6 +71,7 @@ class MembersRepostory {
       registeredOrganizationId: this.nullIfEmpty(memberPm.registeredOrganization),
       welfareSchemeId: this.nullIfEmpty(memberPm.welfareScheme),
       cardNumber: this.nullIfEmpty(memberPm.cardNumber),
+      manuallyEntered: memberPm.manuallyEntered,
     };
 
     let result = await httpGateway.post(config.BASE_URL + 'members', memberDto);
