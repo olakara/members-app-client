@@ -6,11 +6,13 @@ class MembersRepostory {
   programmersModel = null;
   ocrProgrammersModel = null;
   membershipModel = null;
+  disputeInfoProgrammersModel = null;
 
   constructor() {
     this.programmersModel = new Observable([]);
     this.ocrProgrammersModel = new Observable({});
     this.membershipModel = new Observable({});
+    this.disputeInfoProgrammersModel = new Observable({});
   }
 
   getMembers = async (callback) => {
@@ -102,8 +104,13 @@ class MembersRepostory {
   loadMembershipData = async (id) => {
     const dto = await httpGateway.get(config.BASE_URL + 'members/membershipcard/' + id);
     if (!dto) return;
-    debugger;
     this.membershipModel.value = dto;
+  };
+
+  getDisputeInfoForMember = async (eid, callback) => {
+    this.disputeInfoProgrammersModel.subscribe(callback);
+    await this.loadDisputedInfo(eid);
+    this.disputeInfoProgrammersModel.notify();
   };
 
   loadData = async () => {
@@ -111,6 +118,12 @@ class MembersRepostory {
     this.programmersModel.value = membersDto.map((memberDto) => {
       return memberDto;
     });
+  };
+
+  loadDisputedInfo = async (eid) => {
+    const dto = await httpGateway.get(config.BASE_URL + 'isdispute?emiratesIdNumber=' + eid);
+    if (!dto) return;
+    this.disputeInfoProgrammersModel = dto;
   };
 }
 

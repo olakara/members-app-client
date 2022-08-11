@@ -1,17 +1,22 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Head from 'next/head';
-import Router, { useRouter } from 'next/router';
-import UserPresenter from '../components/user/user.presenter';
+import { useRouter } from 'next/router';
+import MemberPresenter from '../components/member/members.presenter';
 import HeaderComponent from '../components/common/header.component';
 
 export default function CreateDisputePage() {
-  let userPresenter = new UserPresenter();
+  const memberPresenter = new MemberPresenter();
 
   const { query, isReady } = useRouter();
 
   useEffect(() => {
+    async function load() {
+      await memberPresenter.get
+    }
+
     if (!isReady) return;
     let id = query.id;
+    load(id);
   }, [isReady]);
 
   return (

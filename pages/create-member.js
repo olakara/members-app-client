@@ -481,6 +481,13 @@ export default function CreateMemberPage() {
     return addressInDistrict && addressInMandalam && addressInPanchayat && houseName;
   };
 
+  const handleCreateDispute = () => {
+    Router.push({
+      pathname: '/create-dispute',
+      query: { id: emiratesIdNumber },
+    });
+  };
+
   return (
     <>
       <Head>
@@ -1398,7 +1405,7 @@ export default function CreateMemberPage() {
                         {isDispute && (
                           <button
                             type="button"
-                            disabled={true}
+                            onClick={handleCreateDispute}
                             className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 disabled:bg-gray-500 disabled:text-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                           >
                             Create Dispute
