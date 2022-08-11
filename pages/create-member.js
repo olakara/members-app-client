@@ -698,8 +698,8 @@ export default function CreateMemberPage() {
                           <NumberFormat
                             onChange={(e) => setMobile(e.target.value)}
                             value={mobile}
-                            format="05########"
-                            placeholder="XXXXXXXXXX"
+                            format="##########"
+                            placeholder="05XXXXXXXX"
                             mask="_"
                             className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                           />
