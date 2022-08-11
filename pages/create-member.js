@@ -264,8 +264,8 @@ export default function CreateMemberPage() {
 
   const handleDownload = async (event) => {
     event.preventDefault();
-    //await memberPresenter.downloadReceipt(memberId, membershipId);
-    Router.push({ pathname: '/receipt', query: { id: memberId } });
+    await memberPresenter.downloadReceipt(memberId, membershipId);
+    //Router.push({ pathname: '/receipt', query: { id: memberId } });
   };
 
   const onSelectingEmiratesIdFront = async (event) => {
