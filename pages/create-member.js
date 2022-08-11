@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Head from 'next/head';
 import Router from 'next/router';
+import NumberFormat from 'react-number-format';
 import { Transition } from '@headlessui/react';
 import LookupsPresenter from '../shared/lookups/lookups.presenter';
 import MemberPresenter from '../components/member/members.presenter';
@@ -394,6 +395,14 @@ export default function CreateMemberPage() {
         (ocrData) => {
           if (ocrData && !isEmptyObject(ocrData)) {
             setErrorMessage('');
+            setIsLoading(false);
+
+            /* If not valid */
+            if (!ocrData.isValidate) {
+              setErrorMessage(ocrData.errorMessage);
+              return;
+            }
+
             if (ocrData.isDispute) {
               setIsDispute(true);
               setCurrentStep(4);
@@ -449,7 +458,7 @@ export default function CreateMemberPage() {
                 setDobBDisabled(false);
               }
             }
-            setIsLoading(false);
+
             setDisableEmiratesIdUploads(true);
           }
         },
@@ -686,13 +695,12 @@ export default function CreateMemberPage() {
                           Mobile Number <span className="text-red-600">*</span>
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
-                          <input
-                            type="text"
-                            name="mobile"
-                            id="mobile"
-                            autoComplete="mobile"
+                          <NumberFormat
                             onChange={(e) => setMobile(e.target.value)}
                             value={mobile}
+                            format="##########"
+                            placeholder="05XXXXXXXX"
+                            mask="_"
                             className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                           />
                         </div>
