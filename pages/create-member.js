@@ -253,6 +253,7 @@ export default function CreateMemberPage() {
       (success) => {
         setMemberId(success.data.id);
         setMembershipId(success.data.membershipId);
+        setErrorMessage('');
         setCurrentStep(5);
       },
       (error) => {
@@ -263,8 +264,8 @@ export default function CreateMemberPage() {
 
   const handleDownload = async (event) => {
     event.preventDefault();
-    //await memberPresenter.downloadReceipt(memberId, membershipId);
-    Router.push({ pathname: '/receipt', query: { id: memberId } });
+    await memberPresenter.downloadReceipt(memberId, membershipId);
+    //Router.push({ pathname: '/receipt', query: { id: memberId } });
   };
 
   const onSelectingEmiratesIdFront = async (event) => {
@@ -282,6 +283,7 @@ export default function CreateMemberPage() {
       setEmiratesIdFrontImagePath(URL.createObjectURL(file));
       await uploadPresenter.uploadEmiratesIdFront((generatedViewModel) => {
         setEmiratesIdFrontPage(generatedViewModel.data);
+        setErrorMessage('');
         setIsLoading(false);
       }, file);
     } else {
@@ -296,6 +298,7 @@ export default function CreateMemberPage() {
       var filesize = (file.size / 1024 / 1024).toFixed(4);
       if (filesize > 2) {
         setErrorMessage('Please upload an image with size less than 2MB');
+        setEmiratesIdLastPage('');
         setEmiratesIdBackImagePath(null);
         setIsLoading(false);
         return;
@@ -303,6 +306,7 @@ export default function CreateMemberPage() {
       setEmiratesIdBackImagePath(URL.createObjectURL(file));
       await uploadPresenter.uploadEmiratesIdBack((generatedViewModel) => {
         setEmiratesIdLastPage(generatedViewModel.data);
+        setErrorMessage('');
         setIsLoading(false);
       }, file);
     } else {
@@ -346,6 +350,7 @@ export default function CreateMemberPage() {
       setPassportFrontImagePath(URL.createObjectURL(file));
       await uploadPresenter.uploadPassportFirstPage((generatedViewModel) => {
         setPassportFrontPage(generatedViewModel.data);
+        setErrorMessage('');
         setIsLoading(false);
       }, file);
     } else {
@@ -368,6 +373,7 @@ export default function CreateMemberPage() {
       await uploadPresenter.uploadPassportLastPage((generatedViewModel) => {
         setPassportLastPage(generatedViewModel.data);
         setIsLoading(false);
+        setErrorMessage('');
       }, file);
     } else {
       setPassportBackImagePath(null);
@@ -387,6 +393,7 @@ export default function CreateMemberPage() {
         emiratesIdData,
         (ocrData) => {
           if (ocrData && !isEmptyObject(ocrData)) {
+            setErrorMessage('');
             if (ocrData.isDispute) {
               setIsDispute(true);
               setCurrentStep(4);
