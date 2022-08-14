@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Head from 'next/head';
 import Router from 'next/router';
+import NumberFormat from 'react-number-format';
 import { Transition } from '@headlessui/react';
 import LookupsPresenter from '../shared/lookups/lookups.presenter';
 import MemberPresenter from '../components/member/members.presenter';
@@ -253,6 +254,7 @@ export default function CreateMemberPage() {
       (success) => {
         setMemberId(success.data.id);
         setMembershipId(success.data.membershipId);
+        setErrorMessage('');
         setCurrentStep(5);
       },
       (error) => {
@@ -263,8 +265,8 @@ export default function CreateMemberPage() {
 
   const handleDownload = async (event) => {
     event.preventDefault();
-    //await memberPresenter.downloadReceipt(memberId, membershipId);
-    Router.push({ pathname: '/receipt', query: { id: memberId } });
+    await memberPresenter.downloadReceipt(memberId, membershipId);
+    //Router.push({ pathname: '/receipt', query: { id: memberId } });
   };
 
   const onSelectingEmiratesIdFront = async (event) => {
@@ -282,6 +284,7 @@ export default function CreateMemberPage() {
       setEmiratesIdFrontImagePath(URL.createObjectURL(file));
       await uploadPresenter.uploadEmiratesIdFront((generatedViewModel) => {
         setEmiratesIdFrontPage(generatedViewModel.data);
+        setErrorMessage('');
         setIsLoading(false);
       }, file);
     } else {
@@ -296,6 +299,7 @@ export default function CreateMemberPage() {
       var filesize = (file.size / 1024 / 1024).toFixed(4);
       if (filesize > 2) {
         setErrorMessage('Please upload an image with size less than 2MB');
+        setEmiratesIdLastPage('');
         setEmiratesIdBackImagePath(null);
         setIsLoading(false);
         return;
@@ -303,6 +307,7 @@ export default function CreateMemberPage() {
       setEmiratesIdBackImagePath(URL.createObjectURL(file));
       await uploadPresenter.uploadEmiratesIdBack((generatedViewModel) => {
         setEmiratesIdLastPage(generatedViewModel.data);
+        setErrorMessage('');
         setIsLoading(false);
       }, file);
     } else {
@@ -346,6 +351,7 @@ export default function CreateMemberPage() {
       setPassportFrontImagePath(URL.createObjectURL(file));
       await uploadPresenter.uploadPassportFirstPage((generatedViewModel) => {
         setPassportFrontPage(generatedViewModel.data);
+        setErrorMessage('');
         setIsLoading(false);
       }, file);
     } else {
@@ -368,6 +374,7 @@ export default function CreateMemberPage() {
       await uploadPresenter.uploadPassportLastPage((generatedViewModel) => {
         setPassportLastPage(generatedViewModel.data);
         setIsLoading(false);
+        setErrorMessage('');
       }, file);
     } else {
       setPassportBackImagePath(null);
@@ -387,6 +394,15 @@ export default function CreateMemberPage() {
         emiratesIdData,
         (ocrData) => {
           if (ocrData && !isEmptyObject(ocrData)) {
+            setErrorMessage('');
+            setIsLoading(false);
+
+            /* If not valid */
+            if (!ocrData.isValidate) {
+              setErrorMessage(ocrData.errorMessage);
+              return;
+            }
+
             if (ocrData.isDispute) {
               setIsDispute(true);
               setCurrentStep(4);
@@ -442,7 +458,7 @@ export default function CreateMemberPage() {
                 setDobBDisabled(false);
               }
             }
-            setIsLoading(false);
+
             setDisableEmiratesIdUploads(true);
           }
         },
@@ -686,13 +702,12 @@ export default function CreateMemberPage() {
                           Mobile Number <span className="text-red-600">*</span>
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
-                          <input
-                            type="text"
-                            name="mobile"
-                            id="mobile"
-                            autoComplete="mobile"
+                          <NumberFormat
                             onChange={(e) => setMobile(e.target.value)}
                             value={mobile}
+                            format="##########"
+                            placeholder="05XXXXXXXX"
+                            mask="_"
                             className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                           />
                         </div>
