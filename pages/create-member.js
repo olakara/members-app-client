@@ -497,6 +497,13 @@ export default function CreateMemberPage() {
     return addressInDistrict && addressInMandalam && addressInPanchayat && houseName;
   };
 
+  const handleCreateDispute = () => {
+    Router.push({
+      pathname: '/create-dispute',
+      query: { id: emiratesIdNumber },
+    });
+  };
+
   return (
     <>
       <Head>
@@ -1230,7 +1237,7 @@ export default function CreateMemberPage() {
                         </div>
                       </div>
                       <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
-                        <label htmlFor="houseName" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                        <label htmlFor="mandalam" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                           Mandalam <span className="text-red-600">*</span>
                         </label>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
@@ -1413,7 +1420,7 @@ export default function CreateMemberPage() {
                         {isDispute && (
                           <button
                             type="button"
-                            disabled={true}
+                            onClick={handleCreateDispute}
                             className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 disabled:bg-gray-500 disabled:text-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                           >
                             Create Dispute
