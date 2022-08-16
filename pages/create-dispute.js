@@ -2,12 +2,16 @@ import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import Router, { useRouter } from 'next/router';
 import MemberPresenter from '../components/member/members.presenter';
+import UserPresenter from '../components/user/user.presenter';
+import LookupsPresenter from '../shared/lookups/lookups.presenter';
 import HeaderComponent from '../components/common/header.component';
 import FormErrorComponent from '../components/common/form-error.component';
 import { isEmptyObject } from '../shared/utilities';
 
 export default function CreateDisputePage() {
   const memberPresenter = new MemberPresenter();
+  const userPresenter = new UserPresenter();
+  const lookupsPresenter = new LookupsPresenter();
 
   const [formData, setFormData] = useState({
     status: 'DRAFT',
@@ -28,14 +32,49 @@ export default function CreateDisputePage() {
   const [errorMessage, setErrorMessage] = useState('');
   const { query, isReady } = useRouter();
 
+  const [isMandalamAgent, setIsMandalamAgent] = useState(false);
+  const [isDistrictAgent, setIsDistrictAgent] = useState(false);
+
+  const [userLookups, copyUserLookupsToStateViewModel] = useState({});
+  const [mandalamLookups, copyMandalamLookupsToStateViewModel] = useState({});
+  const [panchayatLookups, copyPanchayatLookupsToStateViewModel] = useState({});
+
+  const [districtIdOfAgent, setDistrictIdOfAgent] = useState('');
+  const [mandalamIdOfAgent, setMandalamIdOfAgent] = useState('');
+
   useEffect(() => {
     async function load(eid) {
+      await userPresenter.getCurrentUser((generatedViewModel) => {
+        const userRole = generatedViewModel.role;
+        if (userRole === 'mandalam-agent') setIsMandalamAgent(true);
+        if (userRole === 'district-agent') setIsDistrictAgent(true);
+      });
+
+      await lookupsPresenter.loadUserLookups(async (generatedViewModel) => {
+        if (generatedViewModel && isEmptyObject(generatedViewModel)) return;
+        console.log('user lookups', generatedViewModel);
+
+        const { agentMandalamId, agentDistrictId } = generatedViewModel;
+        setDistrictIdOfAgent(agentDistrictId);
+        setMandalamIdOfAgent(agentMandalamId);
+        copyUserLookupsToStateViewModel(generatedViewModel);
+
+        await lookupsPresenter.loadMandalams(agentDistrictId, (mandalamsViewModel) => {
+          copyMandalamLookupsToStateViewModel(mandalamsViewModel);
+        });
+
+        await lookupsPresenter.loadPanchayaths(agentMandalamId, (panchayathsViewModel) => {
+          copyPanchayatLookupsToStateViewModel(panchayathsViewModel);
+        });
+      });
+
       await memberPresenter.getDisputeInfoForMember(eid, (disputeInfo) => {
         if (disputeInfo && isEmptyObject(disputeInfo)) return;
-
         if (!disputeInfo.isDispute) return;
+
         const { member } = disputeInfo;
         console.log('member', member);
+
         let formInitData = {
           status: 'DRAFT',
           membershipNo: member.membershipId,
@@ -46,6 +85,8 @@ export default function CreateDisputePage() {
           mandalam: member.mandalam.name,
           panchayat: member.panchayat.name,
           area: member.area.name,
+          toDistrict: districtIdOfAgent,
+          toMandalam: mandalamIdOfAgent,
         };
         setFormData(formInitData);
       });
@@ -92,9 +133,9 @@ export default function CreateDisputePage() {
                   <div className="mt-1 sm:mt-0 sm:col-span-2">
                     <input
                       type="text"
-                      disabled={true}
+                      disabled
                       value={formData.status}
-                      className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                      className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                     />
                   </div>
                 </div>
@@ -113,9 +154,9 @@ export default function CreateDisputePage() {
                   <div className="mt-1 sm:mt-0 sm:col-span-2">
                     <input
                       type="text"
-                      disabled={true}
+                      disabled
                       value={formData.membershipNo}
-                      className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                      className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                     />
                   </div>
                 </div>
@@ -124,9 +165,9 @@ export default function CreateDisputePage() {
                   <div className="mt-1 sm:mt-0 sm:col-span-2">
                     <input
                       type="text"
-                      disabled={true}
+                      disabled
                       value={formData.name}
-                      className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                      className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                     />
                   </div>
                 </div>
@@ -135,9 +176,9 @@ export default function CreateDisputePage() {
                   <div className="mt-1 sm:mt-0 sm:col-span-2">
                     <input
                       type="text"
-                      disabled={true}
+                      disabled
                       value={formData.mobile}
-                      className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                      className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                     />
                   </div>
                 </div>
@@ -146,9 +187,9 @@ export default function CreateDisputePage() {
                   <div className="mt-1 sm:mt-0 sm:col-span-2">
                     <input
                       type="text"
-                      disabled={true}
+                      disabled
                       value={formData.state}
-                      className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                      className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                     />
                   </div>
                 </div>
@@ -157,9 +198,9 @@ export default function CreateDisputePage() {
                   <div className="mt-1 sm:mt-0 sm:col-span-2">
                     <input
                       type="text"
-                      disabled={true}
+                      disabled
                       value={formData.district}
-                      className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                      className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                     />
                   </div>
                 </div>
@@ -168,9 +209,9 @@ export default function CreateDisputePage() {
                   <div className="mt-1 sm:mt-0 sm:col-span-2">
                     <input
                       type="text"
-                      disabled={true}
+                      disabled
                       value={formData.mandalam}
-                      className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                      className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                     />
                   </div>
                 </div>
@@ -179,9 +220,9 @@ export default function CreateDisputePage() {
                   <div className="mt-1 sm:mt-0 sm:col-span-2">
                     <input
                       type="text"
-                      disabled={true}
+                      disabled
                       value={formData.panchayat}
-                      className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                      className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                     />
                   </div>
                 </div>
@@ -190,18 +231,16 @@ export default function CreateDisputePage() {
                   <div className="mt-1 sm:mt-0 sm:col-span-2">
                     <input
                       type="text"
-                      disabled={true}
+                      disabled
                       value={formData.area}
-                      className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                      className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                     />
                   </div>
                 </div>
               </div>
               <div>
                 <h3 className="text-lg leading-6 font-medium text-gray-900">Change Details</h3>
-                <p className="mt-1 max-w-2xl text-sm text-gray-500">
-                  Current membership details of the member are as follows:
-                </p>
+                <p className="mt-1 max-w-2xl text-sm text-gray-500">Change membership details to the following:</p>
               </div>
               <div className="space-y-6 sm:space-y-5">
                 <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
@@ -211,61 +250,98 @@ export default function CreateDisputePage() {
                   <div className="mt-1 sm:mt-0 sm:col-span-2">
                     <input
                       type="text"
-                      name="fullName"
-                      id="fullName"
-                      autoComplete="given-name"
-                      disabled={true}
-                      value={formData.status}
-                      className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                      disabled
+                      value={userLookups && userLookups.districtsName}
+                      className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                     />
                   </div>
                 </div>
                 <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-                  <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                    Mandalam
+                  <label htmlFor="mandalam" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                    Mandalam <span className="text-red-600">*</span>
                   </label>
                   <div className="mt-1 sm:mt-0 sm:col-span-2">
-                    <input
-                      type="text"
-                      name="fullName"
-                      id="fullName"
-                      autoComplete="given-name"
-                      disabled={true}
-                      value={formData.status}
-                      className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-                    />
+                    <select
+                      id="mandalam"
+                      name="mandalam"
+                      autoComplete="mandalam"
+                      disabled={!isDistrictAgent}
+                      onChange={async (e) => {
+                        setFormData({ ...formData, toMandalam: e.target.value });
+                        await lookupsPresenter.loadPanchayaths(e.target.value, (generatedViewModel) => {
+                          copyPanchayatLookupsToStateViewModel(generatedViewModel);
+                        });
+                      }}
+                      value={formData.toMandalam}
+                      className="max-w-lg block focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                    >
+                      <option value="">Select</option>
+                      {mandalamLookups &&
+                        mandalamLookups.mandalams &&
+                        mandalamLookups.mandalams.map((org, index) => {
+                          return (
+                            <option key={index} value={org.id}>
+                              {org.name}
+                            </option>
+                          );
+                        })}
+                    </select>
                   </div>
                 </div>
                 <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-                  <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                    Panchayath
+                  <label htmlFor="area" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                    Panchayath / Municipality <span className="text-red-600">*</span>
                   </label>
                   <div className="mt-1 sm:mt-0 sm:col-span-2">
-                    <input
-                      type="text"
-                      name="fullName"
-                      id="fullName"
-                      autoComplete="given-name"
-                      disabled={true}
-                      value={formData.status}
-                      className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-                    />
+                    <select
+                      id="toPanchayath"
+                      name="toPanchayath"
+                      autoComplete="toPanchayath"
+                      onChange={(e) => {
+                        setFormData({ ...formData, toPanchayath: e.target.value });
+                      }}
+                      value={formData.toPanchayath}
+                      className="max-w-lg block focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                    >
+                      {<option value="">Select</option>}
+                      {panchayatLookups &&
+                        panchayatLookups.panchayaths &&
+                        panchayatLookups.panchayaths.map((org, index) => {
+                          return (
+                            <option key={index} value={org.id}>
+                              {org.name}
+                            </option>
+                          );
+                        })}
+                    </select>
                   </div>
                 </div>
-                <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-                  <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                    Area
+                <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
+                  <label htmlFor="toArea" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                    Area <span className="text-red-600">*</span>
                   </label>
                   <div className="mt-1 sm:mt-0 sm:col-span-2">
-                    <input
-                      type="text"
-                      name="fullName"
-                      id="fullName"
-                      autoComplete="given-name"
-                      disabled={true}
-                      value={formData.status}
-                      className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-                    />
+                    <select
+                      id="toArea"
+                      name="toArea"
+                      autoComplete="toArea"
+                      onChange={(e) => {
+                        setFormData({ ...formData, toArea: e.target.value });
+                      }}
+                      value={formData.toArea}
+                      className="max-w-lg block focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                    >
+                      <option value="">Select</option>
+                      {userLookups &&
+                        userLookups.areas &&
+                        userLookups.areas.map((org, index) => {
+                          return (
+                            <option key={index} value={org.id}>
+                              {org.name}
+                            </option>
+                          );
+                        })}
+                    </select>
                   </div>
                 </div>
                 <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
@@ -273,15 +349,13 @@ export default function CreateDisputePage() {
                     Remarks
                   </label>
                   <div className="mt-1 sm:mt-0 sm:col-span-2">
-                    <input
-                      type="text"
-                      name="fullName"
-                      id="fullName"
-                      autoComplete="given-name"
-                      disabled={true}
-                      value={formData.status}
+                    <textarea
+                      onChange={(e) => {
+                        setFormData({ ...formData, remarks: e.target.value });
+                      }}
+                      value={formData.remarks}
                       className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-                    />
+                    ></textarea>
                   </div>
                 </div>
               </div>

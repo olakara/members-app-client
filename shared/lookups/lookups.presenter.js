@@ -1,3 +1,4 @@
+import { isEmptyObject } from '../utilities';
 import lookupsRepository from './lookups.repository';
 
 export default class LookupsPresenter {
@@ -17,6 +18,7 @@ export default class LookupsPresenter {
 
   loadUserLookups = async (callback) => {
     lookupsRepository.getUserLookups((lookupPm) => {
+      if (lookupPm && isEmptyObject(lookupPm)) return;
       const lookupsVm = {
         agentDistrictId: lookupPm.agentDistrictId,
         agentMandalamId: lookupPm.agentMandalamId,
