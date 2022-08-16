@@ -55,4 +55,8 @@ export default class MembersPresenter {
       callback(membershipPm);
     });
   };
+
+  getDisputeInfoForMember = async (eid, callback) => {
+    await membersRepostory.getDisputeInfoForMember(eid, callback);
+  };
 }

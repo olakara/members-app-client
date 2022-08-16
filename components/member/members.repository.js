@@ -121,9 +121,8 @@ class MembersRepostory {
   };
 
   loadDisputedInfo = async (eid) => {
-    const dto = await httpGateway.get(config.BASE_URL + 'isdispute?emiratesIdNumber=' + eid);
-    if (!dto) return;
-    this.disputeInfoProgrammersModel = dto;
+    const dto = await httpGateway.get(config.BASE_URL + 'members/isdispute?emiratesIdNumber=' + eid);
+    this.disputeInfoProgrammersModel.value = dto;
   };
 }
 
