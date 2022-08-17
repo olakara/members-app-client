@@ -85,6 +85,22 @@ class MembersRepostory {
     }
   };
 
+  createDispute = async (disputePm, successCallback, errorCallback) => {
+    const disputeDto = {
+      memberId: disputePm.id,
+      proposedAreaId: disputePm.toArea,
+      proposedPanchayatId: disputePm.toPanchayath,
+      reason: disputePm.remarks,
+    };
+
+    let result = await httpGateway.post(config.BASE_URL + 'disputes', disputeDto);
+    if (result.success) {
+      successCallback(result);
+    } else {
+      errorCallback(result);
+    }
+  };
+
   downloadReceipt = async (id, memberId) => {
     let file = await httpGateway.download(config.BASE_URL + 'members/membershipcardpdf/' + id);
     const url = window.URL.createObjectURL(new Blob([file]));

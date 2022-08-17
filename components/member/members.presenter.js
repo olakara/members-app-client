@@ -21,6 +21,10 @@ export default class MembersPresenter {
     await membersRepostory.createMember(memberPm, successCallback, errorCallback);
   };
 
+  createDispute = async (disputePm, successCallback, errorCallback) => {
+    await membersRepostory.createDispute(disputePm, successCallback, errorCallback);
+  };
+
   getOcrData = async (eidPm, successCallback, errorCallback) => {
     await membersRepostory.getOcrData(
       eidPm,

@@ -23,7 +23,6 @@ export default function CreateDisputePage() {
     mandalam: '',
     panchayat: '',
     area: '',
-    toDistrict: '',
     toMandalanm: '',
     toPanchayath: '',
     toArea: '',
@@ -52,7 +51,8 @@ export default function CreateDisputePage() {
 
       await lookupsPresenter.loadUserLookups(async (generatedViewModel) => {
         if (generatedViewModel && isEmptyObject(generatedViewModel)) return;
-        console.log('user lookups', generatedViewModel);
+
+        console.log('User Lookups', generatedViewModel);
 
         const { agentMandalamId, agentDistrictId } = generatedViewModel;
         setDistrictIdOfAgent(agentDistrictId);
@@ -66,29 +66,34 @@ export default function CreateDisputePage() {
         await lookupsPresenter.loadPanchayaths(agentMandalamId, (panchayathsViewModel) => {
           copyPanchayatLookupsToStateViewModel(panchayathsViewModel);
         });
-      });
 
-      await memberPresenter.getDisputeInfoForMember(eid, (disputeInfo) => {
-        if (disputeInfo && isEmptyObject(disputeInfo)) return;
-        if (!disputeInfo.isDispute) return;
+        await memberPresenter.getDisputeInfoForMember(eid, (disputeInfo) => {
+          if (disputeInfo && isEmptyObject(disputeInfo)) return;
+          if (!disputeInfo.isDispute) return;
 
-        const { member } = disputeInfo;
-        console.log('member', member);
+          const { member } = disputeInfo;
+          console.log('member', member);
 
-        let formInitData = {
-          status: 'DRAFT',
-          membershipNo: member.membershipId,
-          name: member.fullName,
-          mobile: member.mobileNumber,
-          state: member.state.name,
-          district: member.district.name,
-          mandalam: member.mandalam.name,
-          panchayat: member.panchayat.name,
-          area: member.area.name,
-          toDistrict: districtIdOfAgent,
-          toMandalam: mandalamIdOfAgent,
-        };
-        setFormData(formInitData);
+          let formInitData = {
+            id: member.id,
+            status: 'DRAFT',
+            membershipNo: member.membershipId,
+            name: member.fullName,
+            mobile: member.mobileNumber,
+            state: member.state.name,
+            district: member.district.name,
+            mandalam: member.mandalam.name,
+            mandalamId: member.mandalam.id,
+            panchayat: member.panchayat.name,
+            panchayatId: member.panchayat.id,
+            area: member.area.name,
+            toMandalam: agentMandalamId,
+            toPanchayath: null,
+            toArea: null,
+            remarks: null,
+          };
+          setFormData(formInitData);
+        });
       });
     }
 
@@ -99,12 +104,12 @@ export default function CreateDisputePage() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    let disputeDto = {
-      formData,
-    };
-
-    console.log(disputeDto);
+    await memberPresenter.createDispute(formData, (success) => {
+      Router.push('/home');
+    }),
+      (error) => {
+        setErrorMessage(error.data.reason);
+      };
   };
 
   return (
@@ -245,6 +250,19 @@ export default function CreateDisputePage() {
               <div className="space-y-6 sm:space-y-5">
                 <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                   <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                    State
+                  </label>
+                  <div className="mt-1 sm:mt-0 sm:col-span-2">
+                    <input
+                      type="text"
+                      disabled
+                      value={userLookups && userLookups.stateName}
+                      className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                    />
+                  </div>
+                </div>
+                <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                  <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                     District
                   </label>
                   <div className="mt-1 sm:mt-0 sm:col-span-2">
@@ -273,7 +291,7 @@ export default function CreateDisputePage() {
                         });
                       }}
                       value={formData.toMandalam}
-                      className="max-w-lg block focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                      className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                     >
                       <option value="">Select</option>
                       {mandalamLookups &&
@@ -373,10 +391,17 @@ export default function CreateDisputePage() {
                 >
                   Cancel
                 </button>
+
                 <button
                   id="submit-button"
                   title="Save"
                   type="submit"
+                  disabled={
+                    !formData.toArea ||
+                    !formData.toMandalam ||
+                    !formData.toPanchayath ||
+                    (formData.toMandalam === formData.mandalamId && formData.toPanchayath === formData.panchayatId)
+                  }
                   className="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white disabled:bg-gray-500 bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                 >
                   Save
