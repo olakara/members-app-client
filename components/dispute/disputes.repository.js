@@ -12,7 +12,7 @@ class DisputeRepository {
   }
 
   getDisputes = async (callback) => {
-    this.disputeProgrammersModel.subscribe(callback);
+    this.disputesProgrammersModel.subscribe(callback);
     await this.loadData();
     this.disputesProgrammersModel.notify();
   };
@@ -25,9 +25,7 @@ class DisputeRepository {
 
   loadData = async () => {
     const dto = await httpGateway.get(config.BASE_URL + 'disputes/role');
-    this.disputeProgrammersModel.value = dto.map((disputeDto) => {
-      return disputeDto;
-    });
+    this.disputesProgrammersModel.value = dto;
   };
 }
 
