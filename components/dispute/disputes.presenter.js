@@ -6,9 +6,13 @@ export default class DisputePresenter {
       console.log('data', disputesPm);
       const disputesVm = disputesPm.map((disputePm) => {
         return {
-          disputePm,
+          id: disputePm.id,
+          membershipNo: disputePm.member.membershipId,
+          fullName: disputePm.member.fullName,
+          location: disputePm.disputeType,
         };
       });
+      callback(disputesVm);
     });
   };
 }

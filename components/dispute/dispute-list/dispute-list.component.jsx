@@ -5,9 +5,13 @@ function DisputeListComponent({ filter, disputes }) {
   const [filteredDisputes, setDisputes] = useState([]);
 
   useEffect(() => {
-    const temp = disputes.filter((e) => {
-      e.fullName.toLowerCase().includes(filter.search.toLowerCase());
-    });
+    const temp = filter.search
+      ? disputes.filter(
+          (e) =>
+            e.membershipNo.toLowerCase().includes(filter.search.toLowerCase()) ||
+            e.fullName.toLowerCase().includes(filter.search.toLowerCase())
+        )
+      : disputes;
     setDisputes(temp);
   }, [filter, disputes]);
   return (

@@ -14,7 +14,6 @@ function MembersComponent() {
   });
 
   const membersPresenter = new MembersPresenter();
-  const lookupsPresenter = new LookupsPresenter();
 
   useEffect(() => {
     async function load() {
