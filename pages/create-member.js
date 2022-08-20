@@ -560,6 +560,7 @@ export default function CreateMemberPage() {
                             onChange={(e) => onSelectingEmiratesIdFront(e)}
                             className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                           />
+                          <span className="text-red-600 italic">Note: Upload image size should be less than 2MB</span>
                         </div>
                         <ImagePreviewComponent vm={emiratesIdFrontImagePath} />
                       </div>
@@ -580,6 +581,7 @@ export default function CreateMemberPage() {
                             onChange={(e) => onSelectingEmiratesIdBack(e)}
                             className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                           />
+                          <span className="text-red-600 italic">Note: Upload image size should be less than 2MB</span>
                         </div>
                         <ImagePreviewComponent vm={emiratesIdBackImagePath} />
                       </div>
