@@ -88,8 +88,8 @@ class MembersRepostory {
   createDispute = async (disputePm, successCallback, errorCallback) => {
     const disputeDto = {
       memberId: disputePm.id,
-      proposedAreaId: disputePm.toArea,
-      proposedPanchayatId: disputePm.toPanchayath,
+      toAreaId: disputePm.toArea,
+      toPanchayatId: disputePm.toPanchayath,
       reason: disputePm.remarks,
     };
 

@@ -72,7 +72,6 @@ export default function CreateDisputePage() {
           if (!disputeInfo.isDispute) return;
 
           const { member } = disputeInfo;
-          console.log('member', member);
 
           let formInitData = {
             id: member.id,
