@@ -3,7 +3,6 @@ import disputeRepository from './disputes.repository';
 export default class DisputePresenter {
   load = async (callback) => {
     await disputeRepository.getDisputes((disputesPm) => {
-      console.log('data', disputesPm);
       const disputesVm = disputesPm.map((disputePm) => {
         return {
           id: disputePm.id,
@@ -14,5 +13,9 @@ export default class DisputePresenter {
       });
       callback(disputesVm);
     });
+  };
+
+  getDispute = async (id, callback) => {
+    await disputeRepository.getDispute(id, callback);
   };
 }

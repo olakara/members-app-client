@@ -1,6 +1,5 @@
 import classNames from 'classnames';
 import { useState } from 'react';
-import Link from 'next/link';
 import MembersPresenter from '../members.presenter';
 
 export default function MemberRowComponent(props) {

@@ -4,10 +4,12 @@ import httpGateway from '../../shared/http-gateway';
 
 class DisputeRepository {
   disputesProgrammersModel = null;
+  disputeInfoProgrammersModel = null;
   disputeProgrammersModel = null;
 
   constructor() {
     this.disputesProgrammersModel = new Observable([]);
+    this.disputeInfoProgrammersModel = new Observable({});
     this.disputeProgrammersModel = new Observable({});
   }
 
@@ -17,10 +19,23 @@ class DisputeRepository {
     this.disputesProgrammersModel.notify();
   };
 
-  getDisputedInfo = async (eid, callback) => {
+  getDispute = async (id, callback) => {
     this.disputeProgrammersModel.subscribe(callback);
+    if (id) {
+      await this.loadDisputeData(id);
+      this.disputeProgrammersModel.notify();
+    }
+  };
+
+  getDisputedInfo = async (eid, callback) => {
+    this.disputeInfoProgrammersModel.subscribe(callback);
     await this.loadDisputedInfo(eid);
-    this.disputeProgrammersModel.notify();
+    this.disputeInfoProgrammersModel.notify();
+  };
+
+  loadDisputeData = async (id) => {
+    const dto = await httpGateway.get(config.BASE_URL + 'disputes/' + id);
+    this.disputeProgrammersModel.value = dto;
   };
 
   loadData = async () => {
