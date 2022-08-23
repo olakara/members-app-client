@@ -39,7 +39,7 @@ export default function Home() {
 
       <DashboardComponent></DashboardComponent>
 
-      {!isAbleToCreateMember && <AgentsComponent></AgentsComponent>}
+      {!isAbleToCreateMember && !isAbleToManageDispute && <AgentsComponent></AgentsComponent>}
 
       <div className="py-10">
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
