@@ -13,6 +13,7 @@ export default function Home() {
   const userPresenter = new UserPresenter();
 
   const [isAbleToCreateMember, setAbleToCreateMember] = useState(false);
+  const [isAbleToManageDispute, setAbleToManageDispute] = useState(false);
 
   useEffect(() => {
     async function load() {
@@ -20,6 +21,9 @@ export default function Home() {
         const userRole = generatedViewModel.role;
         if (userRole === 'mandalam-agent' || userRole === 'district-agent') setAbleToCreateMember(true);
         else setAbleToCreateMember(false);
+
+        if (userRole === 'dispute-committee') setAbleToManageDispute(true);
+        else setAbleToManageDispute(false);
       });
     }
     load();
@@ -107,7 +111,7 @@ export default function Home() {
                   'ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2'
                 )}
               >
-                {isAbleToCreateMember && <DisputesComponent></DisputesComponent>}
+                {isAbleToManageDispute && <DisputesComponent></DisputesComponent>}
               </Tab.Panel>
             </Tab.Panels>
           </Tab.Group>
