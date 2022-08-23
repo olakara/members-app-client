@@ -33,6 +33,34 @@ class DisputeRepository {
     this.disputeInfoProgrammersModel.notify();
   };
 
+  rejectDispute = async (disputePm, successCallback, errorCallback) => {
+    const disputeDto = {
+      requestId: disputePm.id,
+      justificationComment: disputePm.justification,
+    };
+
+    let result = await httpGateway.put(config.BASE_URL + 'disputes/reject/' + disputePm.id, disputeDto);
+    if (result.success) {
+      successCallback(result);
+    } else {
+      errorCallback(result);
+    }
+  };
+
+  approveDispute = async (disputePm, successCallback, errorCallback) => {
+    const disputeDto = {
+      requestId: disputePm.id,
+      justificationComment: disputePm.justification,
+    };
+
+    let result = await httpGateway.put(config.BASE_URL + 'disputes/approve/' + disputePm.id, disputeDto);
+    if (result.success) {
+      successCallback(result);
+    } else {
+      errorCallback(result);
+    }
+  };
+
   loadDisputeData = async (id) => {
     const dto = await httpGateway.get(config.BASE_URL + 'disputes/' + id);
     this.disputeProgrammersModel.value = dto;
