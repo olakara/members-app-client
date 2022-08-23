@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import MemberRowComponent from './member-row.component';
 
 export default function MemberListComponent({ filter, members }) {
-  const [filteredMembers, setMembersEmployees] = useState([]);
+  const [filteredMembers, setMembers] = useState([]);
 
   useEffect(() => {
     const temp = members.filter(
@@ -11,7 +11,7 @@ export default function MemberListComponent({ filter, members }) {
         e.mobile.includes(filter.search) ||
         e.panchayat.toLowerCase().includes(filter.search.toLowerCase())
     );
-    setMembersEmployees(temp);
+    setMembers(temp);
   }, [filter, members]);
 
   return (
