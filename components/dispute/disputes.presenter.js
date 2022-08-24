@@ -10,6 +10,8 @@ export default class DisputePresenter {
           membershipNo: disputePm.member.membershipId,
           fullName: disputePm.member.fullName,
           location: disputePm.disputeType,
+          isCanApprove: disputePm.isCanApprove,
+          status: disputePm.status,
         };
       });
       callback(disputesVm);
