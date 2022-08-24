@@ -51,6 +51,8 @@ export default class AgentsPresenter {
         return 'Agent';
       case 'mandalam-agent':
         return 'Agent';
+      case 'dispute-committee':
+        return 'Dispute Committee';
     }
   };
 
