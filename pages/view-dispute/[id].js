@@ -26,7 +26,7 @@ function ViewDisputePage() {
       await disputePresenter.getDispute(id, (disputeVm) => {
         console.log('Dispute info from server', disputeVm);
         setDispute(disputeVm);
-        setFormData({ ...formData, id: disputeVm.id });
+        setFormData({ ...formData, id: disputeVm.id, justification: disputeVm.justificationComment });
       });
     }
 
@@ -86,7 +86,7 @@ function ViewDisputePage() {
                     <input
                       type="text"
                       disabled
-                      value={dispute.status}
+                      value={dispute.statusText}
                       className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                     />
                   </div>
@@ -289,6 +289,7 @@ function ViewDisputePage() {
                       onChange={(e) => {
                         setFormData({ ...formData, justification: e.target.value });
                       }}
+                      disabled={dispute.status}
                       value={formData.justification}
                       className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                     ></textarea>
@@ -315,7 +316,7 @@ function ViewDisputePage() {
                   title="Reject"
                   type="button"
                   onClick={handleReject}
-                  disabled={!formData.justification && !dispute.isCanApprove}
+                  disabled={dispute.status || (!formData.justification && !dispute.isCanApprove)}
                   className="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white disabled:bg-gray-500 bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                 >
                   Reject
@@ -326,7 +327,7 @@ function ViewDisputePage() {
                   title="Approve"
                   type="button"
                   onClick={handleApprove}
-                  disabled={!formData.justification && !dispute.isCanApprove}
+                  disabled={dispute.status || (!formData.justification && !dispute.isCanApprove)}
                   className="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white disabled:bg-gray-500 bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                 >
                   Approve

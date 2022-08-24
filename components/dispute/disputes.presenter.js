@@ -44,7 +44,8 @@ export default class DisputePresenter {
         justificationComment: disputePm.justificationComment,
         actionDate: disputePm.actionDate,
         actionBy: disputePm.actionBy,
-        status: this.getDisputeStatusText(disputePm.status),
+        statusText: this.getDisputeStatusText(disputePm.status),
+        status: disputePm.status,
       };
       callback(disputeVm);
     });
