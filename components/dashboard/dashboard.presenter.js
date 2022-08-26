@@ -7,7 +7,7 @@ export default class DashboardPresenter {
         return {
           no: widgetPm.no,
           title: widgetPm.title,
-          value: widgetPm.summaryValue || widgetPm.summaryValue,
+          value: widgetPm.summaryValue || widgetPm.summaryText,
           details: widgetPm.details.map((item) => {
             return {
               title: item.text,
