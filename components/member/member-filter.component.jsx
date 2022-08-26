@@ -1,8 +1,7 @@
 import { useState } from 'react';
 function MemberFilterComponent(props) {
-  const { handleFilter, panchayats } = props;
+  const { handleFilter } = props;
   const [text, setText] = useState('');
-  const [panchayat, setPanchayat] = useState('');
 
   return (
     <div className="flex justify-between items-center pt-5 pb-1">
@@ -33,7 +32,6 @@ function MemberFilterComponent(props) {
             setText(e.target.value);
             handleFilter({
               search: e.target.value,
-              panchayat: panchayat,
             });
           }}
           className="block p-2 pl-10 w-80 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"

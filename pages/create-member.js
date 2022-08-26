@@ -52,7 +52,6 @@ export default function CreateMemberPage() {
 
   const nextStep = async () => {
     setMoving('right');
-    // getValues('firstname')
 
     if (true) {
       setSteps((old) =>
@@ -266,14 +265,13 @@ export default function CreateMemberPage() {
   const handleDownload = async (event) => {
     event.preventDefault();
     await memberPresenter.downloadReceipt(memberId, membershipId);
-    //Router.push({ pathname: '/receipt', query: { id: memberId } });
   };
 
   const onSelectingEmiratesIdFront = async (event) => {
     let file = event.target.files[0];
     if (file) {
       setIsLoading(true);
-      var filesize = (file.size / 1024 / 1024).toFixed(4);
+      let filesize = (file.size / 1024 / 1024).toFixed(4);
       if (filesize > 2) {
         setErrorMessage('Please upload an image with size less than 2MB');
         setEmiratesIdFrontPage('');
@@ -296,7 +294,7 @@ export default function CreateMemberPage() {
     let file = event.target.files[0];
     if (file) {
       setIsLoading(true);
-      var filesize = (file.size / 1024 / 1024).toFixed(4);
+      let filesize = (file.size / 1024 / 1024).toFixed(4);
       if (filesize > 2) {
         setErrorMessage('Please upload an image with size less than 2MB');
         setEmiratesIdLastPage('');
@@ -319,7 +317,7 @@ export default function CreateMemberPage() {
     let file = event.target.files[0];
     if (file) {
       setIsLoading(true);
-      var filesize = (file.size / 1024 / 1024).toFixed(4);
+      let filesize = (file.size / 1024 / 1024).toFixed(4);
       if (filesize > 2) {
         setErrorMessage('Please upload an image with size less than 2MB');
         setPhotoImagePath(null);
@@ -341,7 +339,7 @@ export default function CreateMemberPage() {
     let file = event.target.files[0];
     if (file) {
       setIsLoading(true);
-      var filesize = (file.size / 1024 / 1024).toFixed(4);
+      let filesize = (file.size / 1024 / 1024).toFixed(4);
       if (filesize > 2) {
         setErrorMessage('Please upload an image with size less than 2MB');
         setPassportFrontImagePath(null);
@@ -363,7 +361,7 @@ export default function CreateMemberPage() {
     let file = event.target.files[0];
     if (file) {
       setIsLoading(true);
-      var filesize = (file.size / 1024 / 1024).toFixed(4);
+      let filesize = (file.size / 1024 / 1024).toFixed(4);
       if (filesize > 2) {
         setErrorMessage('Please upload an image with size less than 2MB');
         setPassportBackImagePath(null);
