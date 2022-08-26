@@ -94,9 +94,7 @@ function ViewDisputePage() {
             <div className="pt-8 space-y-6 sm:pt-10 sm:space-y-5">
               <div>
                 <h3 className="text-lg leading-6 font-medium text-gray-900">Membership Details</h3>
-                <p className="mt-1 max-w-2xl text-sm text-gray-500">
-                  Current membership details of the member are as follows:
-                </p>
+                <p className="mt-1 max-w-2xl text-sm text-gray-500">Transfer from:</p>
               </div>
               <div className="space-y-6 sm:space-y-5">
                 <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
@@ -140,7 +138,7 @@ function ViewDisputePage() {
                     <input
                       type="text"
                       disabled
-                      value={dispute.toState}
+                      value={dispute.fromState}
                       className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                     />
                   </div>
@@ -152,7 +150,7 @@ function ViewDisputePage() {
                     <input
                       type="text"
                       disabled
-                      value={dispute.toDistrict}
+                      value={dispute.fromDistrict}
                       className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                     />
                   </div>
@@ -164,7 +162,7 @@ function ViewDisputePage() {
                     <input
                       type="text"
                       disabled
-                      value={dispute.toMandalam}
+                      value={dispute.fromMandalam}
                       className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                     />
                   </div>
@@ -176,7 +174,7 @@ function ViewDisputePage() {
                     <input
                       type="text"
                       disabled
-                      value={dispute.toPanchayat}
+                      value={dispute.fromPanchayat}
                       className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                     />
                   </div>
@@ -188,7 +186,7 @@ function ViewDisputePage() {
                     <input
                       type="text"
                       disabled
-                      value={dispute.toArea}
+                      value={dispute.fromArea}
                       className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                     />
                   </div>
@@ -196,7 +194,7 @@ function ViewDisputePage() {
               </div>
               <div>
                 <h3 className="text-lg leading-6 font-medium text-gray-900">Change Details</h3>
-                <p className="mt-1 max-w-2xl text-sm text-gray-500">Change membership details to the following:</p>
+                <p className="mt-1 max-w-2xl text-sm text-gray-500">Transfer to:</p>
               </div>
               <div className="space-y-6 sm:space-y-5">
                 <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
@@ -207,7 +205,7 @@ function ViewDisputePage() {
                     <input
                       type="text"
                       disabled
-                      value={dispute.fromState}
+                      value={dispute.toState}
                       className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                     />
                   </div>
@@ -220,7 +218,7 @@ function ViewDisputePage() {
                     <input
                       type="text"
                       disabled
-                      value={dispute.fromDistrict}
+                      value={dispute.toDistrict}
                       className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                     />
                   </div>
@@ -233,7 +231,7 @@ function ViewDisputePage() {
                     <input
                       type="text"
                       disabled
-                      value={dispute.fromMandalam}
+                      value={dispute.toMandalam}
                       className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                     />
                   </div>
@@ -246,7 +244,7 @@ function ViewDisputePage() {
                     <input
                       type="text"
                       disabled
-                      value={dispute.fromPanchayat}
+                      value={dispute.toPanchayat}
                       className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                     />
                   </div>
@@ -259,7 +257,7 @@ function ViewDisputePage() {
                     <input
                       type="text"
                       disabled
-                      value={dispute.fromArea}
+                      value={dispute.toArea}
                       className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                     />
                   </div>
