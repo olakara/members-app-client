@@ -16,7 +16,6 @@ function ReceiptPage() {
   useEffect(() => {
     async function load() {
       await membersPresenter.getMembershipDetails(id, (generatedViewModel) => {
-        console.log(generatedViewModel);
         setMembership(generatedViewModel);
       });
     }
