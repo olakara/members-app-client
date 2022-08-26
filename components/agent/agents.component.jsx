@@ -1,12 +1,20 @@
 import Link from 'next/link';
 import AgentListComponent from './agent-list/agent-list.component';
+import GeneralFilterComponent from '../common/general-filter.component';
+import AgentsPresenter from '../agent/agents.presenter';
 import { useState, useEffect } from 'react';
 
 import UserPresenter from '../user/user.presenter';
 
 function AgentsComponent() {
   const userPresenter = new UserPresenter();
+  const agentsPresenter = new AgentsPresenter();
   const [isDistrictAdmin, setIsDistrictAdmin] = useState(false);
+  const [agents, setAgents] = useState([]);
+
+  const [filters, setFilters] = useState({
+    search: '',
+  });
 
   useEffect(() => {
     async function load() {
@@ -16,9 +24,18 @@ function AgentsComponent() {
         if (userRole === 'district-admin') setIsDistrictAdmin(true);
         else setIsDistrictAdmin(false);
       });
+
+      await agentsPresenter.load((generatedViewModel) => {
+        setAgents(generatedViewModel);
+      });
     }
     load();
   }, []);
+
+  const handleFilterChange = (filter) => {
+    setFilters(filter);
+  };
+
   return (
     <div className="py-10">
       <header className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -37,7 +54,8 @@ function AgentsComponent() {
         </div>
       </header>
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <AgentListComponent></AgentListComponent>
+        <GeneralFilterComponent handleFilter={handleFilterChange}></GeneralFilterComponent>
+        <AgentListComponent filter={filters} agents={agents}></AgentListComponent>
       </main>
     </div>
   );
