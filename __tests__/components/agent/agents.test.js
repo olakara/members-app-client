@@ -48,7 +48,6 @@ it('should hit backend API and load 1 view model agents when loaded from backend
 });
 
 it('should add a state user when api is called with POST method', async () => {
-  let viewModel = null;
   let agentsPresenter = new AgentsPresenter();
 
   let result = await agentsPresenter.createAgent({
