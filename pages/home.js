@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Tab } from '@headlessui/react';
 import Head from 'next/head';
-
 import UserPresenter from '../components/user/user.presenter';
 import HeaderComponent from '../components/common/header.component';
 import AgentsComponent from '../components/agent/agents.component';

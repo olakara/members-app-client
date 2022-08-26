@@ -1,15 +1,6 @@
-import { useState } from 'react';
-import classNames from 'classnames';
 import UserRow from './user-row';
 
 export default function UserList(props) {
-  let widgetStyles = classNames({
-    'px-4 py-5 bg-gradient-to-tl shadow-md rounded-lg overflow-hidden sm:p-6': true,
-    'from-red-400 to-pink-400': props.color === 'red',
-    'from-orange-400 to-yellow-400': props.color === 'orange',
-    'from-blue-400 to-emerald-400': props.color === 'blue',
-  });
-
   return (
     <div className="-mx-4 mt-8 overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:-mx-6 md:mx-0 md:rounded-lg">
       <table className="min-w-full divide-y divide-gray-300">

@@ -4,11 +4,9 @@ import Router, { useRouter } from 'next/router';
 import MemberPresenter from '../../components/member/members.presenter';
 import DisputePresenter from '../../components/dispute/disputes.presenter';
 import FormErrorComponent from '../../components/common/form-error.component';
-import { isEmptyObject } from '../../shared/utilities';
 import HeaderComponent from '../../components/common/header.component';
 
 function ViewDisputePage() {
-  const memberPresenter = new MemberPresenter();
   const disputePresenter = new DisputePresenter();
 
   const [dispute, setDispute] = useState({});

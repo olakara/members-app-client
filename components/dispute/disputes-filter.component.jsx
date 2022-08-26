@@ -1,6 +1,6 @@
 import { useState } from 'react';
 function DisputesFilterComponent(props) {
-  const { handleFilter, panchayats } = props;
+  const { handleFilter } = props;
   const [text, setText] = useState('');
   return (
     <div className="flex justify-between items-center pt-5 pb-1">

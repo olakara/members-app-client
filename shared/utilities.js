@@ -15,7 +15,7 @@ export function getDateInRegionalFormat(date) {
 
 export function dateToServerSideFormat(date) {
   let dateParts = date.split('/');
-  var dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
+  let dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
   let month = '' + (dateObject.getMonth() + 1),
     day = '' + dateObject.getDate(),
     year = dateObject.getFullYear();
@@ -45,8 +45,7 @@ function dateIsValid(date) {
 export function isEmailValid(email) {
   const regex =
     /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-  if (!email || regex.test(email) === false) return false;
-  return true;
+  return !email || regex.test(email) === false ? false : true;
 }
 
 export function isValidDate(d) {
