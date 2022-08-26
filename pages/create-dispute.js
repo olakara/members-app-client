@@ -52,8 +52,6 @@ export default function CreateDisputePage() {
       await lookupsPresenter.loadUserLookups(async (generatedViewModel) => {
         if (generatedViewModel && isEmptyObject(generatedViewModel)) return;
 
-        console.log('User Lookups', generatedViewModel);
-
         const { agentMandalamId, agentDistrictId } = generatedViewModel;
         setDistrictIdOfAgent(agentDistrictId);
         setMandalamIdOfAgent(agentMandalamId);
@@ -106,6 +104,7 @@ export default function CreateDisputePage() {
     await memberPresenter.createDispute(
       formData,
       (success) => {
+        e.target.reset();
         Router.push('/home');
       },
       (error) => {

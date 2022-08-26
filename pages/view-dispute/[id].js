@@ -22,7 +22,6 @@ function ViewDisputePage() {
   useEffect(() => {
     async function load(id) {
       await disputePresenter.getDispute(id, (disputeVm) => {
-        console.log('Dispute info from server', disputeVm);
         setDispute(disputeVm);
         setFormData({ ...formData, id: disputeVm.id, justification: disputeVm.justificationComment });
       });

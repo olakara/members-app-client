@@ -73,6 +73,7 @@ export default function CreateAgentPage() {
     await agentPresenter.createAgent(
       agentDto,
       (success) => {
+        e.target.reset();
         Router.push('/home');
       },
       (error) => {

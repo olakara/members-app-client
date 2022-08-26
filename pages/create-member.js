@@ -251,6 +251,7 @@ export default function CreateMemberPage() {
     await memberPresenter.createMember(
       memberForm,
       (success) => {
+        e.target.reset();
         setMemberId(success.data.id);
         setMembershipId(success.data.membershipId);
         setErrorMessage('');

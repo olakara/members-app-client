@@ -1,3 +1,4 @@
+import jwt_decode from 'jwt-decode';
 import { config } from '../../shared/constants';
 import httpGateway from '../../shared/http-gateway';
 import Observable from '../../shared/observable';
@@ -32,9 +33,15 @@ class UserRepository {
 
   isLoggedIn = () => {
     const token = localStorage.getItem('token');
-    if (token) {
+    if (!token) return false;
+
+    const decoded = jwt_decode(token);
+    const dateNow = new Date();
+
+    if (decoded.exp < dateNow.getTime()) {
       return true;
-    } else return false;
+    }
+    return false;
   };
 }
 
