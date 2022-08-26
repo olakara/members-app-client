@@ -38,10 +38,7 @@ class UserRepository {
     const decoded = jwt_decode(token);
     const dateNow = new Date();
 
-    if (decoded.exp < dateNow.getTime()) {
-      return true;
-    }
-    return false;
+    return decoded.exp < dateNow.getTime() ? true : false;
   };
 }
 
