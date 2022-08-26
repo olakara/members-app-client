@@ -103,12 +103,15 @@ export default function CreateDisputePage() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    await memberPresenter.createDispute(formData, (success) => {
-      Router.push('/home');
-    }),
+    await memberPresenter.createDispute(
+      formData,
+      (success) => {
+        Router.push('/home');
+      },
       (error) => {
         setErrorMessage(error.data.reason);
-      };
+      }
+    );
   };
 
   return (
