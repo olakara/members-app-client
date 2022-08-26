@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import Router, { useRouter } from 'next/router';
-import MemberPresenter from '../../components/member/members.presenter';
 import DisputePresenter from '../../components/dispute/disputes.presenter';
 import FormErrorComponent from '../../components/common/form-error.component';
 import HeaderComponent from '../../components/common/header.component';
