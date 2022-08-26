@@ -106,6 +106,7 @@ export default function CreateDisputePage() {
     await memberPresenter.createDispute(
       formData,
       (success) => {
+        e.target.reset();
         Router.push('/home');
       },
       (error) => {
