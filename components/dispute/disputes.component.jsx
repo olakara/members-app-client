@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import DisputesFilterComponent from './disputes-filter.component';
+import GeneralFilterComponent from '../common/general-filter.component';
 import DisputeListComponent from './dispute-list/dispute-list.component';
 import DisputePresenter from './disputes.presenter';
 
@@ -35,7 +35,7 @@ function DisputesComponent() {
         </div>
       </header>
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <DisputesFilterComponent handleFilter={handleFilterChange}></DisputesFilterComponent>
+        <GeneralFilterComponent handleFilter={handleFilterChange}></GeneralFilterComponent>
         <DisputeListComponent filter={filters} disputes={disputes}></DisputeListComponent>
       </main>
     </div>

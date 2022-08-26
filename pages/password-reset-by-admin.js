@@ -33,7 +33,6 @@ function PasswordResetByAdminPage() {
     await agentPresenter.resetPassword(
       agentDto,
       (success) => {
-        console.log(success);
         Router.push('/home');
       },
       (error) => {

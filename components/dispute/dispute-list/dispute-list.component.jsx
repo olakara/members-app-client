@@ -45,9 +45,9 @@ function DisputeListComponent({ filter, disputes }) {
                 return <DisputeRowComponent key={index} vm={memberVm} index={index} />;
               })}
 
-            {filteredDisputes.length === 0 && (
+            {filteredDisputes && filteredDisputes.length === 0 && (
               <tr>
-                <td colSpan={4} className="py-3.5 pl-4 text-center text-lg">
+                <td colSpan={5} className="py-3.5 pl-4 text-center text-lg">
                   Data not available
                 </td>
               </tr>

@@ -3,12 +3,10 @@ import AgentsPresenter from '../agents.presenter';
 import LookupsPresenter from '../../../shared/lookups/lookups.presenter';
 import AgentRowComponent from './agent-row.component';
 
-export default function AgentListComponent(props) {
-  const [vm, copyViewModelToStateModel] = useState([]);
+export default function AgentListComponent({ filter, agents }) {
   const [locationLabel, setLocationLabel] = useState('');
-
-  const agentsPresenter = new AgentsPresenter();
   const lookupsPresenter = new LookupsPresenter();
+  const [filteredAgents, setAgents] = useState([]);
 
   useEffect(() => {
     async function load() {
@@ -16,19 +14,18 @@ export default function AgentListComponent(props) {
         const userRole = getDefaultRoleForUser(generatedViewModel.applicableUserRole ?? []);
         setLocationLabel(getLocationLabel(userRole));
       });
-
-      await agentsPresenter.load((generatedViewModel) => {
-        copyViewModelToStateModel(generatedViewModel);
-      });
     }
+
     load();
-  }, []);
+
+    const temp = agents.filter((e) => e.fullName.toLowerCase().includes(filter.search.toLowerCase()));
+    setAgents(temp);
+  }, [filter, agents]);
 
   function getDefaultRoleForUser(applicableUserRoles) {
     if (applicableUserRoles && applicableUserRoles.includes('state-admin')) {
       return 'state-admin';
     }
-
     return applicableUserRoles.length > 0 ? applicableUserRoles[0] : '';
   }
 
@@ -67,14 +64,14 @@ export default function AgentListComponent(props) {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 bg-white">
-            {vm &&
-              vm.map((agentVm, index) => {
+            {filteredAgents &&
+              filteredAgents.map((agentVm, index) => {
                 return <AgentRowComponent key={index} vm={agentVm} index={index} />;
               })}
 
-            {vm && vm.length === 0 && (
+            {filteredAgents && filteredAgents.length === 0 && (
               <tr>
-                <td colSpan="4" className="py-3.5 pl-4 text-center text-lg">
+                <td colSpan={5} className="py-3.5 pl-4 text-center text-lg">
                   Data not available
                 </td>
               </tr>

@@ -1,7 +1,8 @@
 import { useState } from 'react';
-function DisputesFilterComponent(props) {
+function GeneralFilterComponent(props) {
   const { handleFilter } = props;
   const [text, setText] = useState('');
+
   return (
     <div className="flex justify-between items-center pt-5 pb-1">
       <label htmlFor="table-search" className="sr-only">
@@ -41,4 +42,4 @@ function DisputesFilterComponent(props) {
   );
 }
 
-export default DisputesFilterComponent;
+export default GeneralFilterComponent;

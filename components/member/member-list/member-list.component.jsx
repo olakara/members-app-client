@@ -52,7 +52,7 @@ export default function MemberListComponent({ filter, members }) {
                 return <MemberRowComponent key={index} vm={memberVm} index={index} />;
               })}
 
-            {filteredMembers.length === 0 && (
+            {filteredMembers && filteredMembers.length === 0 && (
               <tr>
                 <td colSpan={5} className="py-3.5 pl-4 text-center text-lg">
                   Data not available
