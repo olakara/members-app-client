@@ -145,6 +145,9 @@ export default function CreateMemberPage() {
   const [memberId, setMemberId] = useState('');
   const [membershipId, setMembershipId] = useState('');
 
+  const dummyFrontImagePath = '/images/idfront.jpg';
+  const dummyBackImagePath = 'images/idback.jpg';
+
   useEffect(() => {
     async function load() {
       await userPresenter.getCurrentUser((generatedViewModel) => {
@@ -561,7 +564,8 @@ export default function CreateMemberPage() {
                           />
                           <span className="text-red-600 italic">Note: Upload image size should be less than 2MB</span>
                         </div>
-                        <ImagePreviewComponent vm={emiratesIdFrontImagePath} />
+                        {emiratesIdFrontImagePath && <ImagePreviewComponent vm={emiratesIdFrontImagePath} />}
+                        {!emiratesIdFrontImagePath && <ImagePreviewComponent vm={dummyFrontImagePath} />}
                       </div>
                       <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 pt-5 pb-5">
                         <label
@@ -582,7 +586,9 @@ export default function CreateMemberPage() {
                           />
                           <span className="text-red-600 italic">Note: Upload image size should be less than 2MB</span>
                         </div>
-                        <ImagePreviewComponent vm={emiratesIdBackImagePath} />
+
+                        {emiratesIdBackImagePath && <ImagePreviewComponent vm={emiratesIdBackImagePath} />}
+                        {!emiratesIdBackImagePath && <ImagePreviewComponent vm={dummyBackImagePath} />}
                       </div>
                       <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start pt-1 pb-5">
                         <div className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"></div>
