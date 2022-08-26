@@ -6,7 +6,6 @@ import MembersPresenter from './members.presenter';
 
 function MembersComponent() {
   const [members, copyMembersViewModelToStateModel] = useState([]);
-  const [panchayats, copyPanchayatsToStateModel] = useState([]);
   const [filters, setFilters] = useState({
     search: '',
     panchayat: null,
@@ -22,13 +21,6 @@ function MembersComponent() {
     }
     load();
   }, []);
-
-  // function getDefaultRoleForUser(applicableUserRoles) {
-  //   if (applicableUserRoles && applicableUserRoles.includes('state-admin')) {
-  //     return 'state-admin';
-  //   }
-  //   return applicableUserRoles.length > 0 ? applicableUserRoles[0] : '';
-  // }
 
   const handleFilterChange = (filter) => {
     setFilters(filter);

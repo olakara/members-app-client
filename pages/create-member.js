@@ -17,8 +17,6 @@ import {
   dateToServerSideFormat,
   getDateInRegionalFormat,
   isEmptyObject,
-  getItemNameById,
-  isValidDate,
   convertDateToISOFormat,
 } from '../shared/utilities';
 
@@ -53,19 +51,18 @@ export default function CreateMemberPage() {
   const nextStep = async () => {
     setMoving('right');
 
-    if (true) {
-      setSteps((old) =>
-        old.map((v, i) => {
-          if (i === currentStep) {
-            v.status = 'complete';
-          } else if (i === currentStep + 1) {
-            v.status = 'current';
-          }
-          return v;
-        })
-      );
-      setCurrentStep(currentStep + 1);
-    }
+    setSteps((old) =>
+      old.map((v, i) => {
+        if (i === currentStep) {
+          v.status = 'complete';
+        } else if (i === currentStep + 1) {
+          v.status = 'current';
+        }
+        return v;
+      })
+    );
+    setCurrentStep(currentStep + 1);
+
     return false;
   };
 
