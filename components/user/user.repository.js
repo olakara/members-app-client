@@ -19,9 +19,9 @@ class UserRepository {
   };
 
   signIn = async (signInDto) => {
-    var key = cryptojs.enc.Utf8.parse('8056483646328763');
-    var iv = cryptojs.enc.Utf8.parse('8056483646328763');
-    var encrypted = cryptojs.AES.encrypt(cryptojs.enc.Utf8.parse(signInDto.password), key, {
+    const key = cryptojs.enc.Utf8.parse('8056483646328763');
+    const iv = cryptojs.enc.Utf8.parse('8056483646328763');
+    const encrypted = cryptojs.AES.encrypt(cryptojs.enc.Utf8.parse(signInDto.password), key, {
       keySize: 128 / 8,
       iv: iv,
       mode: cryptojs.mode.CBC,
