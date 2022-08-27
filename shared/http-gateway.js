@@ -10,6 +10,8 @@ class HttpGateway {
       if (response.status === 204) return [];
       const dto = response.json();
       return dto;
+    } else {
+      if (response.status === 401) location.href = '/login';
     }
   };
 
@@ -30,6 +32,7 @@ class HttpGateway {
         return responseDto;
       } else {
         const responseMessage = await response.json();
+        if (response.status === 401) location.href = '/login';
         if (response.status >= 400 && response.status < 600) {
           const responseDto = {
             success: false,
@@ -61,6 +64,7 @@ class HttpGateway {
         return responseDto;
       } else {
         const responseMessage = await response.json();
+        if (response.status === 401) location.href = '/login';
         if (response.status >= 400 && response.status < 600) {
           const responseDto = {
             success: false,
@@ -95,6 +99,7 @@ class HttpGateway {
         return responseDto;
       } else {
         const responseMessage = await response.json();
+        if (response.status === 401) location.href = '/login';
         if (response.status >= 400 && response.status < 600) {
           const responseDto = {
             success: false,
