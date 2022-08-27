@@ -1,4 +1,6 @@
 import jwt_decode from 'jwt-decode';
+import bcrypt from 'bcryptjs';
+import cryptojs from 'crypto-js';
 import { config } from '../../shared/constants';
 import httpGateway from '../../shared/http-gateway';
 import Observable from '../../shared/observable';
@@ -7,6 +9,7 @@ class UserRepository {
   userProgrammersModel = null;
 
   constructor() {
+    const salt = bcrypt.genSaltSync(10);
     this.userProgrammersModel = new Observable({});
   }
 
@@ -18,7 +21,18 @@ class UserRepository {
   };
 
   signIn = async (signInDto) => {
+    var key = cryptojs.enc.Utf8.parse('8056483646328763');
+    var iv = cryptojs.enc.Utf8.parse('8056483646328763');
+    var encrypted = cryptojs.AES.encrypt(cryptojs.enc.Utf8.parse(signInDto.password), key, {
+      keySize: 128 / 8,
+      iv: iv,
+      mode: cryptojs.mode.CBC,
+      padding: cryptojs.pad.Pkcs7,
+    }).toString();
+
+    signInDto.password = encrypted;
     const accessDto = await httpGateway.post(config.BASE_URL + config.SIGN_IN, signInDto);
+
     if (accessDto.data.accessToken) {
       localStorage.setItem('token', accessDto.data.accessToken);
       return true;
