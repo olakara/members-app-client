@@ -1,5 +1,4 @@
 import jwt_decode from 'jwt-decode';
-import bcrypt from 'bcryptjs';
 import cryptojs from 'crypto-js';
 import { config } from '../../shared/constants';
 import httpGateway from '../../shared/http-gateway';
@@ -9,7 +8,6 @@ class UserRepository {
   userProgrammersModel = null;
 
   constructor() {
-    const salt = bcrypt.genSaltSync(10);
     this.userProgrammersModel = new Observable({});
   }
 
