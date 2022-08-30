@@ -16,6 +16,8 @@ function AgentsComponent() {
     search: '',
   });
 
+  const [canAddAgent, setCanAddAgent] = useState(false);
+
   useEffect(() => {
     async function load() {
       await userPresenter.getCurrentUser((generatedViewModel) => {
@@ -27,6 +29,10 @@ function AgentsComponent() {
 
       await agentsPresenter.load((generatedViewModel) => {
         setAgents(generatedViewModel);
+      });
+
+      userPresenter.canUserAddAgent((result) => {
+        setCanAddAgent(result);
       });
     }
     load();
@@ -44,12 +50,14 @@ function AgentsComponent() {
             <h1 className="text-3xl font-bold leading-tight text-gray-900">Users</h1>
           </div>
           <div className="ml-4 mt-2 flex-shrink-0">
-            <Link href="/create-agent">
-              <a className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-green-700 bg-green-100 hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                {isDistrictAdmin && 'Add Agent'}
-                {!isDistrictAdmin && 'Add User'}
-              </a>
-            </Link>
+            {canAddAgent && (
+              <Link href="/create-agent">
+                <a className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-green-700 bg-green-100 hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                  {isDistrictAdmin && 'Add Agent'}
+                  {!isDistrictAdmin && 'Add User'}
+                </a>
+              </Link>
+            )}
           </div>
         </div>
       </header>
