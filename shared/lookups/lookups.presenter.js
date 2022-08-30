@@ -19,7 +19,6 @@ export default class LookupsPresenter {
   loadUserLookups = async (callback) => {
     lookupsRepository.getUserLookups((lookupPm) => {
       if (!lookupPm || isEmptyObject(lookupPm)) return;
-      console.log('Lookup', lookupPm);
       if (typeof lookupPm.agentDistrictId === 'undefined' || typeof lookupPm.agentMandalamId === 'undefined') return;
       const lookupsVm = {
         agentDistrictId: lookupPm.agentDistrictId,

@@ -146,7 +146,9 @@ export default function CreateMemberPage() {
   const dummyBackImagePath = 'images/idback.jpg';
 
   useEffect(() => {
+    console.log('In use effect method');
     async function load() {
+      console.log('In load method...');
       await userPresenter.getCurrentUser((generatedViewModel) => {
         const userRole = generatedViewModel.role;
         if (userRole === 'mandalam-agent') setIsMandalamAgent(true);
@@ -1432,7 +1434,7 @@ export default function CreateMemberPage() {
                         )}
                         <button
                           type="button"
-                          onClick={() => Router.reload(window.location.pathname)}
+                          onClick={() => (location.href = '/create-member')}
                           className="ml-3 py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white disabled:bg-gray-500 bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                         >
                           Add Member
@@ -1465,7 +1467,7 @@ export default function CreateMemberPage() {
                       <div className="mt-9 text-center">
                         <button
                           type="button"
-                          onClick={() => Router.push('/home')}
+                          onClick={() => (location.href = '/')}
                           className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 disabled:bg-gray-500 disabled:text-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                         >
                           Member List
@@ -1481,7 +1483,7 @@ export default function CreateMemberPage() {
 
                         <button
                           type="button"
-                          onClick={() => Router.reload(window.location.pathname)}
+                          onClick={() => (location.href = '/create-member')}
                           className="ml-3 bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 disabled:bg-gray-500 disabled:text-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                         >
                           Add Member
