@@ -31,13 +31,16 @@ export default function HeaderComponent() {
         <div className="flex justify-between h-16">
           <div className="flex">
             <div className="flex-shrink-0 flex items-center">
-              <a href="/">
-                <img className="block lg:hidden h-8 w-auto" src="/images/logo.jpg" alt="Logo" />
-              </a>
-
-              <a href="/">
-                <img className="hidden lg:block h-8 w-auto" src="/images/logo.jpg" alt="Logo" />
-              </a>
+              <Link href="/home">
+                <a>
+                  <img className="block lg:hidden h-8 w-auto" src="/images/logo.jpg" alt="Logo" />
+                </a>
+              </Link>
+              <Link href="/home">
+                <a>
+                  <img className="hidden lg:block h-8 w-auto" src="/images/logo.jpg" alt="Logo" />
+                </a>
+              </Link>
             </div>
           </div>
 
