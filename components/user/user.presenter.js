@@ -24,4 +24,12 @@ export default class UserPresenter {
       callback(null);
     }
   };
+
+  canUserAddMember = (callback) => {
+    callback(userRepository.canUserAddMember());
+  };
+
+  canUserAddAgent = (callback) => {
+    callback(userRepository.canUserAddUser());
+  };
 }

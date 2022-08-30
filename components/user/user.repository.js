@@ -52,6 +52,22 @@ class UserRepository {
 
     return decoded.exp < dateNow.getTime() ? true : false;
   };
+
+  canUserAddMember = () => {
+    const token = localStorage.getItem('token');
+    if (!token) return false;
+
+    const decoded = jwt_decode(token);
+    return JSON.parse(decoded.IsAddMember);
+  };
+
+  canUserAddUser = () => {
+    const token = localStorage.getItem('token');
+    if (!token) return false;
+
+    const decoded = jwt_decode(token);
+    return JSON.parse(decoded.IsAddUser);
+  };
 }
 
 const userRepository = new UserRepository();
