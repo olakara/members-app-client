@@ -12,7 +12,7 @@ function MembersComponent() {
     panchayat: null,
   });
 
-  const [canAddMember, setCanAddMemeber] = useState(false);
+  const [canAddMember, setCanAddMemeber] = useState();
 
   const membersPresenter = new MembersPresenter();
   const userPresenter = new UserPresenter();
