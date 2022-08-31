@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Router from 'next/router';
 import UserPresenter from '../../components/user/user.presenter';
+import HeaderLogoComponent from './header-logo.component';
 
 export default function HeaderComponent() {
   const [user, setCurrentUser] = useState({});
@@ -31,16 +32,7 @@ export default function HeaderComponent() {
         <div className="flex justify-between h-16">
           <div className="flex">
             <div className="flex-shrink-0 flex items-center">
-              <Link href="/home">
-                <a>
-                  <img className="block lg:hidden h-8 w-auto" src="/images/logo.jpg" alt="Logo" />
-                </a>
-              </Link>
-              <Link href="/home">
-                <a>
-                  <img className="hidden lg:block h-8 w-auto" src="/images/logo.jpg" alt="Logo" />
-                </a>
-              </Link>
+              <HeaderLogoComponent></HeaderLogoComponent>
             </div>
           </div>
 
