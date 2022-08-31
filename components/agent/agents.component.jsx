@@ -5,6 +5,7 @@ import AgentsPresenter from '../agent/agents.presenter';
 import { useState, useEffect } from 'react';
 
 import UserPresenter from '../user/user.presenter';
+import AddButtonComponent from '../common/add-button.component';
 
 function AgentsComponent() {
   const userPresenter = new UserPresenter();
@@ -51,12 +52,10 @@ function AgentsComponent() {
           </div>
           <div className="ml-4 mt-2 flex-shrink-0">
             {canAddAgent && (
-              <Link href="/create-agent">
-                <a className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-green-700 bg-green-100 hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                  {isDistrictAdmin && 'Add Agent'}
-                  {!isDistrictAdmin && 'Add User'}
-                </a>
-              </Link>
+              <AddButtonComponent action="/create-agent">
+                {isDistrictAdmin && 'Add Agent'}
+                {!isDistrictAdmin && 'Add User'}
+              </AddButtonComponent>
             )}
           </div>
         </div>
