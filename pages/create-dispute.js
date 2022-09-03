@@ -150,9 +150,7 @@ export default function CreateDisputePage() {
             <div className="pt-8 space-y-6 sm:pt-10 sm:space-y-5">
               <div>
                 <h3 className="text-lg leading-6 font-medium text-gray-900">Membership Details</h3>
-                <p className="mt-1 max-w-2xl text-sm text-gray-500">
-                  Current membership details of the member are as follows:
-                </p>
+                <p className="mt-1 max-w-2xl text-sm text-gray-500">Transfer from:</p>
               </div>
               <div className="space-y-6 sm:space-y-5">
                 <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
@@ -246,7 +244,7 @@ export default function CreateDisputePage() {
               </div>
               <div>
                 <h3 className="text-lg leading-6 font-medium text-gray-900">Change Details</h3>
-                <p className="mt-1 max-w-2xl text-sm text-gray-500">Change membership details to the following:</p>
+                <p className="mt-1 max-w-2xl text-sm text-gray-500">Transfer to:</p>
               </div>
               <div className="space-y-6 sm:space-y-5">
                 <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
