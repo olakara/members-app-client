@@ -32,6 +32,7 @@ export default class LookupsPresenter {
         districtsName: lookupPm.districtsName,
         panchayats: this.getPanchayatsVm(lookupPm.panchayats ?? []),
         stateName: lookupPm.stateName,
+        searchTypes: this.getSearchTypes(lookupPm.searchTypes ?? []),
       };
       callback(lookupsVm);
     });
@@ -125,6 +126,16 @@ export default class LookupsPresenter {
       return {
         id: item.id,
         name: item.name,
+      };
+    });
+  };
+
+  getSearchTypes = (items) => {
+    if (!items) return;
+    return items.map((item) => {
+      return {
+        id: item.searchType,
+        name: item.searchTypeName,
       };
     });
   };
