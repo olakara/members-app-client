@@ -8,10 +8,12 @@ export default class DashboardPresenter {
           no: widgetPm.no,
           title: widgetPm.title,
           value: widgetPm.summaryValue || widgetPm.summaryText || '0',
+          isDispute: widgetPm.summaryText === 'disputes',
           details: widgetPm.details.map((item) => {
             return {
               title: item.text,
               value: item.intValue || item.textValue,
+              isDispute: item.textValue === 'disputes',
             };
           }),
         };

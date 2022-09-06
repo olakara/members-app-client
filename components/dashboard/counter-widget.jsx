@@ -2,10 +2,10 @@ import classNames from 'classnames';
 
 export default function CounterWidget(props) {
   let widgetStyles = classNames({
-    ' bg-gradient-to-tl shadow-xl rounded-lg overflow-hidden p-1': true,
-    'from-red-400 to-pink-400': props.color === 'red',
-    'from-orange-400 to-yellow-400': props.color === 'orange',
-    'from-blue-400 to-emerald-400': props.color === 'blue',
+    'bg-gradient-to-tl shadow-xl rounded-lg overflow-hidden p-1': true,
+    'from-red-400 to-pink-400': props.color === 'red' && !props.vm.isDispute,
+    'from-yellow-400 to-cyan-400': props.color === 'orange' || props.vm.isDispute,
+    'from-blue-400 to-emerald-400': props.color === 'blue' && !props.vm.isDispute,
   });
 
   return (

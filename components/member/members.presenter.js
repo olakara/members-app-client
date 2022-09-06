@@ -4,7 +4,9 @@ import { isEmptyObject } from '../../shared/utilities';
 export default class MembersPresenter {
   load = async (callback) => {
     await membersRepostory.getMembers((membersPm) => {
-      const membersVm = membersPm.map((memberPm) => {
+      const { data } = membersPm;
+      console.log(data);
+      const membersVm = data.items.map((memberPm) => {
         return {
           id: memberPm.id,
           membershipId: memberPm.membershipId,

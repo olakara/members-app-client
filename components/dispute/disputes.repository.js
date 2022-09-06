@@ -13,10 +13,15 @@ class DisputeRepository {
     this.disputeProgrammersModel = new Observable({});
   }
 
-  getDisputes = async (callback) => {
-    this.disputesProgrammersModel.subscribe(callback);
-    await this.loadData();
-    this.disputesProgrammersModel.notify();
+  getDisputes = async (callback, searchDto) => {
+    const defaultDto = {
+      searchType: null,
+      searchString: null,
+      pageIndex: 1,
+      pageSize: 10,
+    };
+    const disputesDto = await httpGateway.post(config.BASE_URL + 'disputes/role', searchDto || defaultDto);
+    callback(disputesDto);
   };
 
   getDispute = async (id, callback) => {
@@ -64,11 +69,6 @@ class DisputeRepository {
   loadDisputeData = async (id) => {
     const dto = await httpGateway.get(config.BASE_URL + 'disputes/' + id);
     this.disputeProgrammersModel.value = dto;
-  };
-
-  loadData = async () => {
-    const dto = await httpGateway.get(config.BASE_URL + 'disputes/role');
-    this.disputesProgrammersModel.value = dto;
   };
 }
 
