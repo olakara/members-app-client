@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
-function AddButtonComponent(props) {
+function ActionButtonComponent(props) {
   const { children, action } = props;
   return (
     <a
@@ -11,4 +11,4 @@ function AddButtonComponent(props) {
   );
 }
 
-export default AddButtonComponent;
+export default ActionButtonComponent;
