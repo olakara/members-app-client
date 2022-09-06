@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-html-link-for-pages */
 /* eslint-disable @next/next/no-img-element */
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -5,9 +6,17 @@ import Router from 'next/router';
 import UserPresenter from '../../components/user/user.presenter';
 import HeaderLogoComponent from './header-logo.component';
 
+import { Fragment } from 'react';
+import { Disclosure, Menu, Transition } from '@headlessui/react';
+import { Bars3Icon, BellIcon, XMarkIcon, ArrowRightOnRectangleIcon } from '@heroicons/react/24/outline';
+import { PlusIcon } from '@heroicons/react/20/solid';
+
 export default function HeaderComponent() {
   const [user, setCurrentUser] = useState({});
   const [isLoggedIn, setLoginStatus] = useState(false);
+
+  const [isAbleToCreateMember, setAbleToCreateMember] = useState(false);
+  const [isAbleToManageDispute, setAbleToManageDispute] = useState(false);
 
   let userPresenter = new UserPresenter();
 
@@ -15,6 +24,12 @@ export default function HeaderComponent() {
     async function loadCurrentUser() {
       await userPresenter.getCurrentUser((user) => {
         setCurrentUser(user);
+        const userRole = user.role;
+        if (userRole === 'mandalam-agent' || userRole === 'district-agent') setAbleToCreateMember(true);
+        else setAbleToCreateMember(false);
+
+        if (userRole === 'dispute-committee') setAbleToManageDispute(true);
+        else setAbleToManageDispute(false);
       });
     }
 
@@ -27,42 +42,140 @@ export default function HeaderComponent() {
   }, []);
 
   return (
-    <nav className="bg-white border-b border-gray-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
-          <div className="flex">
-            <div className="flex-shrink-0 flex items-center">
-              <HeaderLogoComponent></HeaderLogoComponent>
+    <Disclosure as="nav" className="bg-white shadow">
+      {({ open }) => (
+        <>
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="flex h-16 justify-between">
+              <div className="flex">
+                <div className="-ml-2 mr-2 flex items-center md:hidden">
+                  {/* Mobile menu button */}
+                  <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-green-500">
+                    <span className="sr-only">Open main menu</span>
+                    {open ? (
+                      <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
+                    ) : (
+                      <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
+                    )}
+                  </Disclosure.Button>
+                </div>
+                <div className="flex flex-shrink-0 items-center">
+                  <HeaderLogoComponent></HeaderLogoComponent>
+                </div>
+                <div className="hidden md:ml-6 md:flex md:space-x-8">
+                  {/* Current: "border-green-500 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" */}
+                  {isAbleToCreateMember && (
+                    <>
+                      <a
+                        href="/view-members"
+                        className="inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium border-green-500 text-gray-900"
+                      >
+                        Members
+                      </a>
+                      <a
+                        href="/create-member"
+                        className="inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                      >
+                        Add Member
+                      </a>
+                    </>
+                  )}
+                  {!isAbleToCreateMember && !isAbleToManageDispute && (
+                    <>
+                      <a
+                        href="/view-agents"
+                        className="inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                      >
+                        Users
+                      </a>
+                      <a
+                        href="/create-agent"
+                        className="inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                      >
+                        Add User
+                      </a>
+                    </>
+                  )}
+                  {isAbleToManageDispute && (
+                    <a
+                      href="/disputes"
+                      className="inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                    >
+                      Disputes
+                    </a>
+                  )}
+                </div>
+              </div>
+              <div className="flex items-center">
+                <div className="hidden md:ml-4 md:flex md:flex-shrink-0 md:items-center">
+                  <div className="px-3">{user.fullName}</div>
+                  <div>
+                    {isLoggedIn && (
+                      <Link href="/logout" className="cursor-pointer">
+                        <a title="logout">
+                          <ArrowRightOnRectangleIcon className="block h-6 w-6" aria-hidden="true" />
+                        </a>
+                      </Link>
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div className="flex flex-row">
-            <div className="mt-5 pr-3 capitalize">{user.fullName}</div>
-            <div className="mt-5">
-              {isLoggedIn && (
-                <Link href="/logout" className="cursor-pointer">
-                  <a title="logout">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth="1"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                      />
-                    </svg>
-                  </a>
-                </Link>
-              )}
+          <Disclosure.Panel className="md:hidden">
+            <div className="space-y-1 pt-2 pb-3">
+              {/* Current: "bg-green-50 border-green-500 text-green-700", Default: "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700" */}
+              <Disclosure.Button
+                as="a"
+                href="/view-members"
+                className="block border-l-4 border-green-500 bg-green-50 py-2 pl-3 pr-4 text-base font-medium text-green-700 sm:pl-5 sm:pr-6"
+              >
+                Members
+              </Disclosure.Button>
+              <Disclosure.Button
+                as="a"
+                href="/create-member"
+                className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700 sm:pl-5 sm:pr-6"
+              >
+                Add Member
+              </Disclosure.Button>
+              <Disclosure.Button
+                as="a"
+                href="/view-agents"
+                className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700 sm:pl-5 sm:pr-6"
+              >
+                Users
+              </Disclosure.Button>
+              <Disclosure.Button
+                as="a"
+                href="/create-agent"
+                className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700 sm:pl-5 sm:pr-6"
+              >
+                Add User
+              </Disclosure.Button>
+              <Disclosure.Button
+                as="a"
+                href="/create-agent"
+                className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700 sm:pl-5 sm:pr-6"
+              >
+                Dispute
+              </Disclosure.Button>
             </div>
-          </div>
-        </div>
-      </div>
-    </nav>
+            <div className="border-t border-gray-200 pt-4 pb-3">
+              <div className="mt-3 space-y-1">
+                <Disclosure.Button
+                  as="a"
+                  href="/logout"
+                  className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800 sm:px-6"
+                >
+                  Sign out
+                </Disclosure.Button>
+              </div>
+            </div>
+          </Disclosure.Panel>
+        </>
+      )}
+    </Disclosure>
   );
 }

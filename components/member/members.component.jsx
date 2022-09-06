@@ -4,7 +4,7 @@ import GeneralFilterComponent from '../common/general-filter.component';
 import UserPresenter from '../user/user.presenter';
 import MemberListComponent from './member-list/member-list.component';
 import MembersPresenter from './members.presenter';
-import AddButtonComponent from '../common/add-button.component';
+import ActionButtonComponent from '../common/action-button.component';
 
 function MembersComponent() {
   const [members, copyMembersViewModelToStateModel] = useState([]);
@@ -42,7 +42,7 @@ function MembersComponent() {
             <h1 className="text-3xl font-bold leading-tight text-gray-900">Members </h1>
           </div>
           <div className="ml-4 mt-2 flex-shrink-0">
-            {canAddMember && <AddButtonComponent action="/create-member">Add Member</AddButtonComponent>}
+            {canAddMember && <ActionButtonComponent action="/create-member">Add Member</ActionButtonComponent>}
           </div>
         </div>
       </header>

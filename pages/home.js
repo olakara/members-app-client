@@ -2,16 +2,17 @@ import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import UserPresenter from '../components/user/user.presenter';
 import HeaderComponent from '../components/common/header.component';
-import AgentsComponent from '../components/agent/agents.component';
-import MembersComponent from '../components/member/members.component';
 import DashboardComponent from '../components/dashboard/dashboard.component';
-import DisputesComponent from '../components/dispute/disputes.component';
+import ActionButtonComponent from '../components/common/action-button.component';
 
 export default function Home() {
   const userPresenter = new UserPresenter();
 
   const [isAbleToCreateMember, setAbleToCreateMember] = useState(false);
   const [isAbleToManageDispute, setAbleToManageDispute] = useState(false);
+  const [isDistrictAdmin, setIsDistrictAdmin] = useState(false);
+  const [canAddMember, setCanAddMemeber] = useState(false);
+  const [canAddAgent, setCanAddAgent] = useState(false);
 
   useEffect(() => {
     async function load() {
@@ -22,6 +23,15 @@ export default function Home() {
 
         if (userRole === 'dispute-committee') setAbleToManageDispute(true);
         else setAbleToManageDispute(false);
+
+        if (userRole === 'district-admin') setIsDistrictAdmin(true);
+        else setIsDistrictAdmin(false);
+      });
+      userPresenter.canUserAddMember((result) => {
+        setCanAddMemeber(result);
+      });
+      userPresenter.canUserAddAgent((result) => {
+        setCanAddAgent(result);
       });
     }
     load();
@@ -37,11 +47,33 @@ export default function Home() {
 
       <DashboardComponent></DashboardComponent>
 
-      {!isAbleToCreateMember && !isAbleToManageDispute && <AgentsComponent></AgentsComponent>}
+      <div className="py-10">
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {isAbleToCreateMember && <ActionButtonComponent action="/view-members">View Members</ActionButtonComponent>}
 
-      {isAbleToCreateMember && <MembersComponent></MembersComponent>}
+          {isAbleToCreateMember && canAddMember && (
+            <ActionButtonComponent action="/create-member">Add Member</ActionButtonComponent>
+          )}
 
-      {isAbleToManageDispute && <DisputesComponent></DisputesComponent>}
+          {!isAbleToCreateMember && !isAbleToManageDispute && (
+            <ActionButtonComponent action="/view-agents">
+              {isDistrictAdmin && 'View Agents'}
+              {!isDistrictAdmin && 'View Users'}
+            </ActionButtonComponent>
+          )}
+
+          {!isAbleToCreateMember && !isAbleToManageDispute && canAddAgent && (
+            <ActionButtonComponent action="/create-agent">
+              {isDistrictAdmin && 'Add Agent'}
+              {!isDistrictAdmin && 'Add User'}
+            </ActionButtonComponent>
+          )}
+
+          {isAbleToManageDispute && (
+            <ActionButtonComponent action="/view-disputes">View Disputes</ActionButtonComponent>
+          )}
+        </main>
+      </div>
     </>
   );
 }

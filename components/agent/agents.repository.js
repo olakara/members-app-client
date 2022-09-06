@@ -9,9 +9,15 @@ class AgentsRepository {
     this.programmersModel = new Observable([]);
   }
 
-  getAgents = async (callback) => {
+  getAgents = async (callback, searchDto) => {
+    const defaultDto = {
+      searchType: null,
+      searchString: null,
+      pageIndex: 1,
+      pageSize: 10,
+    };
     this.programmersModel.subscribe(callback);
-    await this.loadData();
+    await this.loadData(searchDto || defaultDto);
     this.programmersModel.notify();
   };
 
@@ -64,8 +70,8 @@ class AgentsRepository {
     }
   };
 
-  loadData = async () => {
-    const agentsDto = await httpGateway.get(config.BASE_URL + 'users/role');
+  loadData = async (searchDto) => {
+    const agentsDto = await httpGateway.post(config.BASE_URL + 'users/role', searchDto);
     this.programmersModel.value = agentsDto.map((agentDto) => {
       return agentDto;
     });

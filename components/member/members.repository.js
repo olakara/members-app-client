@@ -9,16 +9,21 @@ class MembersRepostory {
   disputeInfoProgrammersModel = null;
 
   constructor() {
-    this.programmersModel = new Observable([]);
+    this.programmersModel = new Observable({});
     this.ocrProgrammersModel = new Observable({});
     this.membershipModel = new Observable({});
     this.disputeInfoProgrammersModel = new Observable({});
   }
 
-  getMembers = async (callback) => {
-    this.programmersModel.subscribe(callback);
-    await this.loadData();
-    this.programmersModel.notify();
+  getMembers = async (callback, searchDto) => {
+    const defaultDto = {
+      searchType: null,
+      searchString: null,
+      pageIndex: 1,
+      pageSize: 10,
+    };
+    const membersDto = await httpGateway.post(config.BASE_URL + 'members/role', searchDto || defaultDto);
+    callback(membersDto);
   };
 
   getOcrData = async (eidPm, successCallback, errorCallback) => {
@@ -130,10 +135,13 @@ class MembersRepostory {
   };
 
   loadData = async () => {
-    const membersDto = await httpGateway.get(config.BASE_URL + 'members/role');
-    this.programmersModel.value = membersDto.map((memberDto) => {
-      return memberDto;
+    const membersDto = await httpGateway.post(config.BASE_URL + 'members/role', {
+      searchType: null,
+      searchString: null,
+      pageIndex: 1,
+      pageSize: 10,
     });
+    this.programmersModel.value = membersDto;
   };
 
   loadDisputedInfo = async (eid) => {
