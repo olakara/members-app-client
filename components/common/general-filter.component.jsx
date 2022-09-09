@@ -47,7 +47,7 @@ function GeneralFilterComponent({ vm, handleFilter }) {
                 setType(e.target.value);
               }}
               value={type}
-              className="md:ml-2 max-w-lg block focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+              className="md:ml-2 max-w-lg block focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md mr-2"
             >
               <option value="">Select</option>
               {vm &&
@@ -64,7 +64,7 @@ function GeneralFilterComponent({ vm, handleFilter }) {
             <button
               disabled={!text || !type}
               onClick={() => handleFilter({ searchType: type, searchText: text })}
-              className="inline-flex items-center px-2.5 py-1.5 border border-transparent font-medium rounded disabled:text-gray-700 disabled:bg-gray-100 text-green-700 bg-green-100 hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 mx-2"
+              className="inline-flex items-center px-2.5 py-1.5 border border-transparent font-medium rounded disabled:text-gray-700 disabled:bg-gray-100 text-green-700 bg-green-100 hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 mr-2"
             >
               Search
             </button>
@@ -74,7 +74,7 @@ function GeneralFilterComponent({ vm, handleFilter }) {
                 setType();
                 handleFilter({ searchType: null, searchText: null });
               }}
-              className="inline-flex items-center px-2.5 py-1.5 border border-transparent font-medium rounded disabled:text-gray-700 disabled:bg-gray-100 text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 mx-2"
+              className="inline-flex items-center px-2.5 py-1.5 border border-transparent font-medium rounded disabled:text-gray-700 disabled:bg-gray-100 text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
             >
               Clear
             </button>

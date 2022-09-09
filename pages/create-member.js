@@ -261,6 +261,8 @@ export default function CreateMemberPage() {
         setCurrentStep(5);
       },
       (error) => {
+        setProcessing(false);
+        setIsLoading(false);
         setErrorMessage(error.data.reason);
       }
     );
