@@ -1,16 +1,15 @@
-import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import GeneralFilterComponent from '../common/general-filter.component';
-import UserPresenter from '../user/user.presenter';
 import MemberListComponent from './member-list/member-list.component';
+import UserPresenter from '../user/user.presenter';
 import MembersPresenter from './members.presenter';
-import ActionButtonComponent from '../common/action-button.component';
 import LookupsPresenter from '../../shared/lookups/lookups.presenter';
+import ActionButtonComponent from '../common/action-button.component';
 
 function MembersComponent() {
   const [members, setMembers] = useState([]);
   const [lookups, setLookups] = useState({});
-  const [filters, setFilters] = useState({ searchType: null, searchString: null, pageIndex: 1, pageSize: 5 });
+  const [filters, setFilters] = useState({ searchType: null, searchString: null, pageIndex: 1, pageSize: 10 });
 
   const [canAddMember, setCanAddMemeber] = useState();
 
@@ -31,9 +30,7 @@ function MembersComponent() {
   };
 
   useEffect(() => {
-    if (filters) {
-      load(filters);
-    }
+    load(filters);
   }, [filters]);
 
   const handleFilterChange = (search) => {
@@ -61,7 +58,7 @@ function MembersComponent() {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <GeneralFilterComponent vm={lookups.searchTypes} handleFilter={handleFilterChange}></GeneralFilterComponent>
-        <MemberListComponent filter={filters} members={members} handleChange={handlePageChange}></MemberListComponent>
+        <MemberListComponent members={members} handleChange={handlePageChange}></MemberListComponent>
       </main>
     </div>
   );

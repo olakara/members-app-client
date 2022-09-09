@@ -1,45 +1,52 @@
-import Link from 'next/link';
-import AgentListComponent from './agent-list/agent-list.component';
-import GeneralFilterComponent from '../common/general-filter.component';
-import AgentsPresenter from '../agent/agents.presenter';
 import { useState, useEffect } from 'react';
-
+import GeneralFilterComponent from '../common/general-filter.component';
+import AgentListComponent from './agent-list/agent-list.component';
 import UserPresenter from '../user/user.presenter';
+import AgentsPresenter from '../agent/agents.presenter';
+import LookupsPresenter from '../../shared/lookups/lookups.presenter';
 import ActionButtonComponent from '../common/action-button.component';
 
 function AgentsComponent() {
-  const userPresenter = new UserPresenter();
-  const agentsPresenter = new AgentsPresenter();
-  const [isDistrictAdmin, setIsDistrictAdmin] = useState(false);
   const [agents, setAgents] = useState([]);
-
-  const [filters, setFilters] = useState({
-    search: '',
-  });
-
+  const [lookups, setLookups] = useState({});
+  const [filters, setFilters] = useState({ searchType: null, searchString: null, pageIndex: 1, pageSize: 10 });
+  const [isDistrictAdmin, setIsDistrictAdmin] = useState(false);
   const [canAddAgent, setCanAddAgent] = useState(false);
 
+  const userPresenter = new UserPresenter();
+  const agentsPresenter = new AgentsPresenter();
+  const lookupsPresenter = new LookupsPresenter();
+
+  const load = async (filter) => {
+    await userPresenter.getCurrentUser((generatedViewModel) => {
+      const userRole = generatedViewModel.role;
+      if (userRole === 'district-admin') setIsDistrictAdmin(true);
+      else setIsDistrictAdmin(false);
+    });
+    await lookupsPresenter.loadUserLookups(async (lookupsVm) => {
+      setLookups(lookupsVm);
+    });
+
+    await agentsPresenter.load((agentsVm) => {
+      setAgents(agentsVm);
+    }, filter);
+
+    userPresenter.canUserAddAgent((result) => {
+      setCanAddAgent(result);
+    });
+  };
+
   useEffect(() => {
-    async function load() {
-      await userPresenter.getCurrentUser((generatedViewModel) => {
-        const userRole = generatedViewModel.role;
+    load(filters);
+  }, [filters]);
 
-        if (userRole === 'district-admin') setIsDistrictAdmin(true);
-        else setIsDistrictAdmin(false);
-      });
+  const handleFilterChange = (search) => {
+    let filter = { ...filters, searchType: search.searchType, searchString: search.searchText };
+    setFilters(filter);
+  };
 
-      await agentsPresenter.load((generatedViewModel) => {
-        setAgents(generatedViewModel);
-      });
-
-      userPresenter.canUserAddAgent((result) => {
-        setCanAddAgent(result);
-      });
-    }
-    load();
-  }, []);
-
-  const handleFilterChange = (filter) => {
+  const handlePageChange = (page) => {
+    let filter = { ...filters, pageIndex: page };
     setFilters(filter);
   };
 
@@ -61,8 +68,8 @@ function AgentsComponent() {
         </div>
       </header>
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <GeneralFilterComponent handleFilter={handleFilterChange}></GeneralFilterComponent>
-        <AgentListComponent filter={filters} agents={agents}></AgentListComponent>
+        <GeneralFilterComponent vm={lookups.searchTypes} handleFilter={handleFilterChange}></GeneralFilterComponent>
+        <AgentListComponent lookups={lookups} agents={agents} handleChange={handlePageChange}></AgentListComponent>
       </main>
     </div>
   );
