@@ -2,26 +2,36 @@ import { useState, useEffect } from 'react';
 import GeneralFilterComponent from '../common/general-filter.component';
 import DisputeListComponent from './dispute-list/dispute-list.component';
 import DisputePresenter from './disputes.presenter';
+import LookupsPresenter from '../../shared/lookups/lookups.presenter';
 
 function DisputesComponent() {
   const [disputes, setDisputes] = useState([]);
-
-  const [filters, setFilters] = useState({
-    search: '',
-  });
+  const [lookups, setLookups] = useState({});
+  const [filters, setFilters] = useState({ searchType: null, searchString: null, pageIndex: 1, pageSize: 10 });
 
   const disputesPresenter = new DisputePresenter();
+  const lookupsPresenter = new LookupsPresenter();
+
+  const load = async (filter) => {
+    await disputesPresenter.load((disputesVm) => {
+      setDisputes(disputesVm);
+    }, filter);
+    await lookupsPresenter.loadUserLookups(async (lookupsVm) => {
+      setLookups(lookupsVm);
+    });
+  };
 
   useEffect(() => {
-    async function load() {
-      await disputesPresenter.load((disputesVm) => {
-        setDisputes(disputesVm);
-      });
-    }
-    load();
-  }, []);
+    load(filters);
+  }, [filters]);
 
-  const handleFilterChange = (filter) => {
+  const handleFilterChange = (search) => {
+    let filter = { ...filters, searchType: search.searchType, searchString: search.searchText };
+    setFilters(filter);
+  };
+
+  const handlePageChange = (page) => {
+    let filter = { ...filters, pageIndex: page };
     setFilters(filter);
   };
 
@@ -35,8 +45,12 @@ function DisputesComponent() {
         </div>
       </header>
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <GeneralFilterComponent handleFilter={handleFilterChange}></GeneralFilterComponent>
-        <DisputeListComponent filter={filters} disputes={disputes}></DisputeListComponent>
+        <GeneralFilterComponent vm={lookups.searchTypes} handleFilter={handleFilterChange}></GeneralFilterComponent>
+        <DisputeListComponent
+          lookups={lookups}
+          disputes={disputes}
+          handleChange={handlePageChange}
+        ></DisputeListComponent>
       </main>
     </div>
   );

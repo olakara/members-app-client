@@ -14,14 +14,8 @@ class DisputeRepository {
   }
 
   getDisputes = async (callback, searchDto) => {
-    const defaultDto = {
-      searchType: null,
-      searchString: null,
-      pageIndex: 1,
-      pageSize: 10,
-    };
     this.disputesProgrammersModel.subscribe(callback);
-    await this.loadData(searchDto || defaultDto);
+    await this.loadData(searchDto);
     this.disputesProgrammersModel.notify();
   };
 

@@ -1,26 +1,30 @@
 import { useState, useEffect } from 'react';
-
-import LookupsPresenter from '../../../shared/lookups/lookups.presenter';
 import AgentRowComponent from './agent-row.component';
+import PagingComponent from '../../common/paging.component';
 
-export default function AgentListComponent({ filter, agents }) {
+export default function AgentListComponent({ lookups, agents, handleChange }) {
   const [locationLabel, setLocationLabel] = useState('');
-  const lookupsPresenter = new LookupsPresenter();
   const [filteredAgents, setAgents] = useState([]);
+  const [pageConfig, setPageConfig] = useState({
+    hasNextPage: false,
+    hasPreviousPage: false,
+    pageIndex: 1,
+    totalCount: 0,
+    totalPages: 1,
+  });
 
   useEffect(() => {
-    async function load() {
-      await lookupsPresenter.loadUserLookups((generatedViewModel) => {
-        const userRole = getDefaultRoleForUser(generatedViewModel.applicableUserRole ?? []);
-        setLocationLabel(getLocationLabel(userRole));
-      });
-    }
-
-    load();
-
-    const temp = agents.filter((e) => e.fullName.toLowerCase().includes(filter.search.toLowerCase()));
-    setAgents(temp);
-  }, [filter, agents]);
+    setAgents(agents.items);
+    setPageConfig({
+      hasNextPage: agents.hasNextPage,
+      hasPreviousPage: agents.hasPreviousPage,
+      pageIndex: agents.pageIndex,
+      totalCount: agents.totalCount,
+      totalPages: agents.totalPages,
+    });
+    const userRole = getDefaultRoleForUser(lookups.applicableUserRole ?? []);
+    setLocationLabel(getLocationLabel(userRole));
+  }, [agents]);
 
   function getDefaultRoleForUser(applicableUserRoles) {
     if (applicableUserRoles && applicableUserRoles.includes('state-admin')) {
@@ -33,6 +37,10 @@ export default function AgentListComponent({ filter, agents }) {
     const roleSplitArray = roleName.split('-');
     return roleSplitArray[0];
   }
+
+  const handlePageChange = (page) => {
+    handleChange(page);
+  };
 
   return (
     <>
@@ -78,6 +86,7 @@ export default function AgentListComponent({ filter, agents }) {
             )}
           </tbody>
         </table>
+        <PagingComponent vm={pageConfig} toPage={handlePageChange}></PagingComponent>
       </div>
     </>
   );

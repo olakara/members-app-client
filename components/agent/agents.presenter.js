@@ -1,11 +1,11 @@
 import agentsRepository from './agents.repository';
 
 export default class AgentsPresenter {
-  load = async (callback) => {
+  load = async (callback, config) => {
     await agentsRepository.getAgents((agentsPm) => {
       if (!agentsPm.data) return;
       const { data } = agentsPm;
-      const agentsVm = data.items.map((agentPm) => {
+      const agents = data.items.map((agentPm) => {
         return {
           cascadeId: agentPm.cascadeId,
           cascadeName: agentPm.cascadeName,
@@ -17,8 +17,8 @@ export default class AgentsPresenter {
           role: this.getRoleTitle(agentPm.role),
         };
       });
-      callback(agentsVm);
-    });
+      callback({ ...data, items: agents });
+    }, config);
   };
 
   createAgent = async (agentDto, successCallback, errorCallback) => {
@@ -55,6 +55,8 @@ export default class AgentsPresenter {
         return 'Agent';
       case 'dispute-committee':
         return 'Dispute Committee';
+      case 'monitoring-officer':
+        return 'Monitoring Officer';
     }
   };
 
