@@ -259,6 +259,7 @@ export default function CreateMemberPage() {
         setMembershipId(success.data.membershipId);
         setErrorMessage('');
         setCurrentStep(5);
+        setIsLoading(false);
       },
       (error) => {
         setProcessing(false);
