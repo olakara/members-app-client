@@ -55,6 +55,8 @@ export default class AgentsPresenter {
         return 'Agent';
       case 'dispute-committee':
         return 'Dispute Committee';
+      case 'monitoring-officer':
+        return 'Monitoring Officer';
     }
   };
 
