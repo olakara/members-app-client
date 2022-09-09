@@ -146,9 +146,7 @@ export default function CreateMemberPage() {
   const dummyBackImagePath = 'images/idback.jpg';
 
   useEffect(() => {
-    console.log('In use effect method');
     async function load() {
-      console.log('In load method...');
       await userPresenter.getCurrentUser((generatedViewModel) => {
         const userRole = generatedViewModel.role;
         if (userRole === 'mandalam-agent') setIsMandalamAgent(true);

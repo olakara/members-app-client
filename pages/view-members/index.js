@@ -7,7 +7,6 @@ function ViewMembersPage() {
       <Head>
         <title>View Members</title>
       </Head>
-
       <HeaderComponent />
       <MembersComponent></MembersComponent>
     </>

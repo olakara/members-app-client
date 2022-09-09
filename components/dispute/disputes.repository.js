@@ -8,7 +8,7 @@ class DisputeRepository {
   disputeProgrammersModel = null;
 
   constructor() {
-    this.disputesProgrammersModel = new Observable([]);
+    this.disputesProgrammersModel = new Observable({});
     this.disputeInfoProgrammersModel = new Observable({});
     this.disputeProgrammersModel = new Observable({});
   }
@@ -20,8 +20,9 @@ class DisputeRepository {
       pageIndex: 1,
       pageSize: 10,
     };
-    const disputesDto = await httpGateway.post(config.BASE_URL + 'disputes/role', searchDto || defaultDto);
-    callback(disputesDto);
+    this.disputesProgrammersModel.subscribe(callback);
+    await this.loadData(searchDto || defaultDto);
+    this.disputesProgrammersModel.notify();
   };
 
   getDispute = async (id, callback) => {
@@ -69,6 +70,11 @@ class DisputeRepository {
   loadDisputeData = async (id) => {
     const dto = await httpGateway.get(config.BASE_URL + 'disputes/' + id);
     this.disputeProgrammersModel.value = dto;
+  };
+
+  loadData = async (searchDto) => {
+    const disputesDto = await httpGateway.post(config.BASE_URL + 'disputes/role', searchDto);
+    this.disputesProgrammersModel.value = disputesDto;
   };
 }
 

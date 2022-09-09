@@ -3,7 +3,9 @@ import agentsRepository from './agents.repository';
 export default class AgentsPresenter {
   load = async (callback) => {
     await agentsRepository.getAgents((agentsPm) => {
-      const agentsVm = agentsPm.map((agentPm) => {
+      if (!agentsPm.data) return;
+      const { data } = agentsPm;
+      const agentsVm = data.items.map((agentPm) => {
         return {
           cascadeId: agentPm.cascadeId,
           cascadeName: agentPm.cascadeName,

@@ -399,7 +399,9 @@ export default function CreateDisputePage() {
                     !formData.toArea ||
                     !formData.toMandalam ||
                     !formData.toPanchayath ||
-                    (formData.toMandalam === formData.mandalamId && formData.toPanchayath === formData.panchayatId)
+                    (formData.toMandalam === formData.mandalamId &&
+                      formData.toPanchayath === formData.panchayatId &&
+                      userLookups.stateName === formData.state)
                   }
                   className="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white disabled:bg-gray-500 bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                 >
