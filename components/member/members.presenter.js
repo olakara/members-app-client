@@ -2,11 +2,11 @@ import membersRepostory from './members.repository';
 import { isEmptyObject } from '../../shared/utilities';
 
 export default class MembersPresenter {
-  load = async (callback) => {
+  load = async (callback, config) => {
     await membersRepostory.getMembers((membersPm) => {
-      const { data } = membersPm;
-      console.log(data);
-      const membersVm = data.items.map((memberPm) => {
+      if (!membersPm.data) return;
+      let { data } = membersPm;
+      const members = data.items.map((memberPm) => {
         return {
           id: memberPm.id,
           membershipId: memberPm.membershipId,
@@ -15,8 +15,9 @@ export default class MembersPresenter {
           mobile: memberPm.mobileNumber,
         };
       });
-      callback(membersVm);
-    });
+
+      callback({ ...data, items: members });
+    }, config);
   };
 
   createMember = async (memberPm, successCallback, errorCallback) => {

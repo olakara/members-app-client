@@ -1,18 +1,31 @@
 import { useState, useEffect } from 'react';
 import MemberRowComponent from './member-row.component';
+import PagingComponent from '../../common/paging.component';
 
-export default function MemberListComponent({ filter, members }) {
+export default function MemberListComponent({ members, handleChange }) {
   const [filteredMembers, setMembers] = useState([]);
+  const [pageConfig, setPageConfig] = useState({
+    hasNextPage: false,
+    hasPreviousPage: false,
+    pageIndex: 1,
+    totalCount: 0,
+    totalPages: 1,
+  });
 
   useEffect(() => {
-    const temp = members.filter(
-      (e) =>
-        e.fullName.toLowerCase().includes(filter.search.toLowerCase()) ||
-        e.mobile.includes(filter.search) ||
-        e.panchayat.toLowerCase().includes(filter.search.toLowerCase())
-    );
-    setMembers(temp);
-  }, [filter, members]);
+    setMembers(members.items);
+    setPageConfig({
+      hasNextPage: members.hasNextPage,
+      hasPreviousPage: members.hasPreviousPage,
+      pageIndex: members.pageIndex,
+      totalCount: members.totalCount,
+      totalPages: members.totalPages,
+    });
+  }, [members]);
+
+  const handlePageChange = (page) => {
+    handleChange(page);
+  };
 
   return (
     <>
@@ -61,6 +74,7 @@ export default function MemberListComponent({ filter, members }) {
             )}
           </tbody>
         </table>
+        <PagingComponent vm={pageConfig} toPage={handlePageChange}></PagingComponent>
       </div>
     </>
   );

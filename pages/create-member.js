@@ -22,6 +22,7 @@ import {
 
 export default function CreateMemberPage() {
   const [isLoading, setIsLoading] = useState(false);
+  const [processing, setProcessing] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [moving, setMoving] = useState('right');
 
@@ -146,9 +147,7 @@ export default function CreateMemberPage() {
   const dummyBackImagePath = 'images/idback.jpg';
 
   useEffect(() => {
-    console.log('In use effect method');
     async function load() {
-      console.log('In load method...');
       await userPresenter.getCurrentUser((generatedViewModel) => {
         const userRole = generatedViewModel.role;
         if (userRole === 'mandalam-agent') setIsMandalamAgent(true);
@@ -214,6 +213,8 @@ export default function CreateMemberPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+    setProcessing(true);
 
     // create DTO
     let memberForm = {
@@ -260,6 +261,8 @@ export default function CreateMemberPage() {
         setCurrentStep(5);
       },
       (error) => {
+        setProcessing(false);
+        setIsLoading(false);
         setErrorMessage(error.data.reason);
       }
     );
@@ -1531,7 +1534,7 @@ export default function CreateMemberPage() {
                     {currentStep === 3 && (
                       <button
                         type="submit"
-                        disabled={!agreeTermsOne || !agreeTermsTwo || !mandalam || !panchayat || !area}
+                        disabled={!agreeTermsOne || !agreeTermsTwo || !mandalam || !panchayat || !area || processing}
                         className="ml-3 py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white disabled:bg-gray-500 bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                       >
                         Register

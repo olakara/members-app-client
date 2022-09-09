@@ -6,7 +6,7 @@ class AgentsRepository {
   programmersModel = null;
 
   constructor() {
-    this.programmersModel = new Observable([]);
+    this.programmersModel = new Observable({});
   }
 
   getAgents = async (callback, searchDto) => {
@@ -72,9 +72,7 @@ class AgentsRepository {
 
   loadData = async (searchDto) => {
     const agentsDto = await httpGateway.post(config.BASE_URL + 'users/role', searchDto);
-    this.programmersModel.value = agentsDto.map((agentDto) => {
-      return agentDto;
-    });
+    this.programmersModel.value = agentsDto;
   };
 }
 

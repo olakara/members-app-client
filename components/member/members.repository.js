@@ -16,14 +16,9 @@ class MembersRepostory {
   }
 
   getMembers = async (callback, searchDto) => {
-    const defaultDto = {
-      searchType: null,
-      searchString: null,
-      pageIndex: 1,
-      pageSize: 10,
-    };
-    const membersDto = await httpGateway.post(config.BASE_URL + 'members/role', searchDto || defaultDto);
-    callback(membersDto);
+    this.programmersModel.subscribe(callback);
+    await this.loadData(searchDto);
+    this.programmersModel.notify();
   };
 
   getOcrData = async (eidPm, successCallback, errorCallback) => {
@@ -134,13 +129,8 @@ class MembersRepostory {
     this.disputeInfoProgrammersModel.notify();
   };
 
-  loadData = async () => {
-    const membersDto = await httpGateway.post(config.BASE_URL + 'members/role', {
-      searchType: null,
-      searchString: null,
-      pageIndex: 1,
-      pageSize: 10,
-    });
+  loadData = async (searchDto) => {
+    const membersDto = await httpGateway.post(config.BASE_URL + 'members/role', searchDto);
     this.programmersModel.value = membersDto;
   };
 

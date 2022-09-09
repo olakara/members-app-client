@@ -6,8 +6,12 @@ import HeaderComponent from '../components/common/header.component';
 import AgentsPresenter from '../components/agent/agents.presenter';
 import FormErrorComponent from '../components/common/form-error.component';
 import { isEmailValid } from '../shared/utilities';
+import Spinner from '../components/common/spinner';
 
 export default function CreateAgentPage() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [processing, setProcessing] = useState(false);
+
   const [userLookups, copyUserLookupsToStateViewModel] = useState(null);
 
   const [fullName, setFullName] = useState('');
@@ -59,7 +63,8 @@ export default function CreateAgentPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setProcessing(true);
+    setIsLoading(true);
     let agentDto = {
       fullName,
       email,
@@ -77,6 +82,8 @@ export default function CreateAgentPage() {
         Router.push('/home');
       },
       (error) => {
+        setProcessing(false);
+        setIsLoading(false);
         setErrorMessage(error.data.reason);
       }
     );
@@ -88,6 +95,7 @@ export default function CreateAgentPage() {
         <title>Create User</title>
       </Head>
       <HeaderComponent />
+      {isLoading && <Spinner isMessageNeeded={true} />}
       <div className="py-10">
         <header className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="-ml-4 -mt-2 flex items-center justify-between flex-wrap sm:flex-nowrap">
@@ -252,7 +260,13 @@ export default function CreateAgentPage() {
                   title="Save"
                   type="submit"
                   disabled={
-                    !fullName || !email || !mobile || !location || (isLocationNeeded && !role) || !isEmailValid(email)
+                    !fullName ||
+                    !email ||
+                    !mobile ||
+                    !location ||
+                    (isLocationNeeded && !role) ||
+                    !isEmailValid(email) ||
+                    processing
                   }
                   className="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white disabled:bg-gray-500 bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                 >

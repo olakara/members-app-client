@@ -6,9 +6,12 @@ import UserPresenter from '../components/user/user.presenter';
 import LookupsPresenter from '../shared/lookups/lookups.presenter';
 import HeaderComponent from '../components/common/header.component';
 import FormErrorComponent from '../components/common/form-error.component';
+import Spinner from '../components/common/spinner';
 import { isEmptyObject } from '../shared/utilities';
 
 export default function CreateDisputePage() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [processing, setProcessing] = useState(false);
   const memberPresenter = new MemberPresenter();
   const userPresenter = new UserPresenter();
   const lookupsPresenter = new LookupsPresenter();
@@ -101,6 +104,8 @@ export default function CreateDisputePage() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setProcessing(true);
+    setIsLoading(true);
     await memberPresenter.createDispute(
       formData,
       (success) => {
@@ -108,6 +113,8 @@ export default function CreateDisputePage() {
         Router.push('/home');
       },
       (error) => {
+        setProcessing(false);
+        setIsLoading(false);
         setErrorMessage(error.data.reason);
       }
     );
@@ -119,6 +126,7 @@ export default function CreateDisputePage() {
         <title>Create Dispute page</title>
       </Head>
       <HeaderComponent />
+      {isLoading && <Spinner isMessageNeeded={true} />}
       <div className="py-10">
         <header className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="-ml-4 -mt-2 flex items-center justify-between flex-wrap sm:flex-nowrap">
@@ -399,7 +407,10 @@ export default function CreateDisputePage() {
                     !formData.toArea ||
                     !formData.toMandalam ||
                     !formData.toPanchayath ||
-                    (formData.toMandalam === formData.mandalamId && formData.toPanchayath === formData.panchayatId)
+                    (formData.toMandalam === formData.mandalamId &&
+                      formData.toPanchayath === formData.panchayatId &&
+                      userLookups.stateName === formData.state) ||
+                    processing
                   }
                   className="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white disabled:bg-gray-500 bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                 >
