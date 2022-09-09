@@ -16,7 +16,6 @@ class MembersRepostory {
   }
 
   getMembers = async (callback, searchDto) => {
-    console.log('searchDto', searchDto);
     this.programmersModel.subscribe(callback);
     await this.loadData(searchDto);
     this.programmersModel.notify();

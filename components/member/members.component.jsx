@@ -37,7 +37,6 @@ function MembersComponent() {
   }, [filters]);
 
   const handleFilterChange = (search) => {
-    console.log('search', search);
     let filter = { ...filters, searchType: search.searchType, searchString: search.searchText };
     setFilters(filter);
   };
