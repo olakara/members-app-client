@@ -2,9 +2,11 @@ import { isEmptyObject } from '../../shared/utilities';
 import disputeRepository from './disputes.repository';
 
 export default class DisputePresenter {
-  load = async (callback) => {
+  load = async (callback, config) => {
     await disputeRepository.getDisputes((disputesPm) => {
-      const disputesVm = disputesPm.map((disputePm) => {
+      if (!disputesPm.data) return;
+      const { data } = disputesPm;
+      const disputes = data.items.map((disputePm) => {
         return {
           id: disputePm.id,
           membershipNo: disputePm.member.membershipId,
@@ -14,8 +16,8 @@ export default class DisputePresenter {
           status: disputePm.status,
         };
       });
-      callback(disputesVm);
-    });
+      callback({ ...data, items: disputes });
+    }, config);
   };
 
   getDispute = async (id, callback) => {

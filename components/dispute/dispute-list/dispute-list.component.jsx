@@ -1,19 +1,32 @@
 import { useState, useEffect } from 'react';
 import DisputeRowComponent from './dispute-row.component';
+import PagingComponent from '../../common/paging.component';
 
 function DisputeListComponent({ filter, disputes }) {
   const [filteredDisputes, setDisputes] = useState([]);
+  const [pageConfig, setPageConfig] = useState({
+    hasNextPage: false,
+    hasPreviousPage: false,
+    pageIndex: 1,
+    totalCount: 0,
+    totalPages: 1,
+  });
 
   useEffect(() => {
-    const temp = filter.search
-      ? disputes.filter(
-          (e) =>
-            e.membershipNo.toLowerCase().includes(filter.search.toLowerCase()) ||
-            e.fullName.toLowerCase().includes(filter.search.toLowerCase())
-        )
-      : disputes;
-    setDisputes(temp);
-  }, [filter, disputes]);
+    setDisputes(disputes.items);
+    setPageConfig({
+      hasNextPage: disputes.hasNextPage,
+      hasPreviousPage: disputes.hasPreviousPage,
+      pageIndex: disputes.pageIndex,
+      totalCount: disputes.totalCount,
+      totalPages: disputes.totalPages,
+    });
+  }, [disputes]);
+
+  const handlePageChange = (page) => {
+    handleChange(page);
+  };
+
   return (
     <>
       <div className="-mx-4 mt-8 overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:-mx-6 md:mx-0 md:rounded-lg">
@@ -54,6 +67,7 @@ function DisputeListComponent({ filter, disputes }) {
             )}
           </tbody>
         </table>
+        <PagingComponent vm={pageConfig} toPage={handlePageChange}></PagingComponent>
       </div>
     </>
   );
