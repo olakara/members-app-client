@@ -5,11 +5,8 @@ import Link from 'next/link';
 import Router from 'next/router';
 import UserPresenter from '../../components/user/user.presenter';
 import HeaderLogoComponent from './header-logo.component';
-
-import { Fragment } from 'react';
-import { Disclosure, Menu, Transition } from '@headlessui/react';
-import { Bars3Icon, BellIcon, XMarkIcon, ArrowRightOnRectangleIcon } from '@heroicons/react/24/outline';
-import { PlusIcon } from '@heroicons/react/20/solid';
+import { Disclosure } from '@headlessui/react';
+import { Bars3Icon, XMarkIcon, ArrowRightOnRectangleIcon } from '@heroicons/react/24/outline';
 
 export default function HeaderComponent() {
   const [user, setCurrentUser] = useState({});
