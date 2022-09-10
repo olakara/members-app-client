@@ -126,7 +126,7 @@ export default function CreateMemberPage() {
   const [isDisableEmiratesIdUploads, setDisableEmiratesIdUploads] = useState(false);
 
   const [isUserInDubaiState, setIsUserInDubaiState] = useState(false);
-  const [isMandalamAgent, setIsMandalamAgent] = useState(false);
+
   const [isDistrictAgent, setIsDistrictAgent] = useState(false);
 
   const [isDispute, setIsDispute] = useState(false);
@@ -150,7 +150,6 @@ export default function CreateMemberPage() {
     async function load() {
       await userPresenter.getCurrentUser((generatedViewModel) => {
         const userRole = generatedViewModel.role;
-        if (userRole === 'mandalam-agent') setIsMandalamAgent(true);
         if (userRole === 'district-agent') setIsDistrictAgent(true);
       });
 
