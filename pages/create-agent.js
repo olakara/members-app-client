@@ -23,7 +23,7 @@ export default function CreateAgentPage() {
   const [errorMessage, setErrorMessage] = useState('');
   const [locationLabel, setLocationLabel] = useState('');
   const [isLocationNeeded, setIsLocationNeeded] = useState(true);
-  const [isDisputeCommittee, setIsDisputeCommittee] = useState(false);
+  const [isDisputeCommittee] = useState(false);
 
   const agentPresenter = new AgentsPresenter();
   const lookupsPresenter = new LookupsPresenter();
