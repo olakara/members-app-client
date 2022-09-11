@@ -33,6 +33,7 @@ export default class LookupsPresenter {
         panchayats: this.getPanchayatsVm(lookupPm.panchayats ?? []),
         stateName: lookupPm.stateName,
         searchTypes: this.getSearchTypes(lookupPm.searchTypes ?? []),
+        disputeSearchTypes: this.getSearchTypes(lookupPm.disputeSearchTypes ?? []),
       };
       callback(lookupsVm);
     });
