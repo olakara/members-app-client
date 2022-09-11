@@ -210,8 +210,8 @@ export default function CreateMemberPage() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     setIsLoading(true);
     setProcessing(true);
 
@@ -253,7 +253,7 @@ export default function CreateMemberPage() {
     await memberPresenter.createMember(
       memberForm,
       (success) => {
-        e.target.reset();
+        event.target.reset();
         setMemberId(success.data.id);
         setMembershipId(success.data.membershipId);
         setErrorMessage('');
