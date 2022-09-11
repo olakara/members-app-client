@@ -21,7 +21,8 @@ export default function Home() {
         if (userRole === 'mandalam-agent' || userRole === 'district-agent') setAbleToCreateMember(true);
         else setAbleToCreateMember(false);
 
-        if (userRole === 'dispute-committee') setAbleToManageDispute(true);
+        if (userRole === 'dispute-committee' || userRole === 'mandalam-agent' || userRole === 'district-agent')
+          setAbleToManageDispute(true);
         else setAbleToManageDispute(false);
 
         if (userRole === 'district-admin') setIsDistrictAdmin(true);

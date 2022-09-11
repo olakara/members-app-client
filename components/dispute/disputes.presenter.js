@@ -9,8 +9,8 @@ export default class DisputePresenter {
       const disputes = data.items.map((disputePm) => {
         return {
           id: disputePm.id,
-          membershipNo: disputePm.member.membershipId,
-          fullName: disputePm.member.fullName,
+          membershipNo: disputePm.membershipId,
+          fullName: disputePm.fullName,
           location: disputePm.disputeType,
           isCanApprove: disputePm.isCanApprove,
           status: disputePm.status,
