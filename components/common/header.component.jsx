@@ -126,41 +126,51 @@ export default function HeaderComponent() {
             <div className="space-y-1 pt-2 pb-3">
               {/* Current: "bg-green-50 border-green-500 text-green-700", Default: "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700" */}
               {/* active backup: block border-l-4 border-green-500 bg-green-50 py-2 pl-3 pr-4 text-base font-medium text-green-700 sm:pl-5 sm:pr-6 */}
-              <Disclosure.Button
-                as="a"
-                href="/view-members"
-                className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700 sm:pl-5 sm:pr-6"
-              >
-                View Members
-              </Disclosure.Button>
-              <Disclosure.Button
-                as="a"
-                href="/create-member"
-                className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700 sm:pl-5 sm:pr-6"
-              >
-                Add Member
-              </Disclosure.Button>
-              <Disclosure.Button
-                as="a"
-                href="/view-agents"
-                className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700 sm:pl-5 sm:pr-6"
-              >
-                View Users
-              </Disclosure.Button>
-              <Disclosure.Button
-                as="a"
-                href="/create-agent"
-                className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700 sm:pl-5 sm:pr-6"
-              >
-                Add User
-              </Disclosure.Button>
-              <Disclosure.Button
-                as="a"
-                href="/create-agent"
-                className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700 sm:pl-5 sm:pr-6"
-              >
-                Disputes
-              </Disclosure.Button>
+              {isAbleToCreateMember && (
+                <>
+                  <Disclosure.Button
+                    as="a"
+                    href="/view-members"
+                    className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700 sm:pl-5 sm:pr-6"
+                  >
+                    View Members
+                  </Disclosure.Button>
+                  <Disclosure.Button
+                    as="a"
+                    href="/create-member"
+                    className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700 sm:pl-5 sm:pr-6"
+                  >
+                    Add Member
+                  </Disclosure.Button>
+                </>
+              )}
+              {!isAbleToCreateMember && !isAbleToManageDispute && (
+                <>
+                  <Disclosure.Button
+                    as="a"
+                    href="/view-agents"
+                    className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700 sm:pl-5 sm:pr-6"
+                  >
+                    View Users
+                  </Disclosure.Button>
+                  <Disclosure.Button
+                    as="a"
+                    href="/create-agent"
+                    className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700 sm:pl-5 sm:pr-6"
+                  >
+                    Add User
+                  </Disclosure.Button>
+                </>
+              )}
+              {isAbleToManageDispute && (
+                <Disclosure.Button
+                  as="a"
+                  href="/create-agent"
+                  className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700 sm:pl-5 sm:pr-6"
+                >
+                  Disputes
+                </Disclosure.Button>
+              )}
             </div>
             <div className="border-t border-gray-200 pt-4 pb-3">
               <div className="mt-3 space-y-1">
