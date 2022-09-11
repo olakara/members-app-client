@@ -13,12 +13,12 @@ function DisputesComponent() {
   const lookupsPresenter = new LookupsPresenter();
 
   const load = async (filter) => {
-    await disputesPresenter.load((disputesVm) => {
-      setDisputes(disputesVm);
-    }, filter);
     await lookupsPresenter.loadUserLookups(async (lookupsVm) => {
       setLookups(lookupsVm);
     });
+    await disputesPresenter.load((disputesVm) => {
+      setDisputes(disputesVm);
+    }, filter);
   };
 
   useEffect(() => {
@@ -45,7 +45,10 @@ function DisputesComponent() {
         </div>
       </header>
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <GeneralFilterComponent vm={lookups.searchTypes} handleFilter={handleFilterChange}></GeneralFilterComponent>
+        <GeneralFilterComponent
+          vm={lookups.disputeSearchTypes}
+          handleFilter={handleFilterChange}
+        ></GeneralFilterComponent>
         <DisputeListComponent
           lookups={lookups}
           disputes={disputes}
