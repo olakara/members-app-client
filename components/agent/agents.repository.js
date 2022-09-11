@@ -2,6 +2,8 @@ import { config } from '../../shared/constants';
 import httpGateway from '../../shared/http-gateway';
 import Observable from '../../shared/observable';
 
+const defaultSearchDto = { searchType: null, searchString: null, pageIndex: 1, pageSize: 10 };
+
 class AgentsRepository {
   programmersModel = null;
 
@@ -36,7 +38,7 @@ class AgentsRepository {
   activateAgent = async (agentId) => {
     let result = await httpGateway.put(config.BASE_URL + 'users/activate/' + agentId);
     if (result.success) {
-      await this.loadData();
+      await this.loadData(defaultSearchDto);
       this.programmersModel.notify();
     }
     return result;
@@ -45,7 +47,7 @@ class AgentsRepository {
   deactivateAgent = async (agentId) => {
     let result = await httpGateway.put(config.BASE_URL + 'users/deactivate/' + agentId);
     if (result.success) {
-      await this.loadData();
+      await this.loadData(defaultSearchDto);
       this.programmersModel.notify();
     }
     return result;
