@@ -61,8 +61,8 @@ export default function CreateAgentPage() {
     }
   }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     setProcessing(true);
     setIsLoading(true);
     let agentDto = {
@@ -78,7 +78,7 @@ export default function CreateAgentPage() {
     await agentPresenter.createAgent(
       agentDto,
       (success) => {
-        e.target.reset();
+        event.target.reset();
         Router.push('/home');
       },
       (error) => {
