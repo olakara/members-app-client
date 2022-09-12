@@ -13,6 +13,7 @@ export default class MembersPresenter {
           fullName: memberPm.fullName,
           panchayat: memberPm.panchayat.name,
           mobile: memberPm.mobileNumber,
+          agent: memberPm.agent,
         };
       });
 

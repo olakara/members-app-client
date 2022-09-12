@@ -29,6 +29,7 @@ export default function MemberListComponent({ members, handleChange }) {
 
   return (
     <>
+      <p className="my-6 text-lg font-bold text-gray-700 sm:text-lg">Result Count: {filteredMembers?.length || 0}</p>
       <div className="-mx-4 mt-8 overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:-mx-6 md:mx-0 md:rounded-lg">
         <table className="min-w-full divide-y divide-gray-300">
           <thead className="bg-gray-50">
@@ -53,6 +54,12 @@ export default function MemberListComponent({ members, handleChange }) {
                 className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell"
               >
                 Mobile
+              </th>
+              <th
+                scope="col"
+                className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell"
+              >
+                Agent
               </th>
               <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 ">
                 Receipt

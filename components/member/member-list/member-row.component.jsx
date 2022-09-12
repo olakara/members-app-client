@@ -24,6 +24,7 @@ export default function MemberRowComponent(props) {
         </td>
         <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 sm:table-cell">{props.vm.panchayat}</td>
         <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 sm:table-cell">{props.vm.mobile}</td>
+        <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 sm:table-cell">{props.vm.agent}</td>
         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
           <div className="grid grid-cols-3 content-start">
             <div>
