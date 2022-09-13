@@ -3,11 +3,12 @@ import GeneralFilterComponent from '../common/general-filter.component';
 import DisputeListComponent from './dispute-list/dispute-list.component';
 import DisputePresenter from './disputes.presenter';
 import LookupsPresenter from '../../shared/lookups/lookups.presenter';
+import { defaultPagingConfig } from '../../shared/paging-config';
 
 function DisputesComponent() {
   const [disputes, setDisputes] = useState([]);
   const [lookups, setLookups] = useState({});
-  const [filters, setFilters] = useState({ searchType: null, searchString: null, pageIndex: 1, pageSize: 10 });
+  const [filters, setFilters] = useState(defaultPagingConfig);
 
   const disputesPresenter = new DisputePresenter();
   const lookupsPresenter = new LookupsPresenter();

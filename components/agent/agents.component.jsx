@@ -5,11 +5,12 @@ import UserPresenter from '../user/user.presenter';
 import AgentsPresenter from '../agent/agents.presenter';
 import LookupsPresenter from '../../shared/lookups/lookups.presenter';
 import ActionButtonComponent from '../common/action-button.component';
+import { defaultPagingConfig } from '../../shared/paging-config';
 
 function AgentsComponent() {
   const [agents, setAgents] = useState([]);
   const [lookups, setLookups] = useState({});
-  const [filters, setFilters] = useState({ searchType: null, searchString: null, pageIndex: 1, pageSize: 10 });
+  const [filters, setFilters] = useState(defaultPagingConfig);
   const [isDistrictAdmin, setIsDistrictAdmin] = useState(false);
   const [canAddAgent, setCanAddAgent] = useState(false);
 
