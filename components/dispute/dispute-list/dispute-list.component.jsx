@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import DisputeRowComponent from './dispute-row.component';
 import PagingComponent from '../../common/paging.component';
 
-function DisputeListComponent({ filter, disputes }) {
+function DisputeListComponent({ disputes, handleChange }) {
   const [filteredDisputes, setDisputes] = useState([]);
   const [pageConfig, setPageConfig] = useState({
     hasNextPage: false,

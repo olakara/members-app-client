@@ -5,11 +5,12 @@ import UserPresenter from '../user/user.presenter';
 import MembersPresenter from './members.presenter';
 import LookupsPresenter from '../../shared/lookups/lookups.presenter';
 import ActionButtonComponent from '../common/action-button.component';
+import { defaultPagingConfig } from '../../shared/paging-config';
 
 function MembersComponent() {
   const [members, setMembers] = useState([]);
   const [lookups, setLookups] = useState({});
-  const [filters, setFilters] = useState({ searchType: null, searchString: null, pageIndex: 1, pageSize: 2 });
+  const [filters, setFilters] = useState(defaultPagingConfig);
 
   const [canAddMember, setCanAddMemeber] = useState();
 

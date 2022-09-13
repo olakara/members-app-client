@@ -23,15 +23,16 @@ export default function PagingComponent({ vm, toPage }) {
             onClick={handlePreviousClick}
             className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
           >
-            Previous
+            <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
+            <span className="sr-only">Previous</span>
           </button>
         ) : (
           <span
             disabled
             className="cursor-not-allowed relative inline-flex items-center rounded-l-md border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20"
           >
-            <span className="sr-only">Previous</span>
             <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
+            <span className="sr-only">Previous</span>
           </span>
         )}
 
@@ -40,14 +41,16 @@ export default function PagingComponent({ vm, toPage }) {
             onClick={handleNextClick}
             className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
           >
-            Next
+            <span className="sr-only">Next</span>
+            <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
           </button>
         ) : (
           <span
             disabled
             className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
           >
-            Next
+            <span className="sr-only">Next</span>
+            <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
           </span>
         )}
       </div>

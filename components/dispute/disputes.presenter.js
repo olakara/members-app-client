@@ -11,7 +11,7 @@ export default class DisputePresenter {
           id: disputePm.id,
           membershipNo: disputePm.membershipId,
           fullName: disputePm.fullName,
-          location: disputePm.disputeType,
+          location: disputePm.location,
           isCanApprove: disputePm.isCanApprove,
           status: disputePm.status,
         };
