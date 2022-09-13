@@ -9,7 +9,7 @@ import ActionButtonComponent from '../common/action-button.component';
 function MembersComponent() {
   const [members, setMembers] = useState([]);
   const [lookups, setLookups] = useState({});
-  const [filters, setFilters] = useState({ searchType: null, searchString: null, pageIndex: 1, pageSize: 2 });
+  const [filters, setFilters] = useState({ searchType: null, searchString: null, pageIndex: 1, pageSize: 10 });
 
   const [canAddMember, setCanAddMemeber] = useState();
 
