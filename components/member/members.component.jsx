@@ -9,7 +9,7 @@ import ActionButtonComponent from '../common/action-button.component';
 function MembersComponent() {
   const [members, setMembers] = useState([]);
   const [lookups, setLookups] = useState({});
-  const [filters, setFilters] = useState({ searchType: null, searchString: null, pageIndex: 1, pageSize: 10 });
+  const [filters, setFilters] = useState({ searchType: null, searchString: null, pageIndex: 1, pageSize: 2 });
 
   const [canAddMember, setCanAddMemeber] = useState();
 
@@ -34,7 +34,7 @@ function MembersComponent() {
   }, [filters]);
 
   const handleFilterChange = (search) => {
-    let filter = { ...filters, searchType: search.searchType, searchString: search.searchText };
+    let filter = { ...filters, searchType: search.searchType, searchString: search.searchText, pageIndex: 1 };
     setFilters(filter);
   };
 

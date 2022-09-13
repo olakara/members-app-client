@@ -26,7 +26,7 @@ function DisputesComponent() {
   }, [filters]);
 
   const handleFilterChange = (search) => {
-    let filter = { ...filters, searchType: search.searchType, searchString: search.searchText };
+    let filter = { ...filters, searchType: search.searchType, searchString: search.searchText, pageIndex: 1 };
     setFilters(filter);
   };
 
