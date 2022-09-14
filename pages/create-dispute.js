@@ -371,7 +371,7 @@ export default function CreateDisputePage() {
                 </div>
                 <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                   <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                    Remarks
+                    Remarks <span className="text-red-600">*</span>
                   </label>
                   <div className="mt-1 sm:mt-0 sm:col-span-2">
                     <textarea
@@ -404,6 +404,7 @@ export default function CreateDisputePage() {
                   title="Save"
                   type="submit"
                   disabled={
+                    !formData.remarks ||
                     !formData.toArea ||
                     !formData.toMandalam ||
                     !formData.toPanchayath ||
