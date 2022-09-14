@@ -265,12 +265,11 @@ function ViewDisputePage() {
                     Remarks
                   </label>
                   <div className="mt-1 sm:mt-0 sm:col-span-2">
-                    <input
-                      type="text"
+                    <textarea
                       disabled
                       value={dispute.reason}
-                      className="max-w-lg block w-full shadow-sm disabled:bg-gray-100 focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-                    />
+                      className="max-w-lg block w-full shadow-sm focus:ring-green-500 focus:border-green-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                    ></textarea>
                   </div>
                 </div>
                 <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
