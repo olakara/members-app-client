@@ -14,6 +14,7 @@ export default function HeaderComponent() {
 
   const [isAbleToCreateMember, setAbleToCreateMember] = useState(false);
   const [isAbleToManageDispute, setAbleToManageDispute] = useState(false);
+  const [isDistrictAdmin, setIsDistrictAdmin] = useState(false);
 
   let userPresenter = new UserPresenter();
 
@@ -28,6 +29,9 @@ export default function HeaderComponent() {
         if (userRole === 'dispute-committee' || userRole === 'mandalam-agent' || userRole === 'district-agent')
           setAbleToManageDispute(true);
         else setAbleToManageDispute(false);
+
+        if (userRole === 'district-admin') setIsDistrictAdmin(true);
+        else setIsDistrictAdmin(false);
       });
     }
 
@@ -85,13 +89,15 @@ export default function HeaderComponent() {
                         href="/view-agents"
                         className="inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
                       >
-                        Users
+                        {isDistrictAdmin && 'View Agents'}
+                        {!isDistrictAdmin && 'View Users'}
                       </a>
                       <a
                         href="/create-agent"
                         className="inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
                       >
-                        Add User
+                        {isDistrictAdmin && 'Add Agent'}
+                        {!isDistrictAdmin && 'Add User'}
                       </a>
                     </>
                   )}
@@ -151,14 +157,16 @@ export default function HeaderComponent() {
                     href="/view-agents"
                     className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700 sm:pl-5 sm:pr-6"
                   >
-                    View Users
+                    {isDistrictAdmin && 'View Agents'}
+                    {!isDistrictAdmin && 'View Users'}
                   </Disclosure.Button>
                   <Disclosure.Button
                     as="a"
                     href="/create-agent"
                     className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700 sm:pl-5 sm:pr-6"
                   >
-                    Add User
+                    {isDistrictAdmin && 'Add Agent'}
+                    {!isDistrictAdmin && 'Add User'}
                   </Disclosure.Button>
                 </>
               )}
