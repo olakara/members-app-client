@@ -21,7 +21,12 @@ export default function Home() {
         if (userRole === 'mandalam-agent' || userRole === 'district-agent') setAbleToCreateMember(true);
         else setAbleToCreateMember(false);
 
-        if (userRole === 'dispute-committee' || userRole === 'mandalam-agent' || userRole === 'district-agent')
+        if (
+          userRole === 'dispute-committee' ||
+          userRole === 'mandalam-agent' ||
+          userRole === 'district-agent' ||
+          userRole === 'central-dispute-admin'
+        )
           setAbleToManageDispute(true);
         else setAbleToManageDispute(false);
 
@@ -73,6 +78,8 @@ export default function Home() {
           {isAbleToManageDispute && (
             <ActionButtonComponent action="/view-disputes">View Disputes</ActionButtonComponent>
           )}
+
+          <ActionButtonComponent action="verify-member">Verify Member</ActionButtonComponent>
         </main>
       </div>
     </>
