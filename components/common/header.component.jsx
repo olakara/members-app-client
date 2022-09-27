@@ -26,7 +26,12 @@ export default function HeaderComponent() {
         if (userRole === 'mandalam-agent' || userRole === 'district-agent') setAbleToCreateMember(true);
         else setAbleToCreateMember(false);
 
-        if (userRole === 'dispute-committee' || userRole === 'mandalam-agent' || userRole === 'district-agent')
+        if (
+          userRole === 'dispute-committee' ||
+          userRole === 'mandalam-agent' ||
+          userRole === 'district-agent' ||
+          userRole === 'central-dispute-admin'
+        )
           setAbleToManageDispute(true);
         else setAbleToManageDispute(false);
 
