@@ -15,6 +15,7 @@ export default function HeaderComponent() {
   const [isAbleToCreateMember, setAbleToCreateMember] = useState(false);
   const [isAbleToManageDispute, setAbleToManageDispute] = useState(false);
   const [isDistrictAdmin, setIsDistrictAdmin] = useState(false);
+  const [canVerifyMembers, setCanVerifyMembers] = useState(false);
 
   let userPresenter = new UserPresenter();
 
@@ -37,6 +38,9 @@ export default function HeaderComponent() {
 
         if (userRole === 'district-admin') setIsDistrictAdmin(true);
         else setIsDistrictAdmin(false);
+
+        if (userRole === 'verification-officer') setCanVerifyMembers(true);
+        else setCanVerifyMembers(false);
       });
     }
 
@@ -114,6 +118,15 @@ export default function HeaderComponent() {
                       Disputes
                     </a>
                   )}
+
+                  {canVerifyMembers && (
+                    <a
+                      href="/verify-member"
+                      className="inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                    >
+                      Verify Member
+                    </a>
+                  )}
                 </div>
               </div>
               <div className="flex items-center">
@@ -182,6 +195,15 @@ export default function HeaderComponent() {
                   className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700 sm:pl-5 sm:pr-6"
                 >
                   Disputes
+                </Disclosure.Button>
+              )}
+              {canVerifyMembers && (
+                <Disclosure.Button
+                  as="a"
+                  href="/verify-member"
+                  className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700 sm:pl-5 sm:pr-6"
+                >
+                  Verify Member
                 </Disclosure.Button>
               )}
             </div>

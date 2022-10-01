@@ -13,6 +13,7 @@ export default function Home() {
   const [isDistrictAdmin, setIsDistrictAdmin] = useState(false);
   const [canAddMember, setCanAddMemeber] = useState(false);
   const [canAddAgent, setCanAddAgent] = useState(false);
+  const [canVerifyMembers, setCanVerifyMembers] = useState(false);
 
   useEffect(() => {
     async function load() {
@@ -32,6 +33,9 @@ export default function Home() {
 
         if (userRole === 'district-admin') setIsDistrictAdmin(true);
         else setIsDistrictAdmin(false);
+
+        if (userRole === 'verification-officer') setCanVerifyMembers(true);
+        else setCanVerifyMembers(false);
       });
       userPresenter.canUserAddMember((result) => {
         setCanAddMemeber(result);
@@ -79,7 +83,7 @@ export default function Home() {
             <ActionButtonComponent action="/view-disputes">View Disputes</ActionButtonComponent>
           )}
 
-          <ActionButtonComponent action="verify-member">Verify Member</ActionButtonComponent>
+          {canVerifyMembers && <ActionButtonComponent action="/verify-member">Verify Member</ActionButtonComponent>}
         </main>
       </div>
     </>
