@@ -1,3 +1,4 @@
+import { config } from '../../shared/constants';
 import { useEffect, useState } from 'react';
 import ReactImageZoom from 'react-image-zoom';
 import { isEmptyObject } from '../../shared/utilities';
@@ -13,13 +14,13 @@ function VerifyImageComponent({ props }) {
   });
 
   useEffect(() => {
-    console.log(props);
+    console.log('props', props);
     if (isEmptyObject(props)) return;
     setProps({
       width: 400,
       height: 250,
       zoomWidth: 500,
-      img: props.image,
+      img: config.BASE_URL + 'MembershipVerification/eidfrontpagedownload/' + props,
       zoomPosition: 'original',
       class: 'rounded-full',
     });

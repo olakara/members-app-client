@@ -6,23 +6,14 @@ import MembershipInfoComponent from './membership-info.component';
 import YesOrNoComponent from '../../common/yes-or-no.component';
 
 function VerificationFormComponent(props) {
-  const { submit = () => {} } = props;
+  const { submit = () => {}, member } = props;
   const [form, setForm] = useState({});
 
   const [image, setImage] = useState({});
-  const [member, setMember] = useState();
 
   useEffect(() => {
     setImage({
       image: 'https://picsum.photos/seed/000/1920/1080',
-    });
-
-    setMember({
-      fullName: 'Abdel Raoof',
-      emiratesId: '786-1983-68039394-0',
-      expiry: '10-09-2024',
-      dob: '10-09-2024',
-      state: 'Abu Dhabi',
     });
   }, []);
 
@@ -43,10 +34,11 @@ function VerificationFormComponent(props) {
 
   return (
     <>
+      {JSON.stringify(member)}
       <div className="flex flex-row">
         <div className="basis-1/2 py-2">
           <h3 className="text-lg font-medium leading-6 text-gray-900">Emirates ID Front</h3>
-          <VerifyImageComponent props={image} />
+          <VerifyImageComponent props={member?.eidFrontPage} />
         </div>
         <div className="basis-1/2 py-2 overflow-hidden shadow-md sm:rounded-lg">
           <MembershipInfoComponent member={member}></MembershipInfoComponent>
@@ -55,7 +47,7 @@ function VerificationFormComponent(props) {
       <div className="flex flex-row">
         <div className="basis-1/2 py-2">
           <h3 className="text-lg font-medium leading-6 text-gray-900">Emirates ID Back</h3>
-          <VerifyImageComponent props={image} />
+          <VerifyImageComponent props={member?.eidLastPage} />
         </div>
         <div className="basis-1/2 py-2 overflow-hidden shadow-md sm:rounded-lg">
           <div className="px-4 py-2 sm:px-6">

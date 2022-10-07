@@ -1,6 +1,26 @@
+import { useState, useEffect } from 'react';
+import VerifyPresenter from './verify.presenter';
 import VerificationFormComponent from './verification-form/verification-form.component';
 
 function VerficationHomeComponent() {
+  const [verifyId, setVerifyId] = useState(null);
+  const [member, setMember] = useState(null);
+
+  const verifyPresenter = new VerifyPresenter();
+
+  const load = async () => {
+    await verifyPresenter.initVerification(async (id) => {
+      setVerifyId(id);
+      await verifyPresenter.getMembershipVerfication(id, (membershipDetails) => {
+        setMember(membershipDetails);
+      });
+    });
+  };
+
+  useEffect(() => {
+    load();
+  }, []);
+
   return (
     <>
       <div className="py-10">
@@ -12,7 +32,7 @@ function VerficationHomeComponent() {
           </div>
         </header>
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <VerificationFormComponent></VerificationFormComponent>
+          <VerificationFormComponent member={member}></VerificationFormComponent>
         </main>
       </div>
     </>
