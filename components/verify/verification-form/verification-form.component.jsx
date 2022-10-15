@@ -11,6 +11,22 @@ function VerificationFormComponent(props) {
 
   const [image, setImage] = useState({});
 
+  const initalValue = {
+    id: member?.id,
+    ediFrontAndBackSideValid: false,
+    eidNumberValid: false,
+    eidFullNameValid: false,
+    eidNationalityValid: false,
+    eidDOBValid: false,
+    eidDOEValid: false,
+    passportFirstPageValid: false,
+    passportLastPageValid: false,
+    cardType: 0,
+    gender: 0,
+    eidIssuePlaceValid: false,
+    verifiedUserId: null,
+  };
+
   useEffect(() => {
     setImage({
       image: 'https://picsum.photos/seed/000/1920/1080',
@@ -60,7 +76,7 @@ function VerificationFormComponent(props) {
                   <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
                     <dt className="text-sm font-medium text-gray-500">Valid front and back side</dt>
                     <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                      <YesOrNoComponent></YesOrNoComponent>
+                      <YesOrNoComponent name="ediFrontAndBackSideValid"></YesOrNoComponent>
                     </dd>
                   </div>
                   <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
@@ -119,6 +135,7 @@ function VerificationFormComponent(props) {
           </div>
         </div>
       </div>
+      {JSON.stringify(initalValue)}
     </>
   );
 }

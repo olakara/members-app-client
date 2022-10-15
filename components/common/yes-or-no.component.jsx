@@ -1,49 +1,45 @@
 import { FormContext } from '../../shared/form-context';
-import { useContext } from 'react';
+import FormCheckbox from './form-checkbox.component';
+import { useContext, useState } from 'react';
 
 function YesOrNoComponent(props) {
   const { name, value } = props;
+
+  const [yesChecked, setYesChecked] = useState(false);
+  const [noChecked, setNoChecked] = useState(false);
 
   const formContext = useContext(FormContext);
   const { handleFormChange } = formContext;
 
   const handleChange = (event) => {
-    const { checked } = event.target;
-
-    event.target.value = checked ? value : '';
-
+    const { value } = event.target;
+    //event.target.value = checked ? value : '';
+    console.log(value);
     handleFormChange(event);
+  };
+
+  const handleYes = (event) => {
+    if (event.target.value) {
+      setYesChecked(true);
+      setNoChecked(false);
+    } else setYesChecked(false);
+  };
+
+  const handleNo = (event) => {
+    if (event.target.value) {
+      setNoChecked(true);
+      setYesChecked(false);
+    } else setNoChecked(false);
   };
 
   return (
     <div className="relative flex items-start">
       <div className="flex h-5 items-center">
-        <input
-          aria-describedby={name}
-          name={name}
-          type="checkbox"
-          className="h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-green-500"
-          onChange={handleChange}
-        />
+        <FormCheckbox label="Yes" value="Yes" onChange={handleYes} checked={yesChecked}></FormCheckbox>
       </div>
-      <div className="ml-3 text-sm">
-        <label htmlFor="comments" className="font-medium text-gray-700">
-          Yes
-        </label>
-      </div>
+
       <div className="flex h-5 pl-5">
-        <input
-          aria-describedby={name}
-          name={name}
-          type="checkbox"
-          className="h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-green-500"
-          onChange={handleChange}
-        />
-      </div>
-      <div className="ml-3 text-sm">
-        <label htmlFor="comments" className="font-medium text-gray-700">
-          No
-        </label>
+        <FormCheckbox label="No" value="No" onChange={handleNo} checked={noChecked}></FormCheckbox>
       </div>
     </div>
   );
