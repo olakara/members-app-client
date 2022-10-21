@@ -1,3 +1,4 @@
+import { ArrowDownTrayIcon } from '@heroicons/react/20/solid';
 function MembershipInfoComponent({ member }) {
   return (
     <>
@@ -26,6 +27,13 @@ function MembershipInfoComponent({ member }) {
           <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
             <dt className="text-sm font-medium text-gray-500">State</dt>
             <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">{member?.state}</dd>
+          </div>
+          <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
+            <dt className="text-sm font-medium text-gray-500">Passport</dt>
+            <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+              <span>Front page</span>
+              <span>Back page</span>
+            </dd>
           </div>
         </dl>
       </div>

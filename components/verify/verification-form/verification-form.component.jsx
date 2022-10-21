@@ -4,6 +4,7 @@ import { FormContext } from '../../../shared/form-context';
 import VerifyImageComponent from '../../common/verify-image.component';
 import MembershipInfoComponent from './membership-info.component';
 import YesOrNoComponent from '../../common/yes-or-no.component';
+import FormCheckbox from '../../common/form-checkbox.component';
 
 function VerificationFormComponent(props) {
   const { submit = () => {}, member } = props;
@@ -28,6 +29,7 @@ function VerificationFormComponent(props) {
   };
 
   useEffect(() => {
+    setForm(initalValue);
     setImage({
       image: 'https://picsum.photos/seed/000/1920/1080',
     });
@@ -36,10 +38,13 @@ function VerificationFormComponent(props) {
   const handleFormChange = (event) => {
     const { name, value } = event.target;
 
+    console.log('Name', name, 'Value', value);
+
     const updatedForm = {
       ...form,
       [name]: value,
     };
+
     setForm(updatedForm);
   };
 
@@ -54,7 +59,7 @@ function VerificationFormComponent(props) {
       <div className="flex flex-row">
         <div className="basis-1/2 py-2">
           <h3 className="text-lg font-medium leading-6 text-gray-900">Emirates ID Front</h3>
-          <VerifyImageComponent props={member?.eidFrontPage} />
+          <VerifyImageComponent props={member?.id} />
         </div>
         <div className="basis-1/2 py-2 overflow-hidden shadow-md sm:rounded-lg">
           <MembershipInfoComponent member={member}></MembershipInfoComponent>
@@ -63,7 +68,7 @@ function VerificationFormComponent(props) {
       <div className="flex flex-row">
         <div className="basis-1/2 py-2">
           <h3 className="text-lg font-medium leading-6 text-gray-900">Emirates ID Back</h3>
-          <VerifyImageComponent props={member?.eidLastPage} />
+          <VerifyImageComponent props={member?.id} />
         </div>
         <div className="basis-1/2 py-2 overflow-hidden shadow-md sm:rounded-lg">
           <div className="px-4 py-2 sm:px-6">
@@ -82,43 +87,56 @@ function VerificationFormComponent(props) {
                   <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
                     <dt className="text-sm font-medium text-gray-500">Valid Emirates ID number</dt>
                     <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                      <YesOrNoComponent></YesOrNoComponent>
+                      <YesOrNoComponent name="eidNumberValid"></YesOrNoComponent>
                     </dd>
                   </div>
                   <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
                     <dt className="text-sm font-medium text-gray-500">Valid Full name</dt>
                     <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                      <YesOrNoComponent></YesOrNoComponent>
+                      <YesOrNoComponent name="eidFullNameValid"></YesOrNoComponent>
                     </dd>
                   </div>
                   <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
                     <dt className="text-sm font-medium text-gray-500">Valid Nationality</dt>
                     <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                      <YesOrNoComponent></YesOrNoComponent>
+                      <YesOrNoComponent name="eidNationalityValid"></YesOrNoComponent>
                     </dd>
                   </div>
                   <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
                     <dt className="text-sm font-medium text-gray-500">Valid date of exipry</dt>
                     <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                      <YesOrNoComponent></YesOrNoComponent>
+                      <YesOrNoComponent name="eidDOEValid"></YesOrNoComponent>
                     </dd>
                   </div>
                   <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
                     <dt className="text-sm font-medium text-gray-500">Valid date of birth</dt>
                     <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                      <YesOrNoComponent></YesOrNoComponent>
+                      <YesOrNoComponent name="eidDOBValid"></YesOrNoComponent>
                     </dd>
                   </div>
                   <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
                     <dt className="text-sm font-medium text-gray-500">Valid issued place</dt>
                     <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                      <YesOrNoComponent></YesOrNoComponent>
+                      <YesOrNoComponent name="eidIssuePlaceValid"></YesOrNoComponent>
                     </dd>
                   </div>
                   <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
                     <dt className="text-sm font-medium text-gray-500">Gender</dt>
                     <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                      <YesOrNoComponent></YesOrNoComponent>
+                      <div className="relative flex items-start">
+                        <div className="flex h-5 items-center">
+                          <FormCheckbox label="Male" name="gender" value="0" onChange={handleFormChange}></FormCheckbox>
+                        </div>
+
+                        <div className="flex h-5 pl-5">
+                          <FormCheckbox
+                            label="Female"
+                            name="gender"
+                            value="1"
+                            onChange={handleFormChange}
+                          ></FormCheckbox>
+                        </div>
+                      </div>
                     </dd>
                   </div>
                 </dl>
@@ -135,7 +153,7 @@ function VerificationFormComponent(props) {
           </div>
         </div>
       </div>
-      {JSON.stringify(initalValue)}
+      {JSON.stringify(form)}
     </>
   );
 }

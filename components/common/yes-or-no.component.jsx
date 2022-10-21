@@ -12,9 +12,7 @@ function YesOrNoComponent(props) {
   const { handleFormChange } = formContext;
 
   const handleChange = (event) => {
-    const { value } = event.target;
-    //event.target.value = checked ? value : '';
-    console.log(value);
+    event.target.name = name;
     handleFormChange(event);
   };
 
@@ -23,6 +21,8 @@ function YesOrNoComponent(props) {
       setYesChecked(true);
       setNoChecked(false);
     } else setYesChecked(false);
+
+    handleChange(event);
   };
 
   const handleNo = (event) => {
@@ -30,6 +30,8 @@ function YesOrNoComponent(props) {
       setNoChecked(true);
       setYesChecked(false);
     } else setNoChecked(false);
+
+    handleChange(event);
   };
 
   return (

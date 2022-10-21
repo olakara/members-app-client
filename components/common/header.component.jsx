@@ -15,6 +15,7 @@ export default function HeaderComponent() {
   const [isAbleToCreateMember, setAbleToCreateMember] = useState(false);
   const [isAbleToManageDispute, setAbleToManageDispute] = useState(false);
   const [isDistrictAdmin, setIsDistrictAdmin] = useState(false);
+  const [isAbleToViewMembers, setAbleToViewMembers] = useState(false);
   const [canVerifyMembers, setCanVerifyMembers] = useState(false);
 
   let userPresenter = new UserPresenter();
@@ -26,6 +27,8 @@ export default function HeaderComponent() {
         const userRole = user.role;
         if (userRole === 'mandalam-agent' || userRole === 'district-agent') setAbleToCreateMember(true);
         else setAbleToCreateMember(false);
+
+        if (userRole === 'member-viewer') setAbleToViewMembers(true);
 
         if (
           userRole === 'dispute-committee' ||
@@ -76,23 +79,24 @@ export default function HeaderComponent() {
                 <div className="hidden md:ml-6 md:flex md:space-x-8">
                   {/* Current: "border-green-500 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" */}
                   {/* active backup: "inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium border-green-500 text-gray-900" */}
-                  {isAbleToCreateMember && (
-                    <>
-                      <a
-                        href="/view-members"
-                        className="inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
-                      >
-                        View Members
-                      </a>
-                      <a
-                        href="/create-member"
-                        className="inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
-                      >
-                        Add Member
-                      </a>
-                    </>
+                  {(isAbleToViewMembers || isAbleToCreateMember) && (
+                    <a
+                      href="/view-members"
+                      className="inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                    >
+                      View Members
+                    </a>
                   )}
-                  {!isAbleToCreateMember && !isAbleToManageDispute && (
+
+                  {isAbleToCreateMember && (
+                    <a
+                      href="/create-member"
+                      className="inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                    >
+                      Add Member
+                    </a>
+                  )}
+                  {!isAbleToCreateMember && !isAbleToManageDispute && !isAbleToViewMembers && (
                     <>
                       <a
                         href="/view-agents"

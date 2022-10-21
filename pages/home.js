@@ -11,6 +11,7 @@ export default function Home() {
   const [isAbleToCreateMember, setAbleToCreateMember] = useState(false);
   const [isAbleToManageDispute, setAbleToManageDispute] = useState(false);
   const [isDistrictAdmin, setIsDistrictAdmin] = useState(false);
+  const [isAbleToViewMembers, setAbleToViewMembers] = useState(false);
   const [canAddMember, setCanAddMemeber] = useState(false);
   const [canAddAgent, setCanAddAgent] = useState(false);
   const [canVerifyMembers, setCanVerifyMembers] = useState(false);
@@ -21,6 +22,8 @@ export default function Home() {
         const userRole = generatedViewModel.role;
         if (userRole === 'mandalam-agent' || userRole === 'district-agent') setAbleToCreateMember(true);
         else setAbleToCreateMember(false);
+
+        if (userRole === 'member-viewer') setAbleToViewMembers(true);
 
         if (
           userRole === 'dispute-committee' ||
@@ -59,20 +62,22 @@ export default function Home() {
 
       <div className="py-10">
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {isAbleToCreateMember && <ActionButtonComponent action="/view-members">View Members</ActionButtonComponent>}
+          {(isAbleToCreateMember || isAbleToViewMembers) && (
+            <ActionButtonComponent action="/view-members">View Members</ActionButtonComponent>
+          )}
 
           {isAbleToCreateMember && canAddMember && (
             <ActionButtonComponent action="/create-member">Add Member</ActionButtonComponent>
           )}
 
-          {!isAbleToCreateMember && !isAbleToManageDispute && (
+          {!isAbleToCreateMember && !isAbleToManageDispute && !isAbleToViewMembers && (
             <ActionButtonComponent action="/view-agents">
               {isDistrictAdmin && 'View Agents'}
               {!isDistrictAdmin && 'View Users'}
             </ActionButtonComponent>
           )}
 
-          {!isAbleToCreateMember && !isAbleToManageDispute && canAddAgent && (
+          {!isAbleToCreateMember && !isAbleToManageDispute && canAddAgent && !isAbleToViewMembers && (
             <ActionButtonComponent action="/create-agent">
               {isDistrictAdmin && 'Add Agent'}
               {!isDistrictAdmin && 'Add User'}
