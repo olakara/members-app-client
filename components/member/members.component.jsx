@@ -18,6 +18,11 @@ function MembersComponent() {
   const userPresenter = new UserPresenter();
   const lookupsPresenter = new LookupsPresenter();
 
+  const [actions, setActions] = useState({
+    print: false,
+    view: false,
+  });
+
   const load = async (filter) => {
     await membersPresenter.load((membersVm) => {
       setMembers(membersVm);
@@ -27,6 +32,10 @@ function MembersComponent() {
     });
     userPresenter.canUserAddMember((result) => {
       setCanAddMemeber(result);
+      setActions({
+        print: result,
+        view: !result,
+      });
     });
   };
 
@@ -59,7 +68,7 @@ function MembersComponent() {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <GeneralFilterComponent vm={lookups.searchTypes} handleFilter={handleFilterChange}></GeneralFilterComponent>
-        <MemberListComponent members={members} handleChange={handlePageChange}></MemberListComponent>
+        <MemberListComponent members={members} actions={actions} handleChange={handlePageChange}></MemberListComponent>
       </main>
     </div>
   );

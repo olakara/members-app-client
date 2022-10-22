@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import MemberRowComponent from './member-row.component';
 import PagingComponent from '../../common/paging.component';
 
-export default function MemberListComponent({ members, handleChange }) {
+export default function MemberListComponent({ members, actions, handleChange }) {
   const [filteredMembers, setMembers] = useState([]);
   const [pageConfig, setPageConfig] = useState({
     hasNextPage: false,
@@ -62,14 +62,14 @@ export default function MemberListComponent({ members, handleChange }) {
                 Agent
               </th>
               <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 ">
-                Receipt
+                Actions
               </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 bg-white">
             {filteredMembers &&
               filteredMembers.map((memberVm, index) => {
-                return <MemberRowComponent key={index} vm={memberVm} index={index} />;
+                return <MemberRowComponent key={index} vm={memberVm} actions={actions} index={index} />;
               })}
 
             {filteredMembers && filteredMembers.length === 0 && (
