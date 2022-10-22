@@ -3,7 +3,7 @@ import FormCheckbox from './form-checkbox.component';
 import { useContext, useState } from 'react';
 
 function YesOrNoComponent(props) {
-  const { name, value } = props;
+  const { name, value, disabled } = props;
 
   const [yesChecked, setYesChecked] = useState(false);
   const [noChecked, setNoChecked] = useState(false);
@@ -37,11 +37,17 @@ function YesOrNoComponent(props) {
   return (
     <div className="relative flex items-start">
       <div className="flex h-5 items-center">
-        <FormCheckbox label="Yes" value="Yes" onChange={handleYes} checked={yesChecked}></FormCheckbox>
+        <FormCheckbox
+          label="Yes"
+          value="Yes"
+          onChange={handleYes}
+          checked={yesChecked}
+          disabled={disabled}
+        ></FormCheckbox>
       </div>
 
       <div className="flex h-5 pl-5">
-        <FormCheckbox label="No" value="No" onChange={handleNo} checked={noChecked}></FormCheckbox>
+        <FormCheckbox label="No" value="No" onChange={handleNo} checked={noChecked} disabled={disabled}></FormCheckbox>
       </div>
     </div>
   );

@@ -31,8 +31,18 @@ function MembershipInfoComponent({ member }) {
           <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
             <dt className="text-sm font-medium text-gray-500">Passport</dt>
             <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-              <span>Front page</span>
-              <span>Back page</span>
+              <a
+                // href={downloadUrl + member?.passportFrontPage}
+                className="mx-3 underline text-green-600 hover:text-green-800 visited:text-purple-600"
+              >
+                Front Page
+              </a>
+              <a
+                // href={downloadUrl + member?.passportLastPage}
+                className="mx-3 underline text-green-600 hover:text-green-800 visited:text-purple-600"
+              >
+                Back Page
+              </a>
             </dd>
           </div>
         </dl>
