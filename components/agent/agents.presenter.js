@@ -57,6 +57,12 @@ export default class AgentsPresenter {
         return 'Dispute Committee';
       case 'monitoring-officer':
         return 'Monitoring Officer';
+      case 'central-dispute-admin':
+        return 'Central Dispute Admin';
+      case 'verification-officer':
+        return 'Verification Officer';
+      case 'member-viewer':
+        return 'Members Viewer';
     }
   };
 
