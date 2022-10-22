@@ -30,7 +30,7 @@ export default function MemberRowComponent(props) {
           <div className="grid grid-cols-3 content-start">
             <div>
               {props.actions.view && (
-                <Link className="mr-2" href={`/view-dispute/${props.vm.id}`}>
+                <Link className="mr-2" href={`/view-member/${props.vm.id}`}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"

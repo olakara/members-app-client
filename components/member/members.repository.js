@@ -138,6 +138,12 @@ class MembersRepostory {
     const dto = await httpGateway.get(config.BASE_URL + 'members/isdispute?emiratesIdNumber=' + eid);
     this.disputeInfoProgrammersModel.value = dto;
   };
+
+  getMemberViewerDetails = async (id, callback) => {
+    const dto = await httpGateway.get(config.BASE_URL + 'memberview/' + id);
+    if (!dto) return;
+    callback(dto);
+  };
 }
 
 const membersRepostory = new MembersRepostory();

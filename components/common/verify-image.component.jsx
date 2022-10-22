@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import ReactImageZoom from 'react-image-zoom';
 import { isEmptyObject } from '../../shared/utilities';
 
-function VerifyImageComponent({ props }) {
+function VerifyImageComponent({ id, type }) {
   const [imageProps, setProps] = useState({
     width: 400,
     height: 250,
@@ -14,17 +14,16 @@ function VerifyImageComponent({ props }) {
   });
 
   useEffect(() => {
-    console.log('props', props);
-    if (isEmptyObject(props)) return;
+    const url = type === 'front' ? 'eidfrontpagedownload' : 'eidlastpagedownload';
     setProps({
       width: 400,
       height: 250,
       zoomWidth: 500,
-      img: config.BASE_URL + 'MembershipVerification/eidfrontpagedownload/' + props,
+      img: config.BASE_URL + 'MembershipVerification/' + url + '/' + id,
       zoomPosition: 'original',
       class: 'rounded-full',
     });
-  }, [props]);
+  }, [id, type]);
 
   return <ReactImageZoom {...imageProps} />;
 }

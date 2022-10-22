@@ -64,6 +64,13 @@ export default class MembersPresenter {
     });
   };
 
+  getMemberViewerDetails = async (id, callback) => {
+    await membersRepostory.getMemberViewerDetails(id, (member) => {
+      console.log('calling...', member);
+      callback(member);
+    });
+  };
+
   getDisputeInfoForMember = async (eid, callback) => {
     await membersRepostory.getDisputeInfoForMember(eid, callback);
   };
