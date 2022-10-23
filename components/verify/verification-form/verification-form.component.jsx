@@ -4,11 +4,11 @@ import { FormContext } from '../../../shared/form-context';
 import VerifyImageComponent from '../../common/verify-image.component';
 import MembershipInfoComponent from './membership-info.component';
 import YesOrNoComponent from '../../common/yes-or-no.component';
-import FormCheckbox from '../../common/form-checkbox.component';
 
 function VerificationFormComponent(props) {
   const { submit = () => {}, member } = props;
   const [form, setForm] = useState({});
+  const [isFormInValid, setFormInvalid] = useState(false);
 
   const [isDisableFormDueToEID, setDisableFormDueToEID] = useState({});
 
@@ -23,14 +23,14 @@ function VerificationFormComponent(props) {
     passportFirstPageValid: null,
     passportLastPageValid: null,
     cardType: 0,
-    gender: 0,
+    gender: null,
     eidIssuePlaceValid: null,
     verifiedUserId: null,
   };
 
   useEffect(() => {
     setForm(initalValue);
-  }, []);
+  }, [member]);
 
   const handleFormChange = (event) => {
     const { name, value } = event.target;
@@ -51,7 +51,36 @@ function VerificationFormComponent(props) {
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
-    submit(form);
+
+    if (isEmiratesIDBad()) {
+      submit(form);
+      return;
+    }
+
+    if (
+      !isEmiratesIDBad() &&
+      form.ediFrontAndBackSideValid &&
+      form.eidNumberValid &&
+      form.eidFullNameValid &&
+      form.eidNationalityValid &&
+      form.eidDOBValid &&
+      form.eidDOEValid &&
+      form.eidIssuePlaceValid &&
+      form.gender &&
+      checkForPassportValidity()
+    ) {
+      setFormInvalid(false);
+      submit(form);
+    } else setFormInvalid(true);
+  };
+
+  const isEmiratesIDBad = () => {
+    return form.ediFrontAndBackSideValid === 'No';
+  };
+
+  const checkForPassportValidity = () => {
+    if (member?.state === 'DUBAI') return form.passportFirstPageValid && form.passportLastPageValid;
+    else return true;
   };
 
   return (
@@ -120,6 +149,28 @@ function VerificationFormComponent(props) {
                       <YesOrNoComponent name="eidIssuePlaceValid" disabled={isDisableFormDueToEID}></YesOrNoComponent>
                     </dd>
                   </div>
+                  {member?.state === 'DUBAI' && (
+                    <>
+                      <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
+                        <dt className="text-sm font-medium text-gray-500">Passport first page valid</dt>
+                        <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                          <YesOrNoComponent
+                            name="passportFirstPageValid"
+                            disabled={isDisableFormDueToEID}
+                          ></YesOrNoComponent>
+                        </dd>
+                      </div>
+                      <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
+                        <dt className="text-sm font-medium text-gray-500">Passport last page valid</dt>
+                        <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                          <YesOrNoComponent
+                            name="passportLastPageValid"
+                            disabled={isDisableFormDueToEID}
+                          ></YesOrNoComponent>
+                        </dd>
+                      </div>
+                    </>
+                  )}
                   <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
                     <dt className="text-sm font-medium text-gray-500">Gender</dt>
                     <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
@@ -156,14 +207,22 @@ function VerificationFormComponent(props) {
                       </div>
                     </dd>
                   </div>
+                  {isFormInValid && (
+                    <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
+                      <dt className="text-sm font-medium text-red-700">Form Incomplete!</dt>
+                      <dd className="mt-1 text-sm text-red-700 sm:col-span-2 sm:mt-0">
+                        Please make sure you have selected an answer for all the validation questions before submitting!
+                      </dd>
+                    </div>
+                  )}
                 </dl>
               </FormContext.Provider>
               <button
                 id="next-button"
-                title="Next"
+                title="Submit"
                 type="submit"
                 disabled={!form?.ediFrontAndBackSideValid}
-                className="ml-3 inline-flex justify-right py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white disabled:bg-gray-500 bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                className="float-right mr-3 inline-flex justify-right py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white disabled:bg-gray-500 bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
               >
                 Next
               </button>

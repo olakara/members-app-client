@@ -17,6 +17,10 @@ function VerficationHomeComponent() {
     });
   };
 
+  const handelSubmit = (values) => {
+    console.log('form values:', values);
+  };
+
   useEffect(() => {
     load();
   }, []);
@@ -32,7 +36,7 @@ function VerficationHomeComponent() {
           </div>
         </header>
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <VerificationFormComponent member={member}></VerificationFormComponent>
+          <VerificationFormComponent submit={handelSubmit} member={member}></VerificationFormComponent>
         </main>
       </div>
     </>
