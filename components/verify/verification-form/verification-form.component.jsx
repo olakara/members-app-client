@@ -71,7 +71,6 @@ function VerificationFormComponent(props) {
     ) {
       setFormInvalid(false);
       submit(form);
-      document.getElementById('verify-form').reset();
     } else setFormInvalid(true);
   };
 
