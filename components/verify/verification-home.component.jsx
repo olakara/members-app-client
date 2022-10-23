@@ -17,8 +17,17 @@ function VerficationHomeComponent() {
     });
   };
 
-  const handelSubmit = (values) => {
+  const handelSubmit = async (values) => {
     console.log('form values:', values);
+    await verifyPresenter.submitVerification(
+      values,
+      (result) => {
+        window.location = '/verify-member';
+      },
+      (result) => {
+        window.location = '/verify-member';
+      }
+    );
   };
 
   useEffect(() => {

@@ -71,6 +71,7 @@ function VerificationFormComponent(props) {
     ) {
       setFormInvalid(false);
       submit(form);
+      document.getElementById('verify-form').reset();
     } else setFormInvalid(true);
   };
 
@@ -104,7 +105,7 @@ function VerificationFormComponent(props) {
             <h3 className="text-lg font-medium leading-6 text-gray-900">Member Verification</h3>
           </div>
           <div className="border-t border-gray-200 px-4 py-5 sm:p-0">
-            <form onSubmit={handleFormSubmit}>
+            <form onSubmit={handleFormSubmit} id="verify-form">
               <FormContext.Provider value={{ form, handleFormChange }}>
                 <dl className="sm:divide-y sm:divide-gray-200">
                   <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">

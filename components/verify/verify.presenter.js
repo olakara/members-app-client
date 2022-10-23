@@ -31,4 +31,8 @@ export default class VerifyPresenter {
       callback(member);
     });
   };
+
+  submitVerification = async (form, successCallback, errorCallback) => {
+    await verifyRepository.submitVerification(form, successCallback, errorCallback);
+  };
 }
