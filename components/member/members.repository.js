@@ -146,7 +146,7 @@ class MembersRepostory {
   };
 
   downloadMembersExcel = async (searchDto, callback) => {
-    let file = await httpGateway.download(config.BASE_URL + 'members/role-excel', searchDto);
+    let file = await httpGateway.downloadWithPost(config.BASE_URL + 'members/role-excel', searchDto);
     const url = window.URL.createObjectURL(new Blob([file]));
     const link = document.createElement('a');
     link.href = url;
