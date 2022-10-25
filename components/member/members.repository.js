@@ -144,6 +144,18 @@ class MembersRepostory {
     if (!dto) return;
     callback(dto);
   };
+
+  downloadMembersExcel = async (searchDto, callback) => {
+    let file = await httpGateway.download(config.BASE_URL + 'members/role-excel', searchDto);
+    const url = window.URL.createObjectURL(new Blob([file]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `MembersList.xlsx`);
+    document.body.appendChild(link);
+    link.click();
+    link.parentNode.removeChild(link);
+    callback('done');
+  };
 }
 
 const membersRepostory = new MembersRepostory();

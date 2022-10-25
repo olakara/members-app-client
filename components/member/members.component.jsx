@@ -39,6 +39,13 @@ function MembersComponent() {
     });
   };
 
+  const handleDownload = async (event) => {
+    event.preventDefault();
+    await membersPresenter.downloadMembersExcel(filters, (result) => {
+      console.log(result);
+    });
+  };
+
   useEffect(() => {
     load(filters);
   }, [filters]);
@@ -61,6 +68,14 @@ function MembersComponent() {
             <h1 className="text-3xl font-bold leading-tight text-gray-900">Members </h1>
           </div>
           <div className="ml-4 mt-2 flex-shrink-0">
+            {canAddMember && (
+              <a
+                onClick={handleDownload}
+                className="inline-flex items-center px-2.5 py-1.5 border border-transparent cursor-pointer font-medium rounded text-green-700 bg-green-100 hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 m-2"
+              >
+                Download
+              </a>
+            )}
             {canAddMember && <ActionButtonComponent action="/create-member">Add Member</ActionButtonComponent>}
           </div>
         </div>
