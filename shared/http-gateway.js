@@ -123,10 +123,17 @@ class HttpGateway {
     return response.blob();
   };
 
-  downloadWithPost = async (url) => {
+  downloadWithPost = async (url, filterDto) => {
+    let headers = this.authHeader(url);
     const requestOptions = {
       method: 'POST',
-      headers: this.authHeader(url),
+      cache: 'no-cache',
+      body: JSON.stringify(filterDto),
+      headers: {
+        ...headers,
+        'Content-Type': 'application/json',
+        Accept: 'application/octet-stream',
+      },
     };
     const response = await fetch(url, requestOptions);
     return response.blob();
