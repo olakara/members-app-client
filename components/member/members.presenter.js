@@ -74,4 +74,8 @@ export default class MembersPresenter {
   getDisputeInfoForMember = async (eid, callback) => {
     await membersRepostory.getDisputeInfoForMember(eid, callback);
   };
+
+  downloadMembersExcel = async (searchDto, callback) => {
+    await membersRepostory.downloadMembersExcel(searchDto, callback);
+  };
 }

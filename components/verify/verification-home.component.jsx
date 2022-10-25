@@ -17,6 +17,19 @@ function VerficationHomeComponent() {
     });
   };
 
+  const handelSubmit = async (values) => {
+    console.log('form values:', values);
+    await verifyPresenter.submitVerification(
+      values,
+      (result) => {
+        window.location = '/verify-member';
+      },
+      (result) => {
+        window.location = '/verify-member';
+      }
+    );
+  };
+
   useEffect(() => {
     load();
   }, []);
@@ -32,7 +45,7 @@ function VerficationHomeComponent() {
           </div>
         </header>
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <VerificationFormComponent member={member}></VerificationFormComponent>
+          <VerificationFormComponent submit={handelSubmit} member={member}></VerificationFormComponent>
         </main>
       </div>
     </>

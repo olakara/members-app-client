@@ -1,5 +1,7 @@
-import { ArrowDownTrayIcon } from '@heroicons/react/20/solid';
+import { getDateInRegionalFormat } from '../../../shared/utilities';
+import { config } from '../../../shared/constants';
 function MembershipInfoComponent({ member }) {
+  const downloadUrl = config.BASE_URL + 'MembershipVerification/';
   return (
     <>
       <div className="px-4 py-2 sm:px-6">
@@ -18,33 +20,37 @@ function MembershipInfoComponent({ member }) {
           </div>
           <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
             <dt className="text-sm font-medium text-gray-500">Date of Expiry</dt>
-            <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">{member?.expiry}</dd>
+            <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+              {getDateInRegionalFormat(member?.expiry)}
+            </dd>
           </div>
           <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
             <dt className="text-sm font-medium text-gray-500">Date of Birth</dt>
-            <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">{member?.dob}</dd>
+            <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">{getDateInRegionalFormat(member?.dob)}</dd>
           </div>
           <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
             <dt className="text-sm font-medium text-gray-500">State</dt>
             <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">{member?.state}</dd>
           </div>
-          <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
-            <dt className="text-sm font-medium text-gray-500">Passport</dt>
-            <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-              <a
-                // href={downloadUrl + member?.passportFrontPage}
-                className="mx-3 underline text-green-600 hover:text-green-800 visited:text-purple-600"
-              >
-                Front Page
-              </a>
-              <a
-                // href={downloadUrl + member?.passportLastPage}
-                className="mx-3 underline text-green-600 hover:text-green-800 visited:text-purple-600"
-              >
-                Back Page
-              </a>
-            </dd>
-          </div>
+          {member?.state === 'DUBAI' && (
+            <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
+              <dt className="text-sm font-medium text-gray-500">Passport</dt>
+              <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                <a
+                  href={downloadUrl + 'eidfrontpagedownload/' + member?.id}
+                  className="mx-3 underline text-green-600 hover:text-green-800 visited:text-purple-600"
+                >
+                  Front Page
+                </a>
+                <a
+                  href={downloadUrl + 'eidlastpagedownload/' + member?.id}
+                  className="mx-3 underline text-green-600 hover:text-green-800 visited:text-purple-600"
+                >
+                  Back Page
+                </a>
+              </dd>
+            </div>
+          )}
         </dl>
       </div>
     </>

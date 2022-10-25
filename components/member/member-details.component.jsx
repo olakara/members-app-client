@@ -1,7 +1,6 @@
 import { getDateInRegionalFormat } from '../../shared/utilities';
 import ImagePreviewComponent from '../common/image-preview.component';
 import { config } from '../../shared/constants';
-import Link from 'next/link';
 
 function MemberDetailsComponent({ member }) {
   const downloadUrl = config.BASE_URL + 'memberview/member-view/';
