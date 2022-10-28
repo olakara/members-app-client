@@ -107,43 +107,43 @@ function VerificationFormComponent(props) {
             <form onSubmit={handleFormSubmit} id="verify-form">
               <FormContext.Provider value={{ form, handleFormChange }}>
                 <dl className="sm:divide-y sm:divide-gray-200">
-                  <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
+                  <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-3 sm:px-6">
                     <dt className="text-sm font-medium text-gray-500">Valid front and back side</dt>
                     <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
                       <YesOrNoComponent name="ediFrontAndBackSideValid"></YesOrNoComponent>
                     </dd>
                   </div>
-                  <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
+                  <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-3 sm:px-6">
                     <dt className="text-sm font-medium text-gray-500">Valid Emirates ID number</dt>
                     <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
                       <YesOrNoComponent name="eidNumberValid" disabled={isDisableFormDueToEID}></YesOrNoComponent>
                     </dd>
                   </div>
-                  <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
+                  <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-3 sm:px-6">
                     <dt className="text-sm font-medium text-gray-500">Valid Full name</dt>
                     <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
                       <YesOrNoComponent name="eidFullNameValid" disabled={isDisableFormDueToEID}></YesOrNoComponent>
                     </dd>
                   </div>
-                  <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
+                  <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-3 sm:px-6">
                     <dt className="text-sm font-medium text-gray-500">Valid Nationality</dt>
                     <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
                       <YesOrNoComponent name="eidNationalityValid" disabled={isDisableFormDueToEID}></YesOrNoComponent>
                     </dd>
                   </div>
-                  <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
+                  <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-3 sm:px-6">
                     <dt className="text-sm font-medium text-gray-500">Valid date of exipry</dt>
                     <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
                       <YesOrNoComponent name="eidDOEValid" disabled={isDisableFormDueToEID}></YesOrNoComponent>
                     </dd>
                   </div>
-                  <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
+                  <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-3 sm:px-6">
                     <dt className="text-sm font-medium text-gray-500">Valid date of birth</dt>
                     <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
                       <YesOrNoComponent name="eidDOBValid" disabled={isDisableFormDueToEID}></YesOrNoComponent>
                     </dd>
                   </div>
-                  <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
+                  <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-3 sm:px-6">
                     <dt className="text-sm font-medium text-gray-500">Valid issued place</dt>
                     <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
                       <YesOrNoComponent name="eidIssuePlaceValid" disabled={isDisableFormDueToEID}></YesOrNoComponent>
@@ -151,7 +151,7 @@ function VerificationFormComponent(props) {
                   </div>
                   {member?.state === 'DUBAI' && (
                     <>
-                      <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
+                      <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-3 sm:px-6">
                         <dt className="text-sm font-medium text-gray-500">Passport first page valid</dt>
                         <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
                           <YesOrNoComponent
@@ -160,7 +160,7 @@ function VerificationFormComponent(props) {
                           ></YesOrNoComponent>
                         </dd>
                       </div>
-                      <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
+                      <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-3 sm:px-6">
                         <dt className="text-sm font-medium text-gray-500">Passport last page valid</dt>
                         <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
                           <YesOrNoComponent
@@ -171,7 +171,7 @@ function VerificationFormComponent(props) {
                       </div>
                     </>
                   )}
-                  <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
+                  <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-3 sm:px-6">
                     <dt className="text-sm font-medium text-gray-500">Gender</dt>
                     <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
                       <div className="relative flex items-start">
@@ -208,7 +208,7 @@ function VerificationFormComponent(props) {
                     </dd>
                   </div>
                   {isFormInValid && (
-                    <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
+                    <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-3 sm:px-6">
                       <dt className="text-sm font-medium text-red-700">Form Incomplete!</dt>
                       <dd className="mt-1 text-sm text-red-700 sm:col-span-2 sm:mt-0">
                         Please make sure you have selected an answer for all the validation questions before submitting!
