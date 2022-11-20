@@ -18,7 +18,6 @@ function VerficationHomeComponent() {
   };
 
   const handelSubmit = async (values) => {
-    console.log('form values:', values);
     await verifyPresenter.submitVerification(
       values,
       (result) => {
