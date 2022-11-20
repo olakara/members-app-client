@@ -116,37 +116,37 @@ function VerificationFormComponent(props) {
                   <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-3 sm:px-6">
                     <dt className="text-sm font-medium text-gray-500">Valid Emirates ID number</dt>
                     <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                      <YesOrNoComponent name="eidNumberValid" disabled={isDisableFormDueToEID}></YesOrNoComponent>
+                      <YesOrNoComponent name="eidNumberValid"></YesOrNoComponent>
                     </dd>
                   </div>
                   <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-3 sm:px-6">
                     <dt className="text-sm font-medium text-gray-500">Valid Full name</dt>
                     <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                      <YesOrNoComponent name="eidFullNameValid" disabled={isDisableFormDueToEID}></YesOrNoComponent>
+                      <YesOrNoComponent name="eidFullNameValid"></YesOrNoComponent>
                     </dd>
                   </div>
                   <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-3 sm:px-6">
                     <dt className="text-sm font-medium text-gray-500">Valid Nationality</dt>
                     <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                      <YesOrNoComponent name="eidNationalityValid" disabled={isDisableFormDueToEID}></YesOrNoComponent>
+                      <YesOrNoComponent name="eidNationalityValid"></YesOrNoComponent>
                     </dd>
                   </div>
                   <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-3 sm:px-6">
                     <dt className="text-sm font-medium text-gray-500">Valid date of exipry</dt>
                     <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                      <YesOrNoComponent name="eidDOEValid" disabled={isDisableFormDueToEID}></YesOrNoComponent>
+                      <YesOrNoComponent name="eidDOEValid"></YesOrNoComponent>
                     </dd>
                   </div>
                   <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-3 sm:px-6">
                     <dt className="text-sm font-medium text-gray-500">Valid date of birth</dt>
                     <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                      <YesOrNoComponent name="eidDOBValid" disabled={isDisableFormDueToEID}></YesOrNoComponent>
+                      <YesOrNoComponent name="eidDOBValid"></YesOrNoComponent>
                     </dd>
                   </div>
                   <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-3 sm:px-6">
                     <dt className="text-sm font-medium text-gray-500">Valid issued place</dt>
                     <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                      <YesOrNoComponent name="eidIssuePlaceValid" disabled={isDisableFormDueToEID}></YesOrNoComponent>
+                      <YesOrNoComponent name="eidIssuePlaceValid"></YesOrNoComponent>
                     </dd>
                   </div>
                   {member?.state === 'DUBAI' && (
@@ -154,19 +154,13 @@ function VerificationFormComponent(props) {
                       <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-3 sm:px-6">
                         <dt className="text-sm font-medium text-gray-500">Passport first page valid</dt>
                         <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                          <YesOrNoComponent
-                            name="passportFirstPageValid"
-                            disabled={isDisableFormDueToEID}
-                          ></YesOrNoComponent>
+                          <YesOrNoComponent name="passportFirstPageValid"></YesOrNoComponent>
                         </dd>
                       </div>
                       <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-3 sm:px-6">
                         <dt className="text-sm font-medium text-gray-500">Passport last page valid</dt>
                         <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                          <YesOrNoComponent
-                            name="passportLastPageValid"
-                            disabled={isDisableFormDueToEID}
-                          ></YesOrNoComponent>
+                          <YesOrNoComponent name="passportLastPageValid"></YesOrNoComponent>
                         </dd>
                       </div>
                     </>
@@ -184,7 +178,6 @@ function VerificationFormComponent(props) {
                               value="0"
                               className="h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-green-500 cursor-pointer disabled:cursor-not-allowed"
                               onChange={handleFormChange}
-                              disabled={isDisableFormDueToEID}
                             />
                             <span className="ml-3 text-sm">Male</span>
                           </label>
@@ -221,7 +214,6 @@ function VerificationFormComponent(props) {
                 id="next-button"
                 title="Submit"
                 type="submit"
-                disabled={!form?.ediFrontAndBackSideValid}
                 className="float-right mr-3 inline-flex justify-right py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white disabled:bg-gray-500 bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
               >
                 Next

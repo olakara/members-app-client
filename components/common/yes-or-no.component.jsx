@@ -5,7 +5,7 @@ import { useContext, useState } from 'react';
 function YesOrNoComponent(props) {
   const { name, value, disabled } = props;
 
-  const [yesChecked, setYesChecked] = useState(false);
+  const [yesChecked, setYesChecked] = useState(true);
   const [noChecked, setNoChecked] = useState(false);
 
   const formContext = useContext(FormContext);
