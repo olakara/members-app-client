@@ -16,6 +16,8 @@ export default function HeaderComponent() {
   const [isAbleToManageDispute, setAbleToManageDispute] = useState(false);
   const [isDistrictAdmin, setIsDistrictAdmin] = useState(false);
   const [isAbleToViewMembers, setAbleToViewMembers] = useState(false);
+  const [canAddMember, setCanAddMemeber] = useState(false);
+  const [canAddAgent, setCanAddAgent] = useState(false);
   const [canVerifyMembers, setCanVerifyMembers] = useState(false);
 
   let userPresenter = new UserPresenter();
@@ -44,6 +46,13 @@ export default function HeaderComponent() {
 
         if (userRole === 'verification-officer') setCanVerifyMembers(true);
         else setCanVerifyMembers(false);
+      });
+
+      userPresenter.canUserAddMember((result) => {
+        setCanAddMemeber(result);
+      });
+      userPresenter.canUserAddAgent((result) => {
+        setCanAddAgent(result);
       });
     }
 
@@ -88,7 +97,7 @@ export default function HeaderComponent() {
                     </a>
                   )}
 
-                  {isAbleToCreateMember && (
+                  {isAbleToCreateMember && canAddMember && (
                     <a
                       href="/create-member"
                       className="inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
@@ -96,7 +105,7 @@ export default function HeaderComponent() {
                       Add Member
                     </a>
                   )}
-                  {!isAbleToCreateMember && !isAbleToManageDispute && !isAbleToViewMembers && (
+                  {!isAbleToCreateMember && !isAbleToManageDispute && canAddAgent && !isAbleToViewMembers && (
                     <>
                       <a
                         href="/view-agents"

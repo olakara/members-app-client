@@ -51,27 +51,7 @@ function VerificationFormComponent(props) {
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
-
-    if (isEmiratesIDBad()) {
-      submit(form);
-      return;
-    }
-
-    if (
-      !isEmiratesIDBad() &&
-      form.ediFrontAndBackSideValid &&
-      form.eidNumberValid &&
-      form.eidFullNameValid &&
-      form.eidNationalityValid &&
-      form.eidDOBValid &&
-      form.eidDOEValid &&
-      form.eidIssuePlaceValid &&
-      form.gender &&
-      checkForPassportValidity()
-    ) {
-      setFormInvalid(false);
-      submit(form);
-    } else setFormInvalid(true);
+    submit(form);
   };
 
   const isEmiratesIDBad = () => {
