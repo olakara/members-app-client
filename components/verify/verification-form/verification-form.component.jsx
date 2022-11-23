@@ -14,18 +14,17 @@ function VerificationFormComponent(props) {
 
   const initalValue = {
     id: member?.id,
-    ediFrontAndBackSideValid: null,
-    eidNumberValid: null,
-    eidFullNameValid: null,
-    eidNationalityValid: null,
-    eidDOBValid: null,
-    eidDOEValid: null,
-    passportFirstPageValid: null,
-    passportLastPageValid: null,
+    ediFrontAndBackSideValid: 'Yes',
+      eidNumberValid: 'Yes',
+      eidFullNameValid: 'Yes',
+      eidNationalityValid: 'Yes',
+      eidDOBValid: 'Yes',
+      eidDOEValid: 'Yes',
+      passportFirstPageValid: 'Yes',
+      passportLastPageValid: 'Yes',
     cardType: 0,
-    gender: null,
-    eidIssuePlaceValid: null,
-    verifiedUserId: null,
+    gender: 0,
+    eidIssuePlaceValid: 'Yes'
   };
 
   useEffect(() => {
@@ -34,12 +33,6 @@ function VerificationFormComponent(props) {
 
   const handleFormChange = (event) => {
     const { name, value } = event.target;
-
-    if (name === 'ediFrontAndBackSideValid' && value === 'No') {
-      setDisableFormDueToEID(true);
-    } else {
-      setDisableFormDueToEID(false);
-    }
 
     const updatedForm = {
       ...form,
@@ -50,7 +43,7 @@ function VerificationFormComponent(props) {
   };
 
   const handleFormSubmit = (event) => {
-    event.preventDefault();
+    event.preventDefault();    
     submit(form);
   };
 
