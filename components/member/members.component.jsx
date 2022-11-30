@@ -47,6 +47,10 @@ function MembersComponent() {
         setExcelDownloadable(true);
       }
     });
+
+    userPresenter.canUserAddMember((result) => {
+      setCanAddMemeber(result);
+    });
   };
 
   const handleDownload = async (event) => {
