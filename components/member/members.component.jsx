@@ -34,7 +34,6 @@ function MembersComponent() {
 
     await userPresenter.getCurrentUser((generatedViewModel) => {
       const userRole = generatedViewModel.role;
-      console.log('role', userRole);
       if (userRole === 'member-viewer') {
         setActions({
           print: false,
