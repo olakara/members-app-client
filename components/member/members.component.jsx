@@ -13,6 +13,7 @@ function MembersComponent() {
   const [filters, setFilters] = useState(defaultPagingConfig);
 
   const [canAddMember, setCanAddMemeber] = useState();
+  const [canViewMember, setMemberViewer] = useState(false);
 
   const membersPresenter = new MembersPresenter();
   const userPresenter = new UserPresenter();
@@ -30,12 +31,21 @@ function MembersComponent() {
     await lookupsPresenter.loadUserLookups(async (lookupsVm) => {
       setLookups(lookupsVm);
     });
-    userPresenter.canUserAddMember((result) => {
-      setCanAddMemeber(result);
-      setActions({
-        print: result,
-        view: !result,
-      });
+
+    await userPresenter.getCurrentUser((generatedViewModel) => {
+      const userRole = generatedViewModel.role;
+      console.log('role', userRole);
+      if (userRole === 'member-viewer') {
+        setActions({
+          print: false,
+          view: true,
+        });
+      } else {
+        setActions({
+          print: true,
+          view: false,
+        });
+      }
     });
   };
 
