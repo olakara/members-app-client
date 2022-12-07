@@ -15,16 +15,16 @@ function VerificationFormComponent(props) {
   const initalValue = {
     id: member?.id,
     ediFrontAndBackSideValid: 'Yes',
-      eidNumberValid: 'Yes',
-      eidFullNameValid: 'Yes',
-      eidNationalityValid: 'Yes',
-      eidDOBValid: 'Yes',
-      eidDOEValid: 'Yes',
-      passportFirstPageValid: 'Yes',
-      passportLastPageValid: 'Yes',
+    eidNumberValid: 'Yes',
+    eidFullNameValid: 'Yes',
+    eidNationalityValid: 'Yes',
+    eidDOBValid: 'Yes',
+    eidDOEValid: 'Yes',
+    passportFirstPageValid: 'Yes',
+    passportLastPageValid: 'Yes',
     cardType: 0,
     gender: 0,
-    eidIssuePlaceValid: 'Yes'
+    eidIssuePlaceValid: 'Yes',
   };
 
   useEffect(() => {
@@ -43,7 +43,7 @@ function VerificationFormComponent(props) {
   };
 
   const handleFormSubmit = (event) => {
-    event.preventDefault();    
+    event.preventDefault();
     submit(form);
   };
 
@@ -165,7 +165,6 @@ function VerificationFormComponent(props) {
                               value="1"
                               className="h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-green-500 cursor-pointer disabled:cursor-not-allowed"
                               onChange={handleFormChange}
-                              disabled={isDisableFormDueToEID}
                             />
                             <span className="ml-3 text-sm">Female</span>
                           </label>
@@ -189,7 +188,7 @@ function VerificationFormComponent(props) {
                 type="submit"
                 className="float-right mr-3 inline-flex justify-right py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white disabled:bg-gray-500 bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
               >
-                Next
+                Verified
               </button>
             </form>
           </div>
